@@ -66,6 +66,21 @@ namespace vJoySerialFeeder
 			toolStripStatusLabel.Text = "Disconnected";
 		}
 		
+		/// <summary>
+		/// Called from the Mapping class when the mapping should remove
+		/// itself from the MainForm
+		/// </summary>
+		/// <param name="m"></param>
+		public void RemoveMapping(Mapping m) {
+			panelMappings.Controls.Remove(m.GetControl());
+			mappings.Remove(m);
+		}
+		
+		
+		
+		
+		
+		
 		private void saveProfile(XmlElement e) {
 			using(XmlWriter xw = e.CreateNavigator().AppendChild()) {
 				xw.WriteElementString("com", comboPorts.Text);
@@ -199,9 +214,8 @@ namespace vJoySerialFeeder
 		}
 		
 		Mapping addAxis() {
-			var ax = new AxisMapping(onMappingRemoved);
+			var ax = new AxisMapping();
 			mappings.Add(ax);
-			//ax.Removed += onMappingRemoved;
 			panelMappings.Controls.Add(ax.GetControl());
 			return ax;
 		}
@@ -213,11 +227,6 @@ namespace vJoySerialFeeder
 			addAxis();
 		}
 		
-		void onMappingRemoved(Mapping m) {
-			//m.Removed -= onMappingRemoved;
-			panelMappings.Controls.Remove(m.GetControl());
-			mappings.Remove(m);
-		}
 		
 		void FlowLayoutPanel1MouseEnter(object sender, EventArgs e)
 		{

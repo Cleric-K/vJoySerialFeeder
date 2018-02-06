@@ -15,20 +15,12 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public abstract class Mapping
 	{
-		public delegate void RemoveHandler(Mapping sender);
 		public int ChannelValue { get { return MainForm.instance.Channels[channel]; } }
 		
 		protected int channel;
 		
-		private RemoveHandler onRemove;
-		
-		public Mapping(RemoveHandler rh)
-		{
-			onRemove = rh;
-		}
-		
 		public void Remove() {
-			onRemove(this);
+			MainForm.instance.RemoveMapping(this);
 		}
 		
 		abstract public Control GetControl();

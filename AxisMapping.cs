@@ -159,7 +159,7 @@ namespace vJoySerialFeeder
 		private Label inputLabel;
 		private PictureBox progressBox;
 		
-		public AxisMapping(RemoveHandler rh) : base(rh)
+		public AxisMapping()
 		{
 			panel = new FlowLayoutPanel();
 			panel.SuspendLayout();
