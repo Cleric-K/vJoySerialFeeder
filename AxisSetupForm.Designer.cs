@@ -6,7 +6,7 @@
  */
 namespace vJoySerialFeeder
 {
-	partial class AxisForm
+	partial class AxisSetupForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.
@@ -132,10 +132,10 @@ namespace vJoySerialFeeder
 			// 
 			this.numericExpo.Location = new System.Drawing.Point(83, 329);
 			this.numericExpo.Minimum = new decimal(new int[] {
-			100,
-			0,
-			0,
-			-2147483648});
+									100,
+									0,
+									0,
+									-2147483648});
 			this.numericExpo.Name = "numericExpo";
 			this.numericExpo.Size = new System.Drawing.Size(53, 20);
 			this.numericExpo.TabIndex = 9;
@@ -184,46 +184,46 @@ namespace vJoySerialFeeder
 			// 
 			this.numericMax.Location = new System.Drawing.Point(83, 309);
 			this.numericMax.Maximum = new decimal(new int[] {
-			16777216,
-			0,
-			0,
-			0});
+									16777216,
+									0,
+									0,
+									0});
 			this.numericMax.Name = "numericMax";
 			this.numericMax.Size = new System.Drawing.Size(53, 20);
 			this.numericMax.TabIndex = 14;
 			this.numericMax.Value = new decimal(new int[] {
-			1000,
-			0,
-			0,
-			0});
+									1000,
+									0,
+									0,
+									0});
 			this.numericMax.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// numericCenter
 			// 
 			this.numericCenter.Location = new System.Drawing.Point(83, 289);
 			this.numericCenter.Maximum = new decimal(new int[] {
-			16777216,
-			0,
-			0,
-			0});
+									16777216,
+									0,
+									0,
+									0});
 			this.numericCenter.Name = "numericCenter";
 			this.numericCenter.Size = new System.Drawing.Size(53, 20);
 			this.numericCenter.TabIndex = 15;
 			this.numericCenter.Value = new decimal(new int[] {
-			500,
-			0,
-			0,
-			0});
+									500,
+									0,
+									0,
+									0});
 			this.numericCenter.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// numericMin
 			// 
 			this.numericMin.Location = new System.Drawing.Point(83, 269);
 			this.numericMin.Maximum = new decimal(new int[] {
-			16777216,
-			0,
-			0,
-			0});
+									16777216,
+									0,
+									0,
+									0});
 			this.numericMin.Name = "numericMin";
 			this.numericMin.Size = new System.Drawing.Size(53, 20);
 			this.numericMin.TabIndex = 16;
@@ -272,25 +272,13 @@ namespace vJoySerialFeeder
 			this.MinimizeBox = false;
 			this.Name = "AxisForm";
 			this.ShowIcon = false;
-			this.Text = "AxisForm";
+			this.Text = "Axis";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericExpo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMax)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMin)).EndInit();
 			this.ResumeLayout(false);
-
-			this.MinimizeBox = false;
-			this.Name = "AxisForm";
-			this.ShowIcon = false;
-			this.Text = "AxisForm";
-			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericExpo)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericMax)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.numericMin)).EndInit();
-			this.ResumeLayout(false);
-
 		}
 	}
 }

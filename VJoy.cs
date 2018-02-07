@@ -86,7 +86,7 @@ namespace vJoySerialFeeder
 			joystick.SetAxis((int)(value*0x7fff), id, axis);
 		}
 		
-		public void SetAxis(bool value, uint btn) {
+		public void SetButton(bool value, uint btn) {
 			joystick.SetBtn(value, id, btn);
 		}
 		

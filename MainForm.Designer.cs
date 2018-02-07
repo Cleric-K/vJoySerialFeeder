@@ -14,7 +14,7 @@ namespace vJoySerialFeeder
 		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.FlowLayoutPanel panelMappings;
 		private System.Windows.Forms.Button buttonAddAxis;
-		private System.Windows.Forms.Button addButton;
+		private System.Windows.Forms.Button buttonAddButton;
 		private System.Windows.Forms.ComboBox comboPorts;
 		private System.Windows.Forms.TextBox textBaud;
 		private System.Windows.Forms.Label label1;
@@ -55,7 +55,7 @@ namespace vJoySerialFeeder
         private void InitializeComponent() {
         	this.panelMappings = new System.Windows.Forms.FlowLayoutPanel();
         	this.buttonAddAxis = new System.Windows.Forms.Button();
-        	this.addButton = new System.Windows.Forms.Button();
+        	this.buttonAddButton = new System.Windows.Forms.Button();
         	this.comboPorts = new System.Windows.Forms.ComboBox();
         	this.textBaud = new System.Windows.Forms.TextBox();
         	this.label1 = new System.Windows.Forms.Label();
@@ -97,14 +97,15 @@ namespace vJoySerialFeeder
         	this.buttonAddAxis.UseVisualStyleBackColor = true;
         	this.buttonAddAxis.Click += new System.EventHandler(this.ButtonAddAxisClick);
         	// 
-        	// addButton
+        	// buttonAddButton
         	// 
-        	this.addButton.Location = new System.Drawing.Point(84, 81);
-        	this.addButton.Name = "addButton";
-        	this.addButton.Size = new System.Drawing.Size(75, 23);
-        	this.addButton.TabIndex = 5;
-        	this.addButton.Text = "Add Button";
-        	this.addButton.UseVisualStyleBackColor = true;
+        	this.buttonAddButton.Location = new System.Drawing.Point(84, 81);
+        	this.buttonAddButton.Name = "buttonAddButton";
+        	this.buttonAddButton.Size = new System.Drawing.Size(75, 23);
+        	this.buttonAddButton.TabIndex = 5;
+        	this.buttonAddButton.Text = "Add Button";
+        	this.buttonAddButton.UseVisualStyleBackColor = true;
+        	this.buttonAddButton.Click += new System.EventHandler(this.ButtonAddButtonClick);
         	// 
         	// comboPorts
         	// 
@@ -246,7 +247,7 @@ namespace vJoySerialFeeder
         	// statusStrip1
         	// 
         	this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripStatusLabel});
+        	        	        	this.toolStripStatusLabel});
         	this.statusStrip1.Location = new System.Drawing.Point(0, 500);
         	this.statusStrip1.Name = "statusStrip1";
         	this.statusStrip1.Size = new System.Drawing.Size(730, 22);
@@ -280,7 +281,7 @@ namespace vJoySerialFeeder
         	this.Controls.Add(this.label1);
         	this.Controls.Add(this.textBaud);
         	this.Controls.Add(this.comboPorts);
-        	this.Controls.Add(this.addButton);
+        	this.Controls.Add(this.buttonAddButton);
         	this.Controls.Add(this.buttonAddAxis);
         	this.Controls.Add(this.panelMappings);
         	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
@@ -293,7 +294,6 @@ namespace vJoySerialFeeder
         	this.statusStrip1.PerformLayout();
         	this.ResumeLayout(false);
         	this.PerformLayout();
-
         }
 	}
 }

@@ -258,7 +258,7 @@ namespace vJoySerialFeeder
 		
 		private void onSetupClick(object sender, EventArgs e)
 		{
-			using (var dialog = new AxisForm(this)) {
+			using (var dialog = new AxisSetupForm(this)) {
 				if (dialog.ShowDialog() == DialogResult.OK)
 					parameters = dialog.Parameters;
 			}

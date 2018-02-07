@@ -88,11 +88,18 @@ namespace vJoySerialFeeder
 				xw.WriteElementString("vjoy-id", comboJoysticks.Text);
 			}
 			foreach(Mapping m in mappings) {
-				if(m is AxisMapping) {
-					var x = e.OwnerDocument.CreateElement("axis-mapping");
-					m.SaveToXmlElement(x);
-					e.AppendChild(x);
-				}
+				string tag;
+				
+				if(m is AxisMapping)
+					tag = "axis-mapping";
+				else if(m is ButtonMapping)
+					tag = "button-mapping";
+				else
+					continue;
+				
+				var x = e.OwnerDocument.CreateElement(tag);
+				m.SaveToXmlElement(x);
+				e.AppendChild(x);
 			}
 		}
 			
@@ -117,6 +124,9 @@ namespace vJoySerialFeeder
 						break;
 					case "axis-mapping":
 						addAxis().ReadFromXmlElement((XmlElement)x.UnderlyingObject);
+						break;
+					case "button-mapping":
+						addButton().ReadFromXmlElement((XmlElement)x.UnderlyingObject);
 						break;
 				}
 			} while(x.MoveToNext());
@@ -220,13 +230,25 @@ namespace vJoySerialFeeder
 			return ax;
 		}
 		
+		Mapping addButton() {
+			var ax = new ButtonMapping();
+			mappings.Add(ax);
+			panelMappings.Controls.Add(ax.GetControl());
+			return ax;
+		}
+		
 		
 	
 		void ButtonAddAxisClick(object sender, EventArgs e)
 		{
 			addAxis();
 		}
-		
+
+		void ButtonAddButtonClick(object sender, EventArgs e)
+        {
+		 	addButton();
+        }	
+
 		
 		void FlowLayoutPanel1MouseEnter(object sender, EventArgs e)
 		{
@@ -344,5 +366,7 @@ namespace vJoySerialFeeder
 			profiles.Save();
 		}
 
+        
+       
 	}
 }

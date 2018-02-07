@@ -69,11 +69,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AxisForm.cs" />
-    <Compile Include="AxisForm.Designer.cs">
-      <DependentUpon>AxisForm.cs</DependentUpon>
+    <Compile Include="AxisSetupForm.cs" />
+    <Compile Include="AxisSetupForm.Designer.cs">
+      <DependentUpon>AxisSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AxisMapping.cs" />
+    <Compile Include="ButtonSetupForm.cs" />
+    <Compile Include="ButtonSetupForm.Designer.cs">
+      <DependentUpon>ButtonSetupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ButtonMapping.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -94,8 +99,11 @@
     <Compile Include="VJoy.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="AxisForm.resx">
-      <DependentUpon>AxisForm.cs</DependentUpon>
+    <EmbeddedResource Include="AxisSetupForm.resx">
+      <DependentUpon>AxisSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ButtonSetupForm.resx">
+      <DependentUpon>ButtonSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

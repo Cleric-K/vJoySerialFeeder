@@ -16,7 +16,7 @@ namespace vJoySerialFeeder
 	/// Description of AxisForm.
 	/// </summary>
 
-	public partial class AxisForm : Form
+	public partial class AxisSetupForm : Form
 	{
 		static Pen linePen, inputPen, outputPen;
 		
@@ -28,7 +28,7 @@ namespace vJoySerialFeeder
 		private bool initialized = false;
 		private int calibrationStep = 0;
 		
-		static AxisForm() {
+		static AxisSetupForm() {
 			linePen = new Pen(Color.Blue, 2);
 			inputPen = new Pen(Color.Green);
 			inputPen.DashStyle = DashStyle.Dash;
@@ -36,7 +36,7 @@ namespace vJoySerialFeeder
 			outputPen.DashStyle = DashStyle.Dash;
 		}
 		
-		public AxisForm(AxisMapping axisMapping)
+		public AxisSetupForm(AxisMapping axisMapping)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
