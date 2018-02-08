@@ -13,9 +13,8 @@ using System.Windows.Forms;
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of AxisForm.
+	/// Dialog to setup AxisMapping
 	/// </summary>
-
 	public partial class AxisSetupForm : Form
 	{
 		static Pen linePen, inputPen, outputPen;
@@ -44,29 +43,29 @@ namespace vJoySerialFeeder
 			InitializeComponent();
 			
 			this.axisMapping = axisMapping;
-			parameters = axisMapping.Parameters;
+			this.parameters = axisMapping.Parameters;
 			
 			DialogResult = DialogResult.Cancel;
 			
-			MainForm.instance.OnChannelData += onChannelData;
+			MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
 		
 			Disposed += delegate(object sender, EventArgs e) {
-				MainForm.instance.OnChannelData -= onChannelData;
+				MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate;
 			};
 			
-			numericMin.Value = parameters.min;
-			numericMax.Value = parameters.max;
-			numericCenter.Value = parameters.center;
-			numericExpo.Value = parameters.expo;
-			checkInvert.Checked = parameters.invert;
-			checkSymmetric.Checked = parameters.symmetric;
+			numericMin.Value = parameters.Min;
+			numericMax.Value = parameters.Max;
+			numericCenter.Value = parameters.Center;
+			numericExpo.Value = parameters.Expo;
+			checkInvert.Checked = parameters.Invert;
+			checkSymmetric.Checked = parameters.Symmetric;
 			
 			initialized = true;
 			OnChange(null, null);
 			
 		}
 		
-		private void onChannelData(object sender, EventArgs e)
+		private void onChannelDataUpdate(object sender, EventArgs e)
 		{
 			pictureBox.Invalidate();
 			
@@ -101,12 +100,12 @@ namespace vJoySerialFeeder
 				numericCenter.Enabled = false;
 			}
 			
-			parameters.min = (int)numericMin.Value;
-			parameters.max = (int)numericMax.Value;
-			parameters.center = (int)numericCenter.Value;
-			parameters.expo = (int)numericExpo.Value;
-			parameters.invert = checkInvert.Checked;
-			parameters.symmetric = checkSymmetric.Checked;
+			parameters.Min = (int)numericMin.Value;
+			parameters.Max = (int)numericMax.Value;
+			parameters.Center = (int)numericCenter.Value;
+			parameters.Expo = (int)numericExpo.Value;
+			parameters.Invert = checkInvert.Checked;
+			parameters.Symmetric = checkSymmetric.Checked;
 			pictureBox.Invalidate();
 			badValues = false;
 		}
@@ -123,7 +122,7 @@ namespace vJoySerialFeeder
 			
 			for(var i=0; i<w; i++) {
 				
-				p = (int)(parameters.min + (parameters.max-parameters.min)*(double)i/w);
+				p = (int)(parameters.Min + (parameters.Max-parameters.Min)*(double)i/w);
 				val = parameters.Transform(p);
 				y = (int)(padding+h-val*h);
 				
@@ -135,12 +134,12 @@ namespace vJoySerialFeeder
 				lastY = y;
 			}
 			
-			p = Math.Min(parameters.max, Math.Max(parameters.min, axisMapping.ChannelValue)); // clamp
+			p = Math.Min(parameters.Max, Math.Max(parameters.Min, axisMapping.ChannelValue)); // clamp
 			val = parameters.Transform(p);
-			if(parameters.max == parameters.min)
+			if(parameters.Max == parameters.Min)
 				x = padding + w/2;
 			else
-				x = padding + (int)((double)(p-parameters.min)/(parameters.max-parameters.min)*w);
+				x = padding + (int)((double)(p-parameters.Min)/(parameters.Max-parameters.Min)*w);
 			y = padding + h - (int)(val*h);
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);

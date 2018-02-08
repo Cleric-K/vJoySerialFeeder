@@ -150,7 +150,7 @@ namespace vJoySerialFeeder
 									data_start++; // skip command byte
 									int ch = 0;
 				              		while(data_start < data_end) {
-										MainForm.instance.Channels[ch++] = (buf[data_start] | (buf[data_start + 1] << 8));
+										MainForm.Instance.Channels[ch++] = (buf[data_start] | (buf[data_start + 1] << 8));
 										data_start += 2;
 									}
 									

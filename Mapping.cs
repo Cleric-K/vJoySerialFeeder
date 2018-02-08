@@ -5,32 +5,62 @@
  * Time: 18:22 ч.
  */
 using System;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Xml;
 
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of Mapping.
+	/// This is the base class for the mappings.
+	/// A class mapping consists of UI element and logic which transforms
+	/// the raw channel data to the desired joystick command.
 	/// </summary>
+	
+	[DataContract]
 	public abstract class Mapping
 	{
-		public int ChannelValue { get { return MainForm.instance.Channels[channel]; } }
+		/// <summary>
+		/// Helper property to get the Channel value
+		/// </summary>
+		public int ChannelValue { get { return MainForm.Instance.Channels[Channel]; } }
 		
-		protected int channel;
+		/// <summary>
+		/// Every mapping has a single channel to get data from (although this is not forced)
+		/// </summary>
+		[DataMember]
+		public int Channel;
 		
-		public void Remove() {
-			MainForm.instance.RemoveMapping(this);
+		/// <summary>
+		/// If the mapping wants to remove itself it MUST call this method.
+		/// </summary>
+		internal void Remove() {
+			MainForm.Instance.RemoveMapping(this);
 		}
 		
+		/// <summary>
+		/// This method should return a Control element which will be placed in the MainFrame
+		/// It should return the same Control on every call.
+		/// </summary>
+		/// <returns></returns>
 		abstract public Control GetControl();
 		
-		abstract public void WriteChannel();
+		/// <summary>
+		/// This method gets called when the mapping should write its joystick.
+		/// </summary>
+		abstract public void WriteJoystick();
 		
+		/// <summary>
+		/// Request painting of the UI element.
+		/// </summary>
 		abstract public void Paint();
 		
-		abstract public void SaveToXmlElement(XmlElement e);
-
-		abstract public void ReadFromXmlElement(XmlElement e);
+		/// <summary>
+		/// To support saving and loading profiles, every mapping should be able to make a copy of itself
+		/// which includes only the data that should be persisted in the profile.
+		/// </summary>
+		/// <returns>Should return a new object of the same derived type with the same value
+		/// for the persistable fields</returns>
+		abstract public Mapping Copy();
 	}
 }

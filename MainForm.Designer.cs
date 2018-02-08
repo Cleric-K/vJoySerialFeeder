@@ -289,7 +289,6 @@ namespace vJoySerialFeeder
         	this.MaximizeBox = false;
         	this.Name = "MainForm";
         	this.Text = "vJoySerialFeeder";
-        	this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainFormFormClosed);
         	this.statusStrip1.ResumeLayout(false);
         	this.statusStrip1.PerformLayout();
         	this.ResumeLayout(false);

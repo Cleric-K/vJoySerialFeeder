@@ -12,12 +12,8 @@ using System.Windows.Forms;
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of ButtonForm.
+	/// Dialog to setup ButtonMapping
 	/// </summary>
-	
-	
-	
-	
 	public partial class ButtonSetupForm : Form
 	{
 		static Pen linePen, inputPen, outputPen;
@@ -46,14 +42,14 @@ namespace vJoySerialFeeder
 			InitializeComponent();
 			
 			buttonMapping = m;
-			parameters = buttonMapping.Parameters;
+			this.parameters = buttonMapping.Parameters;
 			
 			DialogResult = DialogResult.Cancel;
 			
-			MainForm.instance.OnChannelData += onChannelData;
+			MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
 		
 			Disposed += delegate(object sender, EventArgs e) {
-				MainForm.instance.OnChannelData -= onChannelData;
+				MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate;
 			};
 			
 			checkInvert.Checked = parameters.invert;
@@ -105,11 +101,16 @@ namespace vJoySerialFeeder
 			Close();
 		}
 		
-		private void onChannelData(object sender, EventArgs e)
+		private void onChannelDataUpdate(object sender, EventArgs e)
 		{
 			pictureBox.Invalidate();
 		}
 		
+		/// <summary>
+		/// Draw the button graph
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void PictureBoxPaint(object sender, PaintEventArgs e)
 		{
 			const int padding = 30;
@@ -125,16 +126,21 @@ namespace vJoySerialFeeder
 				int t2 = (int)(parameters.thresh2/(double)max*w);
 				
 				y = !parameters.invert ? padding + h : padding;
+				// left horizontal segment
 				e.Graphics.DrawLine(linePen, padding, y,
 				                    	padding+t1, y);
+				// left vertical segment
 				e.Graphics.DrawLine(linePen, padding+t1, padding,
 				                    	padding+t1, padding + h);
 				y = parameters.invert ? padding + h : padding;
+				// middle horizontal segment
 				e.Graphics.DrawLine(linePen, padding+t1, y,
 				                    	padding+t2, y);
+				// right vertical segment
 				e.Graphics.DrawLine(linePen, padding+t2, padding,
 				                    	padding+t2, padding + h);
 				y = !parameters.invert ? padding + h : padding;
+				// right horizontal segment
 				e.Graphics.DrawLine(linePen, padding+t2, y,
 				                    	padding+w, y);
 			}
@@ -142,11 +148,14 @@ namespace vJoySerialFeeder
 				max = 2*parameters.thresh1;
 				
 				y = !parameters.invert ? padding + h : padding;
+				// left horizontal segment
 				e.Graphics.DrawLine(linePen, padding, y,
 				                    	padding+w/2, y);
+				// vertical segment
 				e.Graphics.DrawLine(linePen, padding+w/2, padding,
 				                    	padding+w/2, padding + h);
 				y = parameters.invert ? padding + h : padding;
+				// right horizontal segment
 				e.Graphics.DrawLine(linePen, padding+w/2, y,
 				                    	padding+w, y);
 			}

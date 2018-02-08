@@ -6,6 +6,7 @@
  */
 using System;
 using System.Drawing;
+using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
@@ -14,11 +15,15 @@ namespace vJoySerialFeeder
 	/// <summary>
 	/// Description of ButtonMapping.
 	/// </summary>
+	
+	[DataContract]
 	public class ButtonMapping : Mapping
 	{
-		
+		[DataContract]
 		public struct ButtonParameters {
+			[DataMember]
 			public int thresh1, thresh2;
+			[DataMember]
 			public bool notch, invert;
 			
 			public bool Transform(int val) {
@@ -34,14 +39,17 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		private uint button = 1;
-		private bool pushed;
-		private ButtonParameters parameters = new ButtonParameters {
+		[DataMember]
+		public uint Button = 1;
+		
+		[DataMember]
+		public ButtonParameters Parameters = new ButtonParameters {
 			thresh1 = 1500
 		};
 		
-		public ButtonParameters Parameters { get { return parameters; } }
+		private bool pushed;
 		
+
 		private FlowLayoutPanel panel;
 		private NumericUpDown channelSpinner;
 		private NumericUpDown buttonSpinner;
@@ -52,8 +60,68 @@ namespace vJoySerialFeeder
 		static private Brush BRUSH_NOT_PUSHED = new SolidBrush(Color.FromArgb(0, 64, 0));
 		
 
+		public override Mapping Copy()
+		{
+			var bm = new ButtonMapping();
+			bm.Parameters = Parameters;
+			bm.Button = Button;
+			bm.Channel = Channel;
+			
+			return bm;
+		}
 		
-		public ButtonMapping()
+		
+		public override void WriteJoystick()
+		{
+			pushed = Parameters.Transform(ChannelValue);
+			MainForm.Instance.VJoy.SetButton(pushed, Button);
+		}
+		
+		public override void Paint()
+		{
+			inputLabel.Text = ChannelValue.ToString();
+			buttonStateBox.Invalidate();
+		}
+		
+		public override System.Windows.Forms.Control GetControl()
+		{
+			if(panel == null)
+				initializePanel();
+			return panel;
+		}
+		
+		private void onChannelChange(object sender, EventArgs e)
+		{
+			Channel = (int)channelSpinner.Value - 1;
+		}
+		
+		private void onButtonChange(object sender, EventArgs e)
+		{
+			Button = (uint)buttonSpinner.Value;
+		}
+		
+		private void onButtonStatePaint(object sender, PaintEventArgs e)
+		{	
+			e.Graphics.FillEllipse(pushed ? BRUSH_PUSHED : BRUSH_NOT_PUSHED,
+			                       30, 0, 18, 18);
+			e.Graphics.DrawEllipse(Pens.Black, 
+			                       30, 0, 18, 18);
+		}
+		
+		private void onRemoveClick(object sender, EventArgs e)
+		{
+			Remove();
+		}
+		
+		private void onSetupClick(object sender, EventArgs e)
+		{
+			using (var dialog = new ButtonSetupForm(this)) {
+				if (dialog.ShowDialog() == DialogResult.OK)
+					Parameters = dialog.Parameters;
+			}
+		}
+		
+		private void initializePanel()
 		{
 			panel = new FlowLayoutPanel();
 			panel.SuspendLayout();
@@ -69,6 +137,7 @@ namespace vJoySerialFeeder
 			channelSpinner.Minimum = 1;
 			channelSpinner.Maximum = 255;
 			channelSpinner.Size = new Size(42, 20);
+			channelSpinner.Value = Channel + 1;
 			channelSpinner.ValueChanged += onChannelChange;
 			panel.Controls.Add(channelSpinner);
 			
@@ -82,6 +151,7 @@ namespace vJoySerialFeeder
 			buttonSpinner.Minimum = 1;
 			buttonSpinner.Maximum = 128;
 			buttonSpinner.Size = new Size(42, 20);
+			buttonSpinner.Value = Button;
 			buttonSpinner.ValueChanged += onButtonChange;
 			panel.Controls.Add(buttonSpinner);
 			
@@ -123,108 +193,6 @@ namespace vJoySerialFeeder
 			panel.Controls.Add(button);
 			
 			panel.ResumeLayout();
-		}
-		
-		public override void WriteChannel()
-		{
-			pushed = parameters.Transform(ChannelValue);
-			MainForm.instance.VJoy.SetButton(pushed, button);
-		}
-		
-		public override void SaveToXmlElement(System.Xml.XmlElement e)
-		{
-			using(var writer = e.CreateNavigator().AppendChild()) {
-				writer.WriteElementString("channel", channel.ToString());
-				writer.WriteElementString("button", button.ToString());
-				writer.WriteElementString("notch", parameters.notch.ToString().ToLower());
-				writer.WriteElementString("invert", parameters.invert.ToString().ToLower());
-				writer.WriteElementString("thresh1", parameters.thresh1.ToString());
-				if(parameters.notch)
-					writer.WriteElementString("thresh2", parameters.thresh2.ToString());
-			}
-		}
-		
-		public override void ReadFromXmlElement(System.Xml.XmlElement e)
-		{
-			using(var reader = e.CreateNavigator().ReadSubtree()) {
-				//return;
-				while(true) {
-					switch(reader.Name) {
-						case "channel":
-							channel = reader.ReadElementContentAsInt();
-							channelSpinner.Value = channel+1;
-							break;
-						case "button":
-							button = (uint)reader.ReadElementContentAsInt();
-							buttonSpinner.Value = button;
-							break;
-						case "notch":
-							parameters.notch = reader.ReadElementContentAsBoolean();
-							//reader.Read();
-							break;
-						case "invert":
-							parameters.invert = reader.ReadElementContentAsBoolean();
-							break;
-						case "thresh1":
-							parameters.thresh1 = reader.ReadElementContentAsInt();
-							break;
-						case "thresh2":
-							parameters.thresh2 = reader.ReadElementContentAsInt();
-							break;
-						default:
-							if(!reader.Read())
-								return;
-							break;
-					}
-				};
-			}
-		}
-		
-		public override void Paint()
-		{
-			inputLabel.Text = ChannelValue.ToString();
-			buttonStateBox.Invalidate();
-		}
-		
-		public override System.Windows.Forms.Control GetControl()
-		{
-			return panel;
-		}
-		
-		
-		
-		
-		
-		
-		private void onChannelChange(object sender, EventArgs e)
-		{
-			channel = (int)channelSpinner.Value - 1;
-		}
-		
-		private void onButtonChange(object sender, EventArgs e)
-		{
-			button = (uint)buttonSpinner.Value;
-		}
-		
-		private void onButtonStatePaint(object sender, PaintEventArgs e)
-		{	
-			e.Graphics.FillEllipse(pushed ? BRUSH_PUSHED : BRUSH_NOT_PUSHED,
-			                       30, 0, 18, 18);
-			e.Graphics.DrawEllipse(Pens.Black, 
-			                       30, 0, 18, 18);
-		}
-		
-		private void onRemoveClick(object sender, EventArgs e)
-		{
-			Remove();
-		}
-		
-		private void onSetupClick(object sender, EventArgs e)
-		{
-			using (var dialog = new ButtonSetupForm(this)) {
-				if (dialog.ShowDialog() == DialogResult.OK)
-					parameters = dialog.Parameters;
-			}
 		}
 	}
 }

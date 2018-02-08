@@ -12,7 +12,7 @@ namespace vJoySerialFeeder {
 	
 	
 	[global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("ICSharpCode.SettingsEditor.SettingsCodeGeneratorTool", "5.1.0.5216")]
+	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("ICSharpCode.SettingsEditor.SettingsCodeGeneratorTool", "4.4.2.9749")]
 	internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
 		
 		private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -25,13 +25,13 @@ namespace vJoySerialFeeder {
 		
 		[global::System.Configuration.UserScopedSettingAttribute()]
 		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-		[global::System.Configuration.DefaultSettingValueAttribute("")]
-		public string profiles {
+		[global::System.Configuration.DefaultSettingValueAttribute("empty")]
+		public string config {
 			get {
-				return ((string)(this["profiles"]));
+				return ((string)(this["config"]));
 			}
 			set {
-				this["profiles"] = value;
+				this["config"] = value;
 			}
 		}
 	}

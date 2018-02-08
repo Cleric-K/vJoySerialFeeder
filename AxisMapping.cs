@@ -6,6 +6,7 @@
  */
 using System;
 using System.Drawing.Text;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Xml.Serialization;
@@ -13,113 +14,71 @@ using System.Xml.Serialization;
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of Axis.
+	/// Maps a channel to a joystick axis
+	/// 
+	/// The two main parameters are Channel and Axis
+	/// The remaining parameters are stored in a struct AxisParameters
 	/// </summary>
+	[DataContract]
 	public class AxisMapping : Mapping
 	{
+		/// <summary>
+		/// Stores the mapping parameters
+		/// </summary>
+		[DataContract]
 		public struct AxisParameters
 		{
-			public int min, max, center, expo;
-			public bool symmetric, invert;
+			[DataMember]
+			public int Min, Max, Center, Expo;
+			[DataMember]
+			public bool Symmetric, Invert;
 			
+			/// <summary>
+			/// Transforms the raw data to axis value
+			/// </summary>
+			/// <param name="val">raw channel integer</param>
+			/// <returns>double in the range [0; 1]</returns>
 			public double Transform(int val) {
-				if(max <= min || symmetric && (center <= min || center >= max))
+				if(Max <= Min || Symmetric && (Center <= Min || Center >= Max))
+					// invalid parameters
 					return 0;
 				
 				bool neg = false;
-				double v = Math.Max(min, val);
-				v = Math.Min(max, v);
+				double v = Math.Max(Min, val);
+				v = Math.Min(Max, v);
 				
-				if(symmetric) {
-					neg = v < center;
+				if(Symmetric) {
+					neg = v < Center;
 					if(neg)
-						v = (center - v)/(center - min);
+						v = (Center - v)/(Center - Min);
 					else
-						v = (v - center)/(max - center);
+						v = (v - Center)/(Max - Center);
 				}
 				else {
-					v = (v - min)/(max - min);
+					v = (v - Min)/(Max - Min);
 				}
 				
-				if(expo != 0) {
-					double e = Math.Abs(expo / 100.0);
-					if(expo > 0)
+				if(Expo != 0) {
+					double e = Math.Abs(Expo / 100.0);
+					if(Expo > 0)
 						v = e*v*v*v + (1-e)*v;
 					else
 						v = e*Math.Pow(v, 0.333) + (1-e)*v;
 				}
 				
-				if(symmetric) {
+				if(Symmetric) {
 					if(neg)
 						v = -v;
 					v = v/2 + 0.5;
 				}
 					
 				
-				if(invert)
+				if(Invert)
 					v = 1-v;
 				
 				return v;
 			}
 		};
-		
-		public AxisParameters Parameters { get { return parameters; } }
-
-		
-		public override void ReadFromXmlElement(System.Xml.XmlElement e)
-		{
-			using(var reader = e.CreateNavigator().ReadSubtree()) {
-				while(true) {
-					
-					
-					switch(reader.Name) {
-						case "channel":
-							channel = reader.ReadElementContentAsInt();
-							channelSpinner.Value = channel+1;
-							break;
-						case "axis":
-							axis = reader.ReadElementContentAsInt();
-							joystickAxisDropdown.SelectedIndex = axis;
-							break;
-						case "symmetric":
-							parameters.symmetric = reader.ReadElementContentAsBoolean();
-							break;
-						case "invert":
-							parameters.invert = reader.ReadElementContentAsBoolean();
-							break;
-						case "min":
-							parameters.min = reader.ReadElementContentAsInt();
-							break;
-						case "max":
-							parameters.max = reader.ReadElementContentAsInt();
-							break;
-						case "center":
-							parameters.center = reader.ReadElementContentAsInt();
-							break;
-						case "expo":
-							parameters.expo = reader.ReadElementContentAsInt();
-							break;
-						default:
-							if(!reader.Read())
-								return;
-							break;
-					}
-				};
-			}
-		}
-		public override void SaveToXmlElement(System.Xml.XmlElement e)
-		{
-			using(var writer = e.CreateNavigator().AppendChild()) {
-				writer.WriteElementString("channel", channel.ToString());
-				writer.WriteElementString("axis", axis.ToString());
-				writer.WriteElementString("symmetric", parameters.symmetric.ToString().ToLower());
-				writer.WriteElementString("invert", parameters.invert.ToString().ToLower());
-				writer.WriteElementString("min", parameters.min.ToString());
-				writer.WriteElementString("max", parameters.max.ToString());
-				writer.WriteElementString("center", parameters.center.ToString());
-				writer.WriteElementString("expo", parameters.expo.ToString());
-			}
-		}
 
 		
 		private static string[] axisNames = new string[] {
@@ -144,14 +103,18 @@ namespace vJoySerialFeeder
 			HID_USAGES.HID_USAGE_SL1
 		};
 		
-		private int axis;
-		private AxisParameters parameters = new AxisParameters {
-			min = 1000,
-			max = 2000,
-			center = 1500,
-			expo = 0,
-			symmetric = true
+		[DataMember]
+		public int Axis;
+		
+		[DataMember]
+		public AxisParameters Parameters = new AxisParameters {
+			Min = 1000,
+			Max = 2000,
+			Center = 1500,
+			Expo = 0,
+			Symmetric = true
 		};
+		
 		private double lastTransformedValue;
 		private FlowLayoutPanel panel;
 		private NumericUpDown channelSpinner;
@@ -159,7 +122,86 @@ namespace vJoySerialFeeder
 		private Label inputLabel;
 		private PictureBox progressBox;
 		
-		public AxisMapping()
+		public override Mapping Copy()
+		{
+			var am = new AxisMapping();
+			am.Parameters = Parameters;
+			am.Channel = Channel;
+			am.Axis = Axis;
+			
+			return am;
+		}
+		
+		public override Control GetControl()
+		{
+			if(panel == null)
+				initializePanel();
+			return panel;
+		}
+
+		
+		public override void Paint()
+		{
+			inputLabel.Text = ChannelValue.ToString();
+			progressBox.Invalidate();
+		}
+		
+		public override void WriteJoystick()
+		{
+			lastTransformedValue = Parameters.Transform(ChannelValue);
+			MainForm.Instance.VJoy.SetAxis(lastTransformedValue, axisHidUsages[Axis]);
+		}
+		
+		
+		
+		private void onRemoveClick(object sender, EventArgs e)
+		{
+			Remove();
+		}
+		
+		private void onSetupClick(object sender, EventArgs e)
+		{
+			using (var dialog = new AxisSetupForm(this)) {
+				if (dialog.ShowDialog() == DialogResult.OK)
+					Parameters = dialog.Parameters;
+			}
+			
+		}
+		
+		private void onProgressPaint(object sender, PaintEventArgs e)
+		{
+			// this custom progress bar is based on code from
+			// http://csharphelper.com/blog/2016/07/display-text-progressbar-c/
+			
+			e.Graphics.FillRectangle(
+				Brushes.LightGreen, 0, 0, (float)(progressBox.ClientSize.Width * lastTransformedValue),
+				progressBox.ClientSize.Height);
+			// Draw the text.
+			e.Graphics.TextRenderingHint =
+		        TextRenderingHint.AntiAliasGridFit;
+			using (StringFormat sf = new StringFormat()) {
+				sf.Alignment = StringAlignment.Center;
+				sf.LineAlignment = StringAlignment.Center;
+				int percent = (int)(lastTransformedValue * 100);
+				e.Graphics.DrawString(
+					percent.ToString() + "%",
+					progressBox.Font, Brushes.Black,
+					progressBox.ClientRectangle, sf);
+			}
+		}
+		
+		private void onChannelChange(object sender, EventArgs e)
+		{
+			Channel = (int)channelSpinner.Value - 1;
+		}
+		
+		private void onAxisChange(object sender, EventArgs e)
+		{
+			Axis = joystickAxisDropdown.SelectedIndex;
+			
+		}
+		
+		private void initializePanel()
 		{
 			panel = new FlowLayoutPanel();
 			panel.SuspendLayout();
@@ -175,6 +217,7 @@ namespace vJoySerialFeeder
 			channelSpinner.Minimum = 1;
 			channelSpinner.Maximum = 255;
 			channelSpinner.Size = new Size(42, 20);
+			channelSpinner.Value = Channel+1;
 			channelSpinner.ValueChanged += onChannelChange;
 			panel.Controls.Add(channelSpinner);
 			
@@ -188,8 +231,7 @@ namespace vJoySerialFeeder
 			joystickAxisDropdown.DropDownStyle = ComboBoxStyle.DropDownList;
 			joystickAxisDropdown.Size = new Size(42, 20);
 			joystickAxisDropdown.Items.AddRange(axisNames);
-			joystickAxisDropdown.SelectedIndex = 0;
-			axis = 0;
+			joystickAxisDropdown.SelectedIndex = Axis;
 			joystickAxisDropdown.SelectedIndexChanged += onAxisChange;
 			panel.Controls.Add(joystickAxisDropdown);
 			
@@ -230,72 +272,6 @@ namespace vJoySerialFeeder
 			panel.Controls.Add(button);
 			
 			panel.ResumeLayout();
-		}
-		
-		public override Control GetControl()
-		{
-			return panel;
-		}
-		
-		public override void Paint()
-		{
-			inputLabel.Text = ChannelValue.ToString();
-			progressBox.Invalidate();
-		}
-		
-		public override void WriteChannel()
-		{
-			lastTransformedValue = parameters.Transform(ChannelValue);
-			MainForm.instance.VJoy.SetAxis(lastTransformedValue, axisHidUsages[axis]);
-		}
-		
-		
-		
-		private void onRemoveClick(object sender, EventArgs e)
-		{
-			Remove();
-		}
-		
-		private void onSetupClick(object sender, EventArgs e)
-		{
-			using (var dialog = new AxisSetupForm(this)) {
-				if (dialog.ShowDialog() == DialogResult.OK)
-					parameters = dialog.Parameters;
-			}
-			
-		}
-		
-		private void onProgressPaint(object sender, PaintEventArgs e)
-		{
-			// this custom progress bar is based on code from
-			// http://csharphelper.com/blog/2016/07/display-text-progressbar-c/
-			
-			e.Graphics.FillRectangle(
-				Brushes.LightGreen, 0, 0, (float)(progressBox.ClientSize.Width * lastTransformedValue),
-				progressBox.ClientSize.Height);
-			// Draw the text.
-			e.Graphics.TextRenderingHint =
-		        TextRenderingHint.AntiAliasGridFit;
-			using (StringFormat sf = new StringFormat()) {
-				sf.Alignment = StringAlignment.Center;
-				sf.LineAlignment = StringAlignment.Center;
-				int percent = (int)(lastTransformedValue * 100);
-				e.Graphics.DrawString(
-					percent.ToString() + "%",
-					progressBox.Font, Brushes.Black,
-					progressBox.ClientRectangle, sf);
-			}
-		}
-		
-		private void onChannelChange(object sender, EventArgs e)
-		{
-			channel = (int)channelSpinner.Value - 1;
-		}
-		
-		private void onAxisChange(object sender, EventArgs e)
-		{
-			axis = joystickAxisDropdown.SelectedIndex;
-			
 		}
 	}
 }
