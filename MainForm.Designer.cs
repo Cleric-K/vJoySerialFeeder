@@ -73,6 +73,8 @@ namespace vJoySerialFeeder
         	this.label5 = new System.Windows.Forms.Label();
         	this.statusStrip1 = new System.Windows.Forms.StatusStrip();
         	this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+        	this.label6 = new System.Windows.Forms.Label();
+        	this.comboProtocol = new System.Windows.Forms.ComboBox();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -176,7 +178,7 @@ namespace vJoySerialFeeder
         	this.comboJoysticks.FormattingEnabled = true;
         	this.comboJoysticks.Location = new System.Drawing.Point(360, 12);
         	this.comboJoysticks.Name = "comboJoysticks";
-        	this.comboJoysticks.Size = new System.Drawing.Size(55, 21);
+        	this.comboJoysticks.Size = new System.Drawing.Size(72, 21);
         	this.comboJoysticks.TabIndex = 12;
         	// 
         	// label3
@@ -261,11 +263,34 @@ namespace vJoySerialFeeder
         	this.toolStripStatusLabel.Size = new System.Drawing.Size(112, 17);
         	this.toolStripStatusLabel.Text = "toolStripStatusLabel";
         	// 
+        	// label6
+        	// 
+        	this.label6.Location = new System.Drawing.Point(276, 39);
+        	this.label6.Name = "label6";
+        	this.label6.Size = new System.Drawing.Size(78, 21);
+        	this.label6.TabIndex = 21;
+        	this.label6.Text = "Protocol:";
+        	this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+        	// 
+        	// comboProtocol
+        	// 
+        	this.comboProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+        	this.comboProtocol.FormattingEnabled = true;
+        	this.comboProtocol.Items.AddRange(new object[] {
+        	        	        	"IBUS",
+        	        	        	"MultiWii"});
+        	this.comboProtocol.Location = new System.Drawing.Point(360, 39);
+        	this.comboProtocol.Name = "comboProtocol";
+        	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
+        	this.comboProtocol.TabIndex = 22;
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.comboProtocol);
+        	this.Controls.Add(this.label6);
         	this.Controls.Add(this.statusStrip1);
         	this.Controls.Add(this.label5);
         	this.Controls.Add(this.label4);
@@ -294,5 +319,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ComboBox comboProtocol;
+        private System.Windows.Forms.Label label6;
 	}
 }

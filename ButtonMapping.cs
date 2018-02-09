@@ -13,12 +13,21 @@ using System.Windows.Forms;
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of ButtonMapping.
+	/// Maps channel data to a button
+	/// 
+	/// There are single and dual threshold mappings.
+	/// In single threshold, if channel value if below the threshold the output is 0 and 1 if above
+	/// The logic can be inverted.
+	/// In dual threshold, if the channel value is between the two threshold the output is 1 and 0
+	/// if outside. The logic can also be inverted.
 	/// </summary>
 	
 	[DataContract]
 	public class ButtonMapping : Mapping
 	{
+		/// <summary>
+		/// Stores the mapping parameters
+		/// </summary>
 		[DataContract]
 		public struct ButtonParameters {
 			[DataMember]
@@ -39,6 +48,9 @@ namespace vJoySerialFeeder
 			}
 		}
 		
+		/// <summary>
+		/// vJoy button id
+		/// </summary>
 		[DataMember]
 		public uint Button = 1;
 		
@@ -176,7 +188,6 @@ namespace vJoySerialFeeder
 			
 			buttonStateBox = new PictureBox();
 			buttonStateBox.Size = new Size(80, 20);
-			//progressBox.BorderStyle = BorderStyle.FixedSingle;
 			buttonStateBox.Paint += onButtonStatePaint;
 			panel.Controls.Add(buttonStateBox);
 			

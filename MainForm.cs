@@ -33,10 +33,13 @@ namespace vJoySerialFeeder
 		private List<Mapping> mappings = new List<Mapping>();
 		private bool connected = false;
 		private SerialPort serialPort;
+		private SerialReader serialReader;
 		
 		private Configuration config;
 		
 		private double updateRate;
+		
+		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader)};
 		
 		public MainForm()
 		{
@@ -53,6 +56,7 @@ namespace vJoySerialFeeder
 			if(!VJoy.Init())
 				Application.Exit();
 			
+			comboProtocol.SelectedIndex = 0;
 			reloadComPorts();
 			reloadJoysticks();
 			ChannelDataUpdate += onChannelDataUpdate;
@@ -97,6 +101,7 @@ namespace vJoySerialFeeder
 			
 			if(!connected) {
 				// load this stuff only if not connected
+				comboProtocol.SelectedIndex = p.Protocol;
 				comboPorts.SelectedItem = p.COMPort;
 				textBaud.Text = p.BaudRate;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
@@ -157,14 +162,17 @@ namespace vJoySerialFeeder
 				return;
 			}
 			
-			backgroundWorker.RunWorkerAsync();
-			
+			serialReader = (SerialReader)Activator.CreateInstance(Protocols[comboProtocol.SelectedIndex]);
+
+			comboProtocol.Enabled = false;
 			comboPorts.Enabled = false;
 			textBaud.Enabled = false;
 			buttonPortsRefresh.Enabled = false;
 			buttonConnect.Text = "Disconnect";
 			comboJoysticks.Enabled = false;
 			connected = true;
+			
+			backgroundWorker.RunWorkerAsync();
 		}
 		
 		private void disconnect() {
@@ -175,9 +183,12 @@ namespace vJoySerialFeeder
 		
 		private void disconnect2() {
 			VJoy.Release();
-			serialPort.Close();
+			try {
+				serialPort.Close();
+			} catch(Exception) {}
 			serialPort = null;
 			
+			comboProtocol.Enabled = true;
 			comboPorts.Enabled = true;
 			textBaud.Enabled = true;
 			buttonPortsRefresh.Enabled = true;
@@ -248,7 +259,9 @@ namespace vJoySerialFeeder
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			SerialReader sr = new SerialReader(serialPort);
+			serialReader.Init(serialPort, Channels);
+			serialReader.Start();
+			
 			double nextUpdateTime = 0, prevTime = 0;
 			double updateSum = 0;
 			int updateCount = 0;
@@ -258,14 +271,15 @@ namespace vJoySerialFeeder
 				
 				if(backgroundWorker.CancellationPending) {
 					e.Cancel = true;
+					serialReader.Stop();
 					return;
 				}
 				
 				try {
-					ActiveChannels = sr.ReadChannels();
+					ActiveChannels = serialReader.ReadChannels();
 				}
 				catch(Exception ex) {
-					System.Diagnostics.Debug.WriteLine(ex);
+					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 				if(ActiveChannels > 0) {
 					foreach(Mapping m in mappings) {
@@ -275,7 +289,7 @@ namespace vJoySerialFeeder
 				
 				double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 				// update UI on every 100ms
-				if(now > prevTime) {
+				if(now > prevTime && ActiveChannels > 0) {
 					updateSum += 1000.0/(now - prevTime);
 					updateCount++;
 				}
@@ -290,7 +304,9 @@ namespace vJoySerialFeeder
 					}
 					backgroundWorker.ReportProgress(0);
 				}
-				prevTime = now;
+				
+				if(ActiveChannels > 0)
+					prevTime = now;
 			}
 		}
 		void BackgroundWorkerRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -312,15 +328,12 @@ namespace vJoySerialFeeder
 			}
 			
 			var p = new Configuration.Profile();
-			
-			if(!connected) {
-				// do not load these settings if we are connected
-				p.COMPort = comboPorts.Text;
-				p.BaudRate = textBaud.Text;
-				p.VJoyInstance = comboJoysticks.Text;
-			}
-			
-			
+				
+			p.Protocol = comboProtocol.SelectedIndex;
+			p.COMPort = comboPorts.Text;
+			p.BaudRate = textBaud.Text;
+			p.VJoyInstance = comboJoysticks.Text;
+
 			p.Mappings = new List<Mapping>();
 			
 			foreach (var m in mappings)

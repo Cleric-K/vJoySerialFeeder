@@ -31,7 +31,8 @@ namespace vJoySerialFeeder
 		public class Profile {
 			[DataMember]
 			public string COMPort, BaudRate, VJoyInstance;
-			
+			[DataMember]
+			public int Protocol;
 			[DataMember]
 			public List<Mapping> Mappings = new List<Mapping>();
 		}	
