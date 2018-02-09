@@ -29,7 +29,7 @@ namespace vJoySerialFeeder
 		public struct AxisParameters
 		{
 			[DataMember]
-			public int Min, Max, Center, Expo;
+			public int Min, Max, Center, Expo, Deadband;
 			[DataMember]
 			public bool Symmetric, Invert;
 			
@@ -58,6 +58,17 @@ namespace vJoySerialFeeder
 				else {
 					v = (v - Min)/(Max - Min);
 				}
+	
+				if(Symmetric && Deadband > 0) {
+					double d = Deadband/100.01; // do not divide at exactly 100 to avoid deadband becoming 1
+					if(v < d)
+						// inside deadband
+						return 0.5;
+
+					// map [d; 1] -> [0; 1]
+					var b = d/(d-1);
+					v = (1-b)*v + b;
+				}
 				
 				if(Expo != 0) {
 					/// expo is based on Super Rates found in Clean/Beta Flight
@@ -81,7 +92,6 @@ namespace vJoySerialFeeder
 						v = -v;
 					v = v/2 + 0.5;
 				}
-					
 				
 				if(Invert)
 					v = 1-v;

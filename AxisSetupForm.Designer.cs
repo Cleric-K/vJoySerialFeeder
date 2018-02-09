@@ -66,11 +66,15 @@ namespace vJoySerialFeeder
 			this.numericMin = new System.Windows.Forms.NumericUpDown();
 			this.checkInvert = new System.Windows.Forms.CheckBox();
 			this.labelCalibrate = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.numericDeadband = new System.Windows.Forms.NumericUpDown();
+			this.label7 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericExpo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMax)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMin)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericDeadband)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBox
@@ -121,16 +125,16 @@ namespace vJoySerialFeeder
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(11, 327);
+			this.label4.Location = new System.Drawing.Point(10, 327);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(67, 20);
 			this.label4.TabIndex = 8;
-			this.label4.Text = "Expo";
+			this.label4.Text = "Deadband";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// numericExpo
 			// 
-			this.numericExpo.Location = new System.Drawing.Point(83, 329);
+			this.numericExpo.Location = new System.Drawing.Point(83, 349);
 			this.numericExpo.Minimum = new decimal(new int[] {
 									100,
 									0,
@@ -143,7 +147,7 @@ namespace vJoySerialFeeder
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(143, 330);
+			this.label5.Location = new System.Drawing.Point(142, 327);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(67, 20);
 			this.label5.TabIndex = 10;
@@ -152,7 +156,7 @@ namespace vJoySerialFeeder
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(209, 373);
+			this.buttonOK.Location = new System.Drawing.Point(209, 387);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
 			this.buttonOK.TabIndex = 11;
@@ -162,7 +166,7 @@ namespace vJoySerialFeeder
 			// 
 			// buttonCancel
 			// 
-			this.buttonCancel.Location = new System.Drawing.Point(128, 373);
+			this.buttonCancel.Location = new System.Drawing.Point(128, 387);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 12;
@@ -246,11 +250,40 @@ namespace vJoySerialFeeder
 			this.labelCalibrate.Size = new System.Drawing.Size(147, 53);
 			this.labelCalibrate.TabIndex = 18;
 			// 
-			// AxisForm
+			// label6
+			// 
+			this.label6.Location = new System.Drawing.Point(142, 347);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(67, 20);
+			this.label6.TabIndex = 21;
+			this.label6.Text = "%";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// numericDeadband
+			// 
+			this.numericDeadband.Location = new System.Drawing.Point(83, 329);
+			this.numericDeadband.Name = "numericDeadband";
+			this.numericDeadband.Size = new System.Drawing.Size(53, 20);
+			this.numericDeadband.TabIndex = 20;
+			this.numericDeadband.ValueChanged += new System.EventHandler(this.OnChange);
+			// 
+			// label7
+			// 
+			this.label7.Location = new System.Drawing.Point(10, 347);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(67, 20);
+			this.label7.TabIndex = 19;
+			this.label7.Text = "Expo";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// AxisSetupForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(271, 408);
+			this.ClientSize = new System.Drawing.Size(271, 422);
+			this.Controls.Add(this.label6);
+			this.Controls.Add(this.numericDeadband);
+			this.Controls.Add(this.label7);
 			this.Controls.Add(this.labelCalibrate);
 			this.Controls.Add(this.checkInvert);
 			this.Controls.Add(this.numericMin);
@@ -270,7 +303,7 @@ namespace vJoySerialFeeder
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "AxisForm";
+			this.Name = "AxisSetupForm";
 			this.ShowIcon = false;
 			this.Text = "Axis";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
@@ -278,7 +311,11 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericMax)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMin)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericDeadband)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label7;
+		private System.Windows.Forms.NumericUpDown numericDeadband;
+		private System.Windows.Forms.Label label6;
 	}
 }

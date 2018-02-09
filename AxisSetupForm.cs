@@ -57,6 +57,7 @@ namespace vJoySerialFeeder
 			numericMax.Value = parameters.Max;
 			numericCenter.Value = parameters.Center;
 			numericExpo.Value = parameters.Expo;
+			numericDeadband.Value = parameters.Deadband;
 			checkInvert.Checked = parameters.Invert;
 			checkSymmetric.Checked = parameters.Symmetric;
 			
@@ -91,6 +92,7 @@ namespace vJoySerialFeeder
 			}
 			if (checkSymmetric.Checked) {
 				numericCenter.Enabled = true;
+				numericDeadband.Enabled = true;
 				if (calibrationStep ==0 && (numericCenter.Value <= numericMin.Value
 				          || numericCenter.Value >= numericMax.Value)) {
 					MessageBox.Show("Center must be between Min and Max");
@@ -98,6 +100,7 @@ namespace vJoySerialFeeder
 				}
 			} else {
 				numericCenter.Enabled = false;
+				numericDeadband.Enabled = false;
 			}
 			
 			parameters.Min = (int)numericMin.Value;
@@ -106,6 +109,7 @@ namespace vJoySerialFeeder
 			parameters.Expo = (int)numericExpo.Value;
 			parameters.Invert = checkInvert.Checked;
 			parameters.Symmetric = checkSymmetric.Checked;
+			parameters.Deadband = (int)numericDeadband.Value;
 			pictureBox.Invalidate();
 			badValues = false;
 		}
@@ -185,7 +189,5 @@ namespace vJoySerialFeeder
 					break;
 			}
 		}
-		
-		
 	}
 }
