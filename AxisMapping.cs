@@ -47,6 +47,7 @@ namespace vJoySerialFeeder
 				double v = Math.Max(Min, val);
 				v = Math.Min(Max, v);
 				
+				// map v to [0; 1]
 				if(Symmetric) {
 					neg = v < Center;
 					if(neg)
@@ -59,14 +60,23 @@ namespace vJoySerialFeeder
 				}
 				
 				if(Expo != 0) {
-					double e = Math.Abs(Expo / 100.0);
+					/// expo is based on Super Rates found in Clean/Beta Flight
+					/// super = 1 / (1 - factor*x)
+					/// axis = x * super
+					/// we also apply normalization to keep max value at 1
+					/// super = (1-factor) / (1 - factor*x)
+					double factor = Math.Abs(Expo)/ 100.01; // do not divide at exactly 100 to avoid factor becoming 1
 					if(Expo > 0)
-						v = e*v*v*v + (1-e)*v;
+						v = v*(1-factor)/(1-v*factor);
 					else
-						v = e*Math.Pow(v, 0.333) + (1-e)*v;
+						v = v/(factor*v-factor+1); // the inverse function of the above
+
+
 				}
 				
 				if(Symmetric) {
+					// map [0; 1] to [0; 0.5] if neg
+					// map [0; 1] to [0.5; 1] if !neg
 					if(neg)
 						v = -v;
 					v = v/2 + 0.5;
