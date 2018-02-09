@@ -7,7 +7,6 @@
 using System;
 using System.Drawing;
 using System.Runtime.Serialization;
-using System.Security.Cryptography;
 using System.Windows.Forms;
 
 namespace vJoySerialFeeder
@@ -83,10 +82,10 @@ namespace vJoySerialFeeder
 		}
 		
 		
-		public override void WriteJoystick()
+		public override void UpdateJoystick(VJoy vjoy)
 		{
 			pushed = Parameters.Transform(ChannelValue);
-			MainForm.Instance.VJoy.SetButton(pushed, Button);
+			vjoy.SetButton(pushed, Button);
 		}
 		
 		public override void Paint()
@@ -109,7 +108,7 @@ namespace vJoySerialFeeder
 		
 		private void onButtonChange(object sender, EventArgs e)
 		{
-			Button = (uint)buttonSpinner.Value;
+			Button = (uint)buttonSpinner.Value - 1;
 		}
 		
 		private void onButtonStatePaint(object sender, PaintEventArgs e)
@@ -163,7 +162,7 @@ namespace vJoySerialFeeder
 			buttonSpinner.Minimum = 1;
 			buttonSpinner.Maximum = 128;
 			buttonSpinner.Size = new Size(42, 20);
-			buttonSpinner.Value = Button;
+			buttonSpinner.Value = Button + 1;
 			buttonSpinner.ValueChanged += onButtonChange;
 			panel.Controls.Add(buttonSpinner);
 			

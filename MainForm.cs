@@ -6,14 +6,8 @@
  */
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.IO.Ports;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Serialization;
-using System.Xml.XPath;
 
 namespace vJoySerialFeeder
 {
@@ -283,9 +277,10 @@ namespace vJoySerialFeeder
 				}
 				if(ActiveChannels > 0) {
 					foreach(Mapping m in mappings) {
-						m.WriteJoystick();
+						m.UpdateJoystick(VJoy);
 					}
 				}
+				VJoy.SetState();
 				
 				double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 				// update UI on every 100ms

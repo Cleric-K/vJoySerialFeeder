@@ -5,11 +5,10 @@
  * Time: 17:53 ч.
  */
 using System;
+using System.Drawing;
 using System.Drawing.Text;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using System.Drawing;
-using System.Xml.Serialization;
 
 namespace vJoySerialFeeder
 {
@@ -99,29 +98,6 @@ namespace vJoySerialFeeder
 				return v;
 			}
 		};
-
-		
-		private static string[] axisNames = new string[] {
-			"X",
-			"Y",
-			"Z",
-			"Rx",
-			"Ry",
-			"Rz",
-			"Sl0",
-			"Sl1"
-		};
-		
-		private static HID_USAGES[] axisHidUsages = new HID_USAGES[] {
-			HID_USAGES.HID_USAGE_X,
-			HID_USAGES.HID_USAGE_Y,
-			HID_USAGES.HID_USAGE_Z,
-			HID_USAGES.HID_USAGE_RX,
-			HID_USAGES.HID_USAGE_RY,
-			HID_USAGES.HID_USAGE_RZ,
-			HID_USAGES.HID_USAGE_SL0,
-			HID_USAGES.HID_USAGE_SL1
-		};
 		
 		[DataMember]
 		public int Axis;
@@ -166,10 +142,10 @@ namespace vJoySerialFeeder
 			progressBox.Invalidate();
 		}
 		
-		public override void WriteJoystick()
+		public override void UpdateJoystick(VJoy vjoy)
 		{
 			lastTransformedValue = Parameters.Transform(ChannelValue);
-			MainForm.Instance.VJoy.SetAxis(lastTransformedValue, axisHidUsages[Axis]);
+			vjoy.SetAxis(lastTransformedValue, Axis);
 		}
 		
 		
@@ -250,7 +226,7 @@ namespace vJoySerialFeeder
 			joystickAxisDropdown = new ComboBox();
 			joystickAxisDropdown.DropDownStyle = ComboBoxStyle.DropDownList;
 			joystickAxisDropdown.Size = new Size(42, 20);
-			joystickAxisDropdown.Items.AddRange(axisNames);
+			joystickAxisDropdown.Items.AddRange(Enum.GetNames(typeof(VJoy.Axes)));
 			joystickAxisDropdown.SelectedIndex = Axis;
 			joystickAxisDropdown.SelectedIndexChanged += onAxisChange;
 			panel.Controls.Add(joystickAxisDropdown);

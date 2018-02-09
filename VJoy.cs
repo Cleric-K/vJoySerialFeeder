@@ -6,7 +6,6 @@
  */
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using vJoyInterfaceWrap;
 
@@ -17,17 +16,29 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public class VJoy
 	{
-		vJoy joystick;
-		public vJoy.JoystickState jState { get; private set;}
-        uint id;
+        public enum Axes {
+			X,
+			Y,
+			Z,
+			Rx,
+			Ry,
+			Rz,
+			Sl0,
+			Sl1
+		};
+
+
+		private vJoy joystick;
+		private vJoy.JoystickState state;
+        private uint id;
 
 		public VJoy()
 		{
 			// Create one joystick object
             joystick = new vJoy();
-            jState = new vJoy.JoystickState();
+            state = new vJoy.JoystickState();
 		}
-		
+
 		public bool Init() {
             // Get the driver attributes (Vendor ID, Product ID, Version Number)
             if (!joystick.vJoyEnabled())
@@ -82,14 +93,49 @@ namespace vJoySerialFeeder
 			joystick.RelinquishVJD(id);
 		}
 		
-		public void SetAxis(double value, HID_USAGES axis) {
-			joystick.SetAxis((int)(value*0x7fff), id, axis);
+		public void SetAxis(double value, int axis) {
+			// axis values seem to range between -0x7fff to 0x7fff
+			int v = (int)(value*0x7fff); 
+
+			switch((Axes)axis) {
+				case Axes.X:
+				   state.AxisX = v;
+				   break;
+				case Axes.Y:
+				   state.AxisY = v;
+				   break;
+				case Axes.Z:
+				   state.AxisZ = v;
+				   break;
+				case Axes.Rx:
+				   state.AxisXRot = v;
+				   break;
+				case Axes.Ry:
+				   state.AxisYRot = v;
+				   break;
+				case Axes.Rz:
+				   state.AxisZRot = v;
+				   break;
+				case Axes.Sl0:
+				   state.Slider = v;
+				   break;
+				case Axes.Sl1:
+				   state.Dial = v;
+				   break;
+			}
 		}
 		
 		public void SetButton(bool value, uint btn) {
-			joystick.SetBtn(value, id, btn);
+			if(value)
+				state.Buttons |= (uint)1<<(int)btn;
+			else
+				state.Buttons &= ~((uint)1<<(int)btn);
 		}
-		
+
+		public void SetState() {
+			joystick.UpdateVJD(id, ref state);
+		}
+
 		public object[] GetJoysticks() {
 			ArrayList list = new ArrayList();
 			for(uint i = 1; i <= 16; i++) {

@@ -7,7 +7,6 @@
 using System;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace vJoySerialFeeder
 {
@@ -48,7 +47,7 @@ namespace vJoySerialFeeder
 		/// <summary>
 		/// This method gets called when the mapping should write its joystick.
 		/// </summary>
-		abstract public void WriteJoystick();
+		abstract public void UpdateJoystick(VJoy vjoy);
 		
 		/// <summary>
 		/// Request painting of the UI element.
