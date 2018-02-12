@@ -5,6 +5,7 @@
  * Time: 20:01 ч.
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
@@ -119,57 +120,46 @@ namespace vJoySerialFeeder
 			var w = pictureBox.Width - 2*padding;
 			var h = pictureBox.Height - 2*padding;
 			int max;
-			
+
+			int y1 = !parameters.invert ? padding + h : padding;
+			int y2 = parameters.invert ? padding + h : padding;
+
+			GraphicsPath graphPath = new GraphicsPath();
+			List<Point> points = new List<Point>();
+
 			if(parameters.notch) {
 				max = parameters.thresh2 + parameters.thresh1;
 				int t1 = (int)(parameters.thresh1/(double)max*w);
 				int t2 = (int)(parameters.thresh2/(double)max*w);
-				
-				y = !parameters.invert ? padding + h : padding;
-				// left horizontal segment
-				e.Graphics.DrawLine(linePen, padding, y,
-				                    	padding+t1, y);
-				// left vertical segment
-				e.Graphics.DrawLine(linePen, padding+t1, padding,
-				                    	padding+t1, padding + h);
-				y = parameters.invert ? padding + h : padding;
-				// middle horizontal segment
-				e.Graphics.DrawLine(linePen, padding+t1, y,
-				                    	padding+t2, y);
-				// right vertical segment
-				e.Graphics.DrawLine(linePen, padding+t2, padding,
-				                    	padding+t2, padding + h);
-				y = !parameters.invert ? padding + h : padding;
-				// right horizontal segment
-				e.Graphics.DrawLine(linePen, padding+t2, y,
-				                    	padding+w, y);
+
+				points.Add(new Point(padding, y1));     // left start point
+				points.Add(new Point(padding+t1, y1));  // left horizontal
+				points.Add(new Point(padding+t1, y2));  // left vertical
+				points.Add(new Point(padding+t2, y2));  // middle horizontal
+				points.Add(new Point(padding+t2, y1));  // right vertical
+				points.Add(new Point(padding+w, y1));   // right horizontal
 			}
 			else {
 				max = 2*parameters.thresh1;
-				
-				y = !parameters.invert ? padding + h : padding;
-				// left horizontal segment
-				e.Graphics.DrawLine(linePen, padding, y,
-				                    	padding+w/2, y);
-				// vertical segment
-				e.Graphics.DrawLine(linePen, padding+w/2, padding,
-				                    	padding+w/2, padding + h);
-				y = parameters.invert ? padding + h : padding;
-				// right horizontal segment
-				e.Graphics.DrawLine(linePen, padding+w/2, y,
-				                    	padding+w, y);
+
+				points.Add(new Point(padding, y1));      // left start point
+				points.Add(new Point(padding+w/2, y1));  // left horizontal
+				points.Add(new Point(padding+w/2, y2));  // middle vertical
+				points.Add(new Point(padding+w, y2));    // right horizontal
 			}
-			
+
+			graphPath.AddLines(points.ToArray());
+			e.Graphics.DrawPath(linePen, graphPath);
+
 			p = Math.Min(max, Math.Max(0, buttonMapping.ChannelValue)); // clamp
 			val = parameters.Transform(p);
 			x = padding + (int)(p/(double)max*w);
 			y = !parameters.Transform(p) ? padding + h: padding;
-			
+
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);
 			e.Graphics.DrawString(buttonMapping.ChannelValue.ToString(), DefaultFont, Brushes.Green, x, h+padding);
 			e.Graphics.DrawString(val ? "On" : "Off", DefaultFont, Brushes.Red, 0, y);
-		
 		}
 		
 		void ButtonCalibrateClick(object sender, EventArgs e)

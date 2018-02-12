@@ -5,9 +5,9 @@
  * Time: 22:44 ч.
  */
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Net;
 using System.Windows.Forms;
 
 namespace vJoySerialFeeder
@@ -119,25 +119,25 @@ namespace vJoySerialFeeder
 		{
 			//e.Graphics.DrawLine(Pens.Blue, axisMapping.ChannelValue, 0, 100, 50);
 			const int padding = 30;
-			int p, x, y, lastY = 0;
+			int p, x, y;
 			double val;
 			var w = pictureBox.Width - 2*padding;
 			var h = pictureBox.Height - 2*padding;
-			
-			for(var i=0; i<w; i++) {
-				
-				p = (int)(parameters.Min + (parameters.Max-parameters.Min)*(double)i/w);
+
+			GraphicsPath graphPath = new GraphicsPath();
+			List<Point> points = new List<Point>();
+
+			for(var i=0; i<=w; i++) {
+				p = (int)Math.Round(parameters.Min + (parameters.Max-parameters.Min)*(double)i/w);
 				val = parameters.Transform(p);
-				y = (int)(padding+h-val*h);
+				y = (int)Math.Round(padding+h-val*h);
 				
-				//System.Diagnostics.Debug.Print((float)(h-lastVal*h)+","+(float)(h-val*h));
-				if(i > 0)
-					e.Graphics.DrawLine(linePen, padding+i-1, (float)lastY,
-					                    padding+i, (float)y);
-				
-				lastY = y;
+				points.Add(new Point(padding+i, y));
 			}
-			
+
+			graphPath.AddLines(points.ToArray());
+			e.Graphics.DrawPath(linePen, graphPath);
+
 			p = Math.Min(parameters.Max, Math.Max(parameters.Min, axisMapping.ChannelValue)); // clamp
 			val = parameters.Transform(p);
 			if(parameters.Max == parameters.Min)
