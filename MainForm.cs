@@ -198,7 +198,8 @@ namespace vJoySerialFeeder
 				mapping.Paint();
 			}
 			toolStripStatusLabel.Text = "Connected, "+ActiveChannels
-				+" channels available, Update Rate "+Math.Round(updateRate)+" Hz";
+				+" channels available, Update Rate "+Math.Round(updateRate)+" Hz"
+				+" (" + (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms)";
 		}
 		
 		Mapping addAxis() {

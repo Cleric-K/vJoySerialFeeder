@@ -74,20 +74,19 @@ namespace vJoySerialFeeder
 				checksum ^= Buffer[idx++];
 			}
 			
-			if(Buffer[idx] == checksum) {
+			if(Buffer[idx++] == checksum) {
 				// correct checksum
 				if(Buffer[4] == MSP_RC) {
 					var data_start = 5; // first data byte
-					while(data_start + 1 < 5 + len) {
-						channelData[ch++] = (Buffer[data_start] | (Buffer[data_start + 1] << 8));
-						data_start += 2;
-					}
+					while(data_start + 1 < 5 + len)
+						channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
+
 					Buffer.FrameLength = idx + 1; // use for next get
 				}
 			}
 			// else incorrect checksum
 			
-			Buffer.Slide(idx + 1);
+			Buffer.Slide(idx);
 			return ch;
 			
 		}

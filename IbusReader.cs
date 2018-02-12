@@ -89,7 +89,7 @@ namespace vJoySerialFeeder
 			}
 			
 			// check checksum
-			if(chksum == Buffer[idx] + (Buffer[++idx] << 8)) {
+			if(chksum == Buffer[idx++] + (Buffer[idx++] << 8)) {
 				// Valid packet
 				        	
 	        	Buffer.FrameLength = data_len + PROTOCOL_OVERHEAD; // used for next serial read
@@ -100,12 +100,10 @@ namespace vJoySerialFeeder
 					data_end = data_start + data_len;
 					data_start++; // skip command byte
 					int ch = 0;
-              		while(data_start+1 < data_end) {
-						channelData[ch++] = (Buffer[data_start] | (Buffer[data_start + 1] << 8));
-						data_start += 2;
-					}
+              		while(data_start+1 < data_end)
+						channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
 					
-					Buffer.Slide(idx + 1);
+					Buffer.Slide(idx);
 					
 					return ch;
 				}
@@ -117,7 +115,7 @@ namespace vJoySerialFeeder
 				{
 					// Usually if it is a real bit error we should just try and read the next
 					// packet.
-					Buffer.Slide(idx + 1);
+					Buffer.Slide(idx);
 					System.Diagnostics.Debug.WriteLine("bad checksum");
 				}
 				else {
