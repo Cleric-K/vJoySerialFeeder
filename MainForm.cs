@@ -182,6 +182,7 @@ namespace vJoySerialFeeder
 			} catch(Exception) {}
 			serialPort = null;
 			
+			ActiveChannels = 0;
 			comboProtocol.Enabled = true;
 			comboPorts.Enabled = true;
 			textBaud.Enabled = true;
@@ -274,6 +275,7 @@ namespace vJoySerialFeeder
 					ActiveChannels = serialReader.ReadChannels();
 				}
 				catch(Exception ex) {
+					ActiveChannels = 0;
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 				}
 				if(ActiveChannels > 0) {
@@ -372,5 +374,12 @@ namespace vJoySerialFeeder
 			config.Save();
 			reloadProfiles();
 		}
+        
+        void ButtonMonitorClick(object sender, EventArgs e)
+        {
+        	var f = new MonitorForm();
+        	f.Owner = this;
+        	f.Show();
+        }
 	}
 }

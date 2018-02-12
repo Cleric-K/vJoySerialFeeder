@@ -75,6 +75,7 @@ namespace vJoySerialFeeder
         	this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
         	this.label6 = new System.Windows.Forms.Label();
         	this.comboProtocol = new System.Windows.Forms.ComboBox();
+        	this.buttonMonitor = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -284,11 +285,22 @@ namespace vJoySerialFeeder
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
         	this.comboProtocol.TabIndex = 22;
         	// 
+        	// buttonMonitor
+        	// 
+        	this.buttonMonitor.Location = new System.Drawing.Point(588, 80);
+        	this.buttonMonitor.Name = "buttonMonitor";
+        	this.buttonMonitor.Size = new System.Drawing.Size(114, 23);
+        	this.buttonMonitor.TabIndex = 23;
+        	this.buttonMonitor.Text = "Channel Monitor";
+        	this.buttonMonitor.UseVisualStyleBackColor = true;
+        	this.buttonMonitor.Click += new System.EventHandler(this.ButtonMonitorClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonMonitor);
         	this.Controls.Add(this.comboProtocol);
         	this.Controls.Add(this.label6);
         	this.Controls.Add(this.statusStrip1);
@@ -319,6 +331,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonMonitor;
         private System.Windows.Forms.ComboBox comboProtocol;
         private System.Windows.Forms.Label label6;
 	}
