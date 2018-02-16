@@ -39,8 +39,8 @@ IBus ibus(NUM_CHANNELS);
 
 void setup()
 {
-  analogReference(ANALOG_REFERENCE);     // using external voltage reference
-  Serial.begin(BAUD_RATE);          // setup serial
+  analogReference(ANALOG_REFERENCE); // use the defined ADC reference voltage source
+  Serial.begin(BAUD_RATE);           // setup serial
 }
 
 void loop()
