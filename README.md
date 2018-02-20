@@ -19,4 +19,4 @@ After data is received it can be _mapped_ to any vJoy axis or button in very fle
 You can dowload binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](http://www.icsharpcode.net/opensource/sd/)
 
 ## How to use it? ##
-Check ot the [Manual](docs/MANUAL.md).
+Check out the [Manual](docs/MANUAL.md).
