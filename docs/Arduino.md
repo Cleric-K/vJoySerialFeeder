@@ -5,7 +5,7 @@ It is very easy to use VJoySerialFeeder with Arduino. You can use [this simple s
 
 Analog data is read using the 10-bit ADC which results in channel values between 0 and 1023.
 
-Digital data is read from the digital pins and is send as channel values 0 for logical 0 and 1023 for logical 1.
+Digital data is read from the digital pins and is send as channel values 0 for LOW and 1023 for HIGH _or_ up to 16 digital pins can be encoded as bits (0 or 1) in a single channel (channel values are 16-bit integers).
 
 Analog channels are most easily implemented with potentiometers and digital - with switches.
 
@@ -14,7 +14,7 @@ If you have an old toy RC controller it is quite easy to read its pots with ardu
 
 ![RC](images/ard1.jpg)
 
-In general, every potentiometer in the RC conroller has three pins - the two outer pins are for Ground and +Voltage and the center pin is for reading the output (it varies between 0 and +Voltage, depending on the rotation).
+In general, every potentiometer in the RC controller has three pins - the two outer pins are for Ground and +Voltage and the center pin is for reading the output (it varies between 0 and +Voltage, depending on the rotation).
 
 The center pins of the four pots must be connected to four of the analog pins of the Arduino.
 
