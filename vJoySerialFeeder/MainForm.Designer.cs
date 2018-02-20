@@ -76,6 +76,7 @@ namespace vJoySerialFeeder
         	this.label6 = new System.Windows.Forms.Label();
         	this.comboProtocol = new System.Windows.Forms.ComboBox();
         	this.buttonMonitor = new System.Windows.Forms.Button();
+        	this.buttonBitmappedButton = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -295,11 +296,22 @@ namespace vJoySerialFeeder
         	this.buttonMonitor.UseVisualStyleBackColor = true;
         	this.buttonMonitor.Click += new System.EventHandler(this.ButtonMonitorClick);
         	// 
+        	// buttonBitmappedButton
+        	// 
+        	this.buttonBitmappedButton.Location = new System.Drawing.Point(166, 81);
+        	this.buttonBitmappedButton.Name = "buttonBitmappedButton";
+        	this.buttonBitmappedButton.Size = new System.Drawing.Size(133, 23);
+        	this.buttonBitmappedButton.TabIndex = 24;
+        	this.buttonBitmappedButton.Text = "Add Bit-mapped Button";
+        	this.buttonBitmappedButton.UseVisualStyleBackColor = true;
+        	this.buttonBitmappedButton.Click += new System.EventHandler(this.ButtonBitmappedButtonClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonBitmappedButton);
         	this.Controls.Add(this.buttonMonitor);
         	this.Controls.Add(this.comboProtocol);
         	this.Controls.Add(this.label6);
@@ -331,6 +343,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonBitmappedButton;
         private System.Windows.Forms.Button buttonMonitor;
         private System.Windows.Forms.ComboBox comboProtocol;
         private System.Windows.Forms.Label label6;

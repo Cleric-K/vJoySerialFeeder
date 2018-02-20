@@ -77,6 +77,11 @@
       <DependentUpon>AxisSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AxisMapping.cs" />
+    <Compile Include="ButtonBitmapMapping.cs" />
+    <Compile Include="ButtonBitmapSetupForm.cs" />
+    <Compile Include="ButtonBitmapSetupForm.Designer.cs">
+      <DependentUpon>ButtonBitmapSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ButtonSetupForm.cs" />
     <Compile Include="ButtonSetupForm.Designer.cs">
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>
@@ -110,6 +115,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">
       <DependentUpon>AxisSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ButtonBitmapSetupForm.resx">
+      <DependentUpon>ButtonBitmapSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ButtonSetupForm.resx">
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>

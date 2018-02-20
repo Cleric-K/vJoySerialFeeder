@@ -52,7 +52,7 @@ namespace vJoySerialFeeder
 	
 		private static DataContractJsonSerializer Serializer = new DataContractJsonSerializer(
 				typeof(Configuration),
-				new Type[] {typeof(AxisMapping), typeof(ButtonMapping)}
+				new Type[] {typeof(AxisMapping), typeof(ButtonMapping), typeof(ButtonBitmapMapping)}
 			);
 		
 		

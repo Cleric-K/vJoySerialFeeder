@@ -230,7 +230,12 @@ namespace vJoySerialFeeder
 		void ButtonAddButtonClick(object sender, EventArgs e)
         {
 			addMapping(new ButtonMapping());
-        }	
+        }
+		
+		void ButtonBitmappedButtonClick(object sender, EventArgs e)
+        {
+			addMapping(new ButtonBitmapMapping());
+        }
 
 		
 		void FlowLayoutPanel1MouseEnter(object sender, EventArgs e)
@@ -380,6 +385,6 @@ namespace vJoySerialFeeder
         	var f = new MonitorForm();
         	f.Owner = this;
         	f.Show();
-        }
+        } 
 	}
 }
