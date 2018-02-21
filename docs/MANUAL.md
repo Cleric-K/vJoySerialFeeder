@@ -9,23 +9,25 @@ _Tech details:_ Serial data arrives in _frames_. Different protocols use differe
 A mapping is a rule which transforms the integer channel data in a value that can be fed to vJoy. There are two types of mappings:
   1. Axis Mapping - used to transform a channel to a joystick axis (X, Y, Slider, etc.).
   2. Button Mapping - used to transform channel value to a binary button state - pressed/depressed - using threshold(s).
-  3. Bit-mapped Button Mapping - takes the channel values as 16-bit integer and allows each bit to command one button (16 buttons total).
+  3. Bit-mapped Button Mapping - takes the channel value as 16-bit integer and allows each bit to command one button (16 buttons total).
   
 ## How to use ##
-1. First you have to decide how you are going to get the serial data you need. Refer to [Use cases](../README.md).
+1. [Download](https://sourceforge.net/projects/vjoystick/files/latest/download) and install the latest version of vJoy (2.x at this time). Create at least one joystick and add the needed axes and buttons.
 
-2. After your data provider is ready you should select the COM port and baud rate.
+2. Then you have to decide how you are going to get the serial data you need. Refer to [Use cases](../README.md).
 
-3. Select the correct serial protocol.
+3. After your data provider is ready you should select the COM port and baud rate.
 
-4. Select the vJoy joystick instance (if there are more than one).
+4. Select the correct serial protocol.
 
-5. Click the **Connect** button. If everything is OK you should see in the status bar something like:
+5. Select the vJoy joystick instance (if there are more than one).
+
+6. Click the **Connect** button. If everything is OK you should see in the status bar something like:
 ![status](images/statusbar.png)
 
-6. Open the **Channel Monitor** and see if everything seems to be working OK. Try changing your inputs and confirm that channels are changing value.
+7. Open the **Channel Monitor** and see if everything seems to be working OK. Try changing your inputs and confirm that channels are changing value.
 
-7. Start mapping!\
+8. Start mapping!\
 Use the **Add Axis**,  **Add Button** and **Add Bit-mapped Button** buttons to add mappings to the interface.\
 All mappings can take data from only one channel. Use the **Channel** input box to select it. What is done with the data depends on the mapping type.
   * In Axis Mappings, there is a **Axis** dropdown menu from which you can select the joystick axis which you would like to command with the selected channel. Please note that your vJoy configuration may or may not have some of the axes enabled.\
@@ -69,4 +71,4 @@ Axis Mappings can be thought of as a function which take the input channel value
   After a button has been mapped its vJoy button id is shown in the box. If the button is inverted an overbar is shown above the number.\
   For unmapped bits (no number shown) the color of the box represents the _input_ bit. For mapped bits the color represents the vJoy button state.
   
-8. Save your your configuration as a **Profile**. Enter a profile name in the text box and click **Save**. The last used profile is automatically loaded on next run.
+9. Save your your configuration as a **Profile**. Enter a profile name in the text box and click **Save**. The last used profile is automatically loaded on next run.

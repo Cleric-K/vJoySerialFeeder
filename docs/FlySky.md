@@ -15,8 +15,8 @@ RX             | IBUS
 
 In the picture above, FS82 micro receiver has been used which is cheap and perfect for this use.
 
-After connecting the the receiver to the PC through the cable/adapter, you should bind it to your radio controller, if not bound already. It is convinient to define a dedicated model in your controller for this receiver.
+After connecting the receiver to the PC through the cable/adapter, you should bind it to your radio controller, if not already bound. It is convenient to define a dedicated model in your controller for this receiver.
 
-Then you should select the correct COM port, choose baud rate 115200, select IBUS protocl and hit **connect**.
+Then you should select the correct COM port, choose baud rate 115200, select IBUS protocol and hit **connect**.
 
 Map your channels and enjoy your wireless controller with your favorite sims.
