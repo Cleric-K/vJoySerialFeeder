@@ -17,7 +17,7 @@ GND            | GND
 +5V            | +5V
 RX             | IBUS
 
-(Please note that in some rarer FTDI adapters RX and TX labels are reversed. Always make sure you connect the IBUS pin to the the pin of the FTDI where it expects the signal to go IN - almost always that is RX)
+(Please note that in some rarer FTDI adapters RX and TX labels are reversed. Always make sure you connect the IBUS pin to the pin of the FTDI where it expects the signal to go IN - almost always that is RX)
 
 In the picture above, FS82 micro receiver has been used which is cheap and perfect for this use.
 
