@@ -105,6 +105,7 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="IbusReader.cs" />
+    <Compile Include="SbusReader.cs" />
     <Compile Include="SerialReader.cs" />
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>

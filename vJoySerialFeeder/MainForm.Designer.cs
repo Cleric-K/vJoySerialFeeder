@@ -280,7 +280,8 @@ namespace vJoySerialFeeder
         	this.comboProtocol.FormattingEnabled = true;
         	this.comboProtocol.Items.AddRange(new object[] {
         	        	        	"IBUS",
-        	        	        	"MultiWii"});
+        	        	        	"MultiWii",
+        	        	        	"SBUS"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 39);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);

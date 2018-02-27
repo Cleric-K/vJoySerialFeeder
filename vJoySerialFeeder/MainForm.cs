@@ -33,7 +33,7 @@ namespace vJoySerialFeeder
 		
 		private double updateRate;
 		
-		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader)};
+		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader)};
 		
 		public MainForm()
 		{
@@ -134,7 +134,9 @@ namespace vJoySerialFeeder
 		private void connect() {
 			int baudRate;
 			string errmsg;
-			if((errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
+			Type readerType;
+			
+			if(comboJoysticks.SelectedItem != null && (errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
 				MessageBox.Show(errmsg);
 				return;
 			}
@@ -146,8 +148,13 @@ namespace vJoySerialFeeder
 				return;
 			}
 			
+			readerType = Protocols[comboProtocol.SelectedIndex];
 			try {
-				serialPort = new SerialPort((string)comboPorts.SelectedItem, baudRate);
+				if(readerType == typeof(SbusReader))
+					serialPort = new SerialPort((string)comboPorts.SelectedItem, baudRate, Parity.Even, 8, StopBits.Two);
+				else
+					serialPort = new SerialPort((string)comboPorts.SelectedItem, baudRate);
+				
 				serialPort.Open();
 			}
 			catch(Exception) {
@@ -156,7 +163,7 @@ namespace vJoySerialFeeder
 				return;
 			}
 			
-			serialReader = (SerialReader)Activator.CreateInstance(Protocols[comboProtocol.SelectedIndex]);
+			serialReader = (SerialReader)Activator.CreateInstance(readerType);
 
 			comboProtocol.Enabled = false;
 			comboPorts.Enabled = false;
