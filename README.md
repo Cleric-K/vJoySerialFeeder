@@ -11,8 +11,8 @@ After data is received it can be _mapped_ to any vJoy axis or button in very fle
 
 ## Use cases ##
 1. Use Arduino to read data from any device and send it to your PC - basic sketch in the [Arduino](Arduino/Joystick) directory. See [example](docs/Arduino.md) on using old RC controller for simulators.
-2. Read controller directly from any IBUS capable FlySky receiver. [Example](docs/FlySky.md)
-3. Use MultiWii compatible Flight Controller (MultiWii, CleanFlight, BetaFlight, etc.). Connect your RC model to your PC, choose the MultiWii protocol and open the USB serial port (the one you would normally use for your Configurator utility).
+2. Read controller directly from any IBUS capable FlySky receiver. [Example](docs/FlySky.md). See also Drone Mesh's video tutorials [here](https://www.youtube.com/watch?v=TRnu2_TI9Vk) and [here](https://www.youtube.com/watch?v=sp9Fq9gAqXk).
+3. Use MultiWii compatible Flight Controller (MultiWii, CleanFlight, BetaFlight, etc.). Connect your RC model to your PC, choose the MultiWii protocol and open the USB serial port (the one you would normally use for your Configurator utility). Video tutorial [here](https://www.youtube.com/watch?v=6RsGqLJqsD4).
 4. Feed over network. You can use pairs of virtual serial ports provided by [com0com](http://com0com.sourceforge.net/) and [com2tcp](https://sourceforge.net/projects/com0com/files/com2tcp) for the TCP/IP transport. Another option is [HW VSP3](https://www.hw-group.com/products/hw_vsp/index_en.html) which combines the virtual serial port and the TCP/IP transport but the free version allows only one COM port.
 
 ## How to get it? ##
