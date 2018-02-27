@@ -20,3 +20,7 @@ You can dowload binaries from the [releases](../../releases) section or you can 
 
 ## How to use it? ##
 Check out the [Manual](docs/MANUAL.md).
+
+## Like it?
+If this software brought a smile on your face, you may shine back if you feel like it: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L5789HZB5NAX4&lc=BG&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)\
+Thank you!!!
