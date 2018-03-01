@@ -37,9 +37,11 @@ namespace vJoySerialFeeder
 			[DataMember]
 			public List<Mapping> Mappings = new List<Mapping>();
 			[DataMember]
-			public bool UseProtocolDefaults = true;
+			public bool UseProtocolSerialDefaults = true;
 			[DataMember]
 			public SerialParameters SerialParameters;
+			[DataMember]
+			public string ProtocolConfiguration = "";
 		}
 		
 		/// <summary>

@@ -28,9 +28,10 @@ namespace vJoySerialFeeder
 		private bool connected = false;
 		private SerialPort serialPort;
 		private SerialReader serialReader;
+		private string protocolConfig = "";
 		
 		private Configuration config;
-		private bool useProtocolDefaults = true;
+		private bool useProtocolSerialDefaults = true;
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
@@ -99,8 +100,9 @@ namespace vJoySerialFeeder
 				// load this stuff only if not connected
 				comboProtocol.SelectedIndex = p.Protocol;
 				comboPorts.SelectedItem = p.COMPort;
-				useProtocolDefaults = p.UseProtocolDefaults;
+				useProtocolSerialDefaults = p.UseProtocolSerialDefaults;
 				serialParameters = p.SerialParameters;
+				protocolConfig = p.ProtocolConfiguration;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
 			}
 			
@@ -147,7 +149,7 @@ namespace vJoySerialFeeder
 
 			serialReader = createSerialReader();
 			
-			var sp = useProtocolDefaults ?
+			var sp = useProtocolSerialDefaults ?
 				serialReader.GetDefaultSerialParameters()
 				: serialParameters;
 			
@@ -249,7 +251,7 @@ namespace vJoySerialFeeder
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			serialReader.Init(serialPort, Channels);
+			serialReader.Init(serialPort, Channels, protocolConfig);
 			serialReader.Start();
 			
 			double nextUpdateTime = 0, prevTime = 0;
@@ -323,8 +325,9 @@ namespace vJoySerialFeeder
 				
 			p.Protocol = comboProtocol.SelectedIndex;
 			p.COMPort = comboPorts.Text;
-			p.UseProtocolDefaults = useProtocolDefaults;
+			p.UseProtocolSerialDefaults = useProtocolSerialDefaults;
 			p.SerialParameters = serialParameters;
+			p.ProtocolConfiguration = protocolConfig;
 			p.VJoyInstance = comboJoysticks.Text;
 
 			p.Mappings = new List<Mapping>();
@@ -379,15 +382,27 @@ namespace vJoySerialFeeder
         
         void ButtonPortSetupClick(object sender, EventArgs e)
         {
-        	var sp = useProtocolDefaults ?
+        	var sp = useProtocolSerialDefaults ?
         		createSerialReader().GetDefaultSerialParameters()
         		: serialParameters;
-        	var d = new PortSetupForm(useProtocolDefaults, sp);
+        	var d = new PortSetupForm(useProtocolSerialDefaults, sp);
         	d.ShowDialog();
         	if(d.DialogResult == DialogResult.OK) {
-        		useProtocolDefaults = d.UseProtocolDefaults;
+        		useProtocolSerialDefaults = d.UseProtocolSerialDefaults;
         		serialParameters = d.SerialParameters;
         	}
+        }
+        
+        void ButtonProtocolSetupClick(object sender, EventArgs e)
+        {
+        	var c = createSerialReader().Configure(protocolConfig);
+        	if(c != null)
+        		protocolConfig = c;
+        }
+        
+        void ComboProtocolSelectedIndexChanged(object sender, EventArgs e)
+        {
+        	buttonProtocolSetup.Visible = createSerialReader().IsConfigurable();
         }
 	}
 }

@@ -74,6 +74,7 @@ namespace vJoySerialFeeder
         	this.buttonMonitor = new System.Windows.Forms.Button();
         	this.buttonBitmappedButton = new System.Windows.Forms.Button();
         	this.buttonPortSetup = new System.Windows.Forms.Button();
+        	this.buttonProtocolSetup = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -265,6 +266,7 @@ namespace vJoySerialFeeder
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
         	this.comboProtocol.TabIndex = 5;
+        	this.comboProtocol.SelectedIndexChanged += new System.EventHandler(this.ComboProtocolSelectedIndexChanged);
         	// 
         	// buttonMonitor
         	// 
@@ -296,11 +298,22 @@ namespace vJoySerialFeeder
         	this.buttonPortSetup.UseVisualStyleBackColor = true;
         	this.buttonPortSetup.Click += new System.EventHandler(this.ButtonPortSetupClick);
         	// 
+        	// buttonProtocolSetup
+        	// 
+        	this.buttonProtocolSetup.Location = new System.Drawing.Point(439, 38);
+        	this.buttonProtocolSetup.Name = "buttonProtocolSetup";
+        	this.buttonProtocolSetup.Size = new System.Drawing.Size(46, 23);
+        	this.buttonProtocolSetup.TabIndex = 22;
+        	this.buttonProtocolSetup.Text = "Setup";
+        	this.buttonProtocolSetup.UseVisualStyleBackColor = true;
+        	this.buttonProtocolSetup.Click += new System.EventHandler(this.ButtonProtocolSetupClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonProtocolSetup);
         	this.Controls.Add(this.buttonPortSetup);
         	this.Controls.Add(this.buttonBitmappedButton);
         	this.Controls.Add(this.buttonMonitor);
@@ -333,6 +346,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonProtocolSetup;
         private System.Windows.Forms.Button buttonPortSetup;
         private System.Windows.Forms.Button buttonBitmappedButton;
         private System.Windows.Forms.Button buttonMonitor;

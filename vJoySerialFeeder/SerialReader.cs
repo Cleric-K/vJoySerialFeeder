@@ -80,17 +80,19 @@ namespace vJoySerialFeeder
 		
 		protected SerialPort serialPort;
 		protected SerialBuffer Buffer;
+		protected string config;
 		
 		/// <summary>
 		/// the ReadChannels method should put its data in this array.
 		/// </summary>
 		protected int[] channelData;
 		
-		public void Init(SerialPort sp, int[] channelData)
+		public void Init(SerialPort sp, int[] channelData, string config)
 		{
 			serialPort = sp;
 			Buffer = new SerialBuffer(sp);
 			this.channelData = channelData;
+			this.config = config;
 		}
 		
 		/// <summary>
@@ -115,5 +117,25 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <returns></returns>
 		public abstract Configuration.SerialParameters GetDefaultSerialParameters();
+		
+		/// <summary>
+		/// Override this to return yes if protocl should display protocol 'Setup' butto
+		/// </summary>
+		/// <returns></returns>
+		public virtual bool IsConfigurable() {
+			return false;
+		}
+		
+		/// <summary>
+		/// Override this to display a dialog or whatever.
+		/// 
+		/// Procotol configuration is a simple string (could be empty or null). The deriving class should
+		/// decide for itself how it's going to serialize its configuration.
+		/// </summary>
+		/// <param name="config">This is the current configuration</param>
+		/// <returns>The new configuration. Return null if the configuration should not be changed.</returns>
+		public virtual string Configure(string config) {
+			throw new NotImplementedException("You must implement this yourself");
+		}
 	}
 }
