@@ -31,7 +31,7 @@ namespace vJoySerialFeeder
 		private string protocolConfig = "";
 		
 		private Configuration config;
-		private bool useProtocolSerialDefaults = true;
+		private bool useCustomSerialParameters = true;
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
@@ -100,7 +100,7 @@ namespace vJoySerialFeeder
 				// load this stuff only if not connected
 				comboProtocol.SelectedIndex = p.Protocol;
 				comboPorts.SelectedItem = p.COMPort;
-				useProtocolSerialDefaults = p.UseProtocolSerialDefaults;
+				useCustomSerialParameters = p.UseCustomSerialParameters;
 				serialParameters = p.SerialParameters;
 				protocolConfig = p.ProtocolConfiguration;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
@@ -149,9 +149,9 @@ namespace vJoySerialFeeder
 
 			serialReader = createSerialReader();
 			
-			var sp = useProtocolSerialDefaults ?
-				serialReader.GetDefaultSerialParameters()
-				: serialParameters;
+			var sp = useCustomSerialParameters ?
+				serialParameters
+				: serialReader.GetDefaultSerialParameters();
 			
 			try {
 				serialPort = new SerialPort((string)comboPorts.SelectedItem, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
@@ -327,7 +327,7 @@ namespace vJoySerialFeeder
 				
 			p.Protocol = comboProtocol.SelectedIndex;
 			p.COMPort = comboPorts.Text;
-			p.UseProtocolSerialDefaults = useProtocolSerialDefaults;
+			p.UseCustomSerialParameters = useCustomSerialParameters;
 			p.SerialParameters = serialParameters;
 			p.ProtocolConfiguration = protocolConfig;
 			p.VJoyInstance = comboJoysticks.Text;
@@ -384,13 +384,13 @@ namespace vJoySerialFeeder
         
         void ButtonPortSetupClick(object sender, EventArgs e)
         {
-        	var sp = useProtocolSerialDefaults ?
-        		createSerialReader().GetDefaultSerialParameters()
-        		: serialParameters;
-        	var d = new PortSetupForm(useProtocolSerialDefaults, sp);
+        	var sp = useCustomSerialParameters ?
+        		serialParameters
+        		: createSerialReader().GetDefaultSerialParameters();
+        	var d = new PortSetupForm(useCustomSerialParameters, sp);
         	d.ShowDialog();
         	if(d.DialogResult == DialogResult.OK) {
-        		useProtocolSerialDefaults = d.UseProtocolSerialDefaults;
+        		useCustomSerialParameters = d.UseCustomSerialParameters;
         		serialParameters = d.SerialParameters;
         	}
         }

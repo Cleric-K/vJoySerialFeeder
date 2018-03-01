@@ -17,9 +17,9 @@ namespace vJoySerialFeeder
 	public partial class PortSetupForm : Form
 	{
 		public Configuration.SerialParameters SerialParameters { get; private set; }
-		public bool UseProtocolSerialDefaults { get; private set; }
+		public bool UseCustomSerialParameters { get; private set; }
 		
-		public PortSetupForm(bool useDefault, Configuration.SerialParameters serParams)
+		public PortSetupForm(bool useCustom, Configuration.SerialParameters serParams)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -28,10 +28,10 @@ namespace vJoySerialFeeder
 			
 			SerialParameters = serParams;
 			
-			if(useDefault)
-				radioDefault.Checked = true;
-			else
+			if(useCustom)
 				radioCustom.Checked = true;
+			else
+				radioDefault.Checked = true;
 			
 			textBaudrate.Text = serParams.BaudRate.ToString();
 			
@@ -50,7 +50,7 @@ namespace vJoySerialFeeder
 		void ButtonOKClick(object sender, EventArgs e)
 		{
 			Configuration.SerialParameters p;
-			UseProtocolSerialDefaults = radioDefault.Checked;
+			UseCustomSerialParameters = radioCustom.Checked;
 			try {
 				p.BaudRate = (int)uint.Parse(textBaudrate.Text);
 			}
