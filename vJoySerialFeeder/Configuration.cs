@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
@@ -30,12 +31,30 @@ namespace vJoySerialFeeder
 		[DataContract]
 		public class Profile {
 			[DataMember]
-			public string COMPort, BaudRate, VJoyInstance;
+			public string COMPort, VJoyInstance;
 			[DataMember]
 			public int Protocol;
 			[DataMember]
 			public List<Mapping> Mappings = new List<Mapping>();
-		}	
+			[DataMember]
+			public bool UseProtocolDefaults = true;
+			[DataMember]
+			public SerialParameters SerialParameters;
+		}
+		
+		/// <summary>
+		/// Stores Serial Port Config
+		/// </summary>
+		[DataContract]
+		public struct SerialParameters
+		{
+			[DataMember]
+			public int BaudRate, DataBits;
+			[DataMember]
+			public Parity Parity;
+			[DataMember]
+			public StopBits StopBits;
+		}
 		
 		/// <summary>
 		/// Stores the name of the profile to load on startup

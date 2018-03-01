@@ -130,7 +130,16 @@ namespace vJoySerialFeeder
 			return 0;
 		}
 		
-		
+		public override Configuration.SerialParameters GetDefaultSerialParameters()
+		{
+			Configuration.SerialParameters p;
+			p.BaudRate = 115200;
+			p.DataBits = 8;
+			p.Parity = Parity.None;
+			p.StopBits = StopBits.One;
+			
+			return p;
+		}
 		
 		
 	}

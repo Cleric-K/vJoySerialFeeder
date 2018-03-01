@@ -30,6 +30,8 @@ namespace vJoySerialFeeder
 		private SerialReader serialReader;
 		
 		private Configuration config;
+		private bool useProtocolDefaults = true;
+		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
 		
@@ -97,7 +99,8 @@ namespace vJoySerialFeeder
 				// load this stuff only if not connected
 				comboProtocol.SelectedIndex = p.Protocol;
 				comboPorts.SelectedItem = p.COMPort;
-				textBaud.Text = p.BaudRate;
+				useProtocolDefaults = p.UseProtocolDefaults;
+				serialParameters = p.SerialParameters;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
 			}
 			
@@ -131,23 +134,25 @@ namespace vJoySerialFeeder
 				comboJoysticks.SelectedIndex = 0;
 		}
 		
+		private SerialReader createSerialReader() {
+			return (SerialReader)Activator.CreateInstance(Protocols[comboProtocol.SelectedIndex]);
+		}
+		
 		private void connect() {
-			int baudRate;
 			string errmsg;
-			if((errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
+			if(comboJoysticks.SelectedItem != null && (errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
 				MessageBox.Show(errmsg);
 				return;
 			}
-			try {
-				baudRate = (int)UInt32.Parse(textBaud.Text);
-			}
-			catch(Exception) {
-				MessageBox.Show("Invalid baud rate", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
-			}
+
+			serialReader = createSerialReader();
+			
+			var sp = useProtocolDefaults ?
+				serialReader.GetDefaultSerialParameters()
+				: serialParameters;
 			
 			try {
-				serialPort = new SerialPort((string)comboPorts.SelectedItem, baudRate);
+				serialPort = new SerialPort((string)comboPorts.SelectedItem, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
 				serialPort.Open();
 			}
 			catch(Exception) {
@@ -155,12 +160,10 @@ namespace vJoySerialFeeder
 				VJoy.Release();
 				return;
 			}
-			
-			serialReader = (SerialReader)Activator.CreateInstance(Protocols[comboProtocol.SelectedIndex]);
 
 			comboProtocol.Enabled = false;
 			comboPorts.Enabled = false;
-			textBaud.Enabled = false;
+			buttonPortSetup.Enabled = false;
 			buttonPortsRefresh.Enabled = false;
 			buttonConnect.Text = "Disconnect";
 			comboJoysticks.Enabled = false;
@@ -185,7 +188,7 @@ namespace vJoySerialFeeder
 			ActiveChannels = 0;
 			comboProtocol.Enabled = true;
 			comboPorts.Enabled = true;
-			textBaud.Enabled = true;
+			buttonPortSetup.Enabled = true;
 			buttonPortsRefresh.Enabled = true;
 			buttonConnect.Text = "Connect";
 			connected = false;
@@ -320,7 +323,8 @@ namespace vJoySerialFeeder
 				
 			p.Protocol = comboProtocol.SelectedIndex;
 			p.COMPort = comboPorts.Text;
-			p.BaudRate = textBaud.Text;
+			p.UseProtocolDefaults = useProtocolDefaults;
+			p.SerialParameters = serialParameters;
 			p.VJoyInstance = comboJoysticks.Text;
 
 			p.Mappings = new List<Mapping>();
@@ -372,5 +376,18 @@ namespace vJoySerialFeeder
         	f.Owner = this;
         	f.Show();
         } 
+        
+        void ButtonPortSetupClick(object sender, EventArgs e)
+        {
+        	var sp = useProtocolDefaults ?
+        		createSerialReader().GetDefaultSerialParameters()
+        		: serialParameters;
+        	var d = new PortSetupForm(useProtocolDefaults, sp);
+        	d.ShowDialog();
+        	if(d.DialogResult == DialogResult.OK) {
+        		useProtocolDefaults = d.UseProtocolDefaults;
+        		serialParameters = d.SerialParameters;
+        	}
+        }
 	}
 }

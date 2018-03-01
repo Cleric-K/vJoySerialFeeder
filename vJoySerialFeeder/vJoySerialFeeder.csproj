@@ -105,6 +105,10 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="IbusReader.cs" />
+    <Compile Include="PortSetupForm.cs" />
+    <Compile Include="PortSetupForm.Designer.cs">
+      <DependentUpon>PortSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerialReader.cs" />
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
@@ -131,6 +135,9 @@
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PortSetupForm.resx">
+      <DependentUpon>PortSetupForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

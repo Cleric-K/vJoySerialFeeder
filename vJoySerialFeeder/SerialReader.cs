@@ -109,5 +109,11 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <returns>The number of channels written to channelData</returns>
 		public abstract int ReadChannels();
+		
+		/// <summary>
+		/// Get's the default SerialParameters for this protocol
+		/// </summary>
+		/// <returns></returns>
+		public abstract Configuration.SerialParameters GetDefaultSerialParameters();
 	}
 }
