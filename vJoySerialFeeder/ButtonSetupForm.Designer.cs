@@ -71,7 +71,7 @@ namespace vJoySerialFeeder
 			this.checkInvert.Location = new System.Drawing.Point(12, 239);
 			this.checkInvert.Name = "checkInvert";
 			this.checkInvert.Size = new System.Drawing.Size(104, 24);
-			this.checkInvert.TabIndex = 32;
+			this.checkInvert.TabIndex = 1;
 			this.checkInvert.Text = "Invert";
 			this.checkInvert.UseVisualStyleBackColor = true;
 			this.checkInvert.CheckedChanged += new System.EventHandler(this.OnChange);
@@ -86,7 +86,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericThresh1.Name = "numericThresh1";
 			this.numericThresh1.Size = new System.Drawing.Size(53, 20);
-			this.numericThresh1.TabIndex = 31;
+			this.numericThresh1.TabIndex = 3;
 			this.numericThresh1.Value = new decimal(new int[] {
 									1500,
 									0,
@@ -104,7 +104,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericThresh2.Name = "numericThresh2";
 			this.numericThresh2.Size = new System.Drawing.Size(53, 20);
-			this.numericThresh2.TabIndex = 30;
+			this.numericThresh2.TabIndex = 4;
 			this.numericThresh2.Value = new decimal(new int[] {
 									1750,
 									0,
@@ -117,17 +117,18 @@ namespace vJoySerialFeeder
 			this.buttonCalibrate.Location = new System.Drawing.Point(181, 266);
 			this.buttonCalibrate.Name = "buttonCalibrate";
 			this.buttonCalibrate.Size = new System.Drawing.Size(75, 23);
-			this.buttonCalibrate.TabIndex = 28;
+			this.buttonCalibrate.TabIndex = 2;
 			this.buttonCalibrate.Text = "Calibrate";
 			this.buttonCalibrate.UseVisualStyleBackColor = true;
 			this.buttonCalibrate.Click += new System.EventHandler(this.ButtonCalibrateClick);
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Location = new System.Drawing.Point(129, 372);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 27;
+			this.buttonCancel.TabIndex = 5;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -137,7 +138,7 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(210, 372);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
-			this.buttonOK.TabIndex = 26;
+			this.buttonOK.TabIndex = 6;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -165,15 +166,17 @@ namespace vJoySerialFeeder
 			this.checkTwoThresholds.Location = new System.Drawing.Point(12, 210);
 			this.checkTwoThresholds.Name = "checkTwoThresholds";
 			this.checkTwoThresholds.Size = new System.Drawing.Size(104, 24);
-			this.checkTwoThresholds.TabIndex = 19;
+			this.checkTwoThresholds.TabIndex = 0;
 			this.checkTwoThresholds.Text = "Two thresholds";
 			this.checkTwoThresholds.UseVisualStyleBackColor = true;
 			this.checkTwoThresholds.CheckedChanged += new System.EventHandler(this.OnChange);
 			// 
 			// ButtonSetupForm
 			// 
+			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(271, 408);
 			this.Controls.Add(this.labelCalibrate);
 			this.Controls.Add(this.checkInvert);
@@ -190,6 +193,8 @@ namespace vJoySerialFeeder
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ButtonSetupForm";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Button";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh1)).EndInit();

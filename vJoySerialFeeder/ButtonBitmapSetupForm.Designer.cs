@@ -90,17 +90,18 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(99, 115);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonOK.TabIndex = 3;
+			this.buttonOK.TabIndex = 4;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Location = new System.Drawing.Point(18, 115);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 4;
+			this.buttonCancel.TabIndex = 3;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -111,15 +112,17 @@ namespace vJoySerialFeeder
 			this.checkEnable.Location = new System.Drawing.Point(12, 12);
 			this.checkEnable.Name = "checkEnable";
 			this.checkEnable.Size = new System.Drawing.Size(104, 24);
-			this.checkEnable.TabIndex = 5;
+			this.checkEnable.TabIndex = 0;
 			this.checkEnable.Text = "Enabled";
 			this.checkEnable.UseVisualStyleBackColor = true;
 			this.checkEnable.CheckedChanged += new System.EventHandler(this.onEnableCheck);
 			// 
 			// ButtonBitmapSetupForm
 			// 
+			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(186, 150);
 			this.Controls.Add(this.checkEnable);
 			this.Controls.Add(this.buttonCancel);
@@ -131,6 +134,8 @@ namespace vJoySerialFeeder
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.Name = "ButtonBitmapSetupForm";
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "ButtonBitmapSetupForm";
 			((System.ComponentModel.ISupportInitialize)(this.numericButton)).EndInit();
 			this.ResumeLayout(false);

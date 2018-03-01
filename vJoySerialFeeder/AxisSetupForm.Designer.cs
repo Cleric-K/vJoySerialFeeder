@@ -91,7 +91,7 @@ namespace vJoySerialFeeder
 			this.checkSymmetric.Location = new System.Drawing.Point(11, 211);
 			this.checkSymmetric.Name = "checkSymmetric";
 			this.checkSymmetric.Size = new System.Drawing.Size(104, 24);
-			this.checkSymmetric.TabIndex = 1;
+			this.checkSymmetric.TabIndex = 0;
 			this.checkSymmetric.Text = "Symmetric";
 			this.checkSymmetric.UseVisualStyleBackColor = true;
 			this.checkSymmetric.CheckStateChanged += new System.EventHandler(this.OnChange);
@@ -142,7 +142,7 @@ namespace vJoySerialFeeder
 									-2147483648});
 			this.numericExpo.Name = "numericExpo";
 			this.numericExpo.Size = new System.Drawing.Size(53, 20);
-			this.numericExpo.TabIndex = 9;
+			this.numericExpo.TabIndex = 7;
 			this.numericExpo.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// label5
@@ -159,17 +159,18 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(209, 387);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
-			this.buttonOK.TabIndex = 11;
+			this.buttonOK.TabIndex = 9;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
 			// 
 			// buttonCancel
 			// 
+			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.Location = new System.Drawing.Point(128, 387);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 12;
+			this.buttonCancel.TabIndex = 8;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -179,7 +180,7 @@ namespace vJoySerialFeeder
 			this.buttonCalibrate.Location = new System.Drawing.Point(180, 267);
 			this.buttonCalibrate.Name = "buttonCalibrate";
 			this.buttonCalibrate.Size = new System.Drawing.Size(75, 23);
-			this.buttonCalibrate.TabIndex = 13;
+			this.buttonCalibrate.TabIndex = 2;
 			this.buttonCalibrate.Text = "Calibrate";
 			this.buttonCalibrate.UseVisualStyleBackColor = true;
 			this.buttonCalibrate.Click += new System.EventHandler(this.ButtonCalibrateClick);
@@ -194,7 +195,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericMax.Name = "numericMax";
 			this.numericMax.Size = new System.Drawing.Size(53, 20);
-			this.numericMax.TabIndex = 14;
+			this.numericMax.TabIndex = 5;
 			this.numericMax.Value = new decimal(new int[] {
 									1000,
 									0,
@@ -212,7 +213,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericCenter.Name = "numericCenter";
 			this.numericCenter.Size = new System.Drawing.Size(53, 20);
-			this.numericCenter.TabIndex = 15;
+			this.numericCenter.TabIndex = 4;
 			this.numericCenter.Value = new decimal(new int[] {
 									500,
 									0,
@@ -230,7 +231,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericMin.Name = "numericMin";
 			this.numericMin.Size = new System.Drawing.Size(53, 20);
-			this.numericMin.TabIndex = 16;
+			this.numericMin.TabIndex = 3;
 			this.numericMin.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// checkInvert
@@ -238,7 +239,7 @@ namespace vJoySerialFeeder
 			this.checkInvert.Location = new System.Drawing.Point(11, 240);
 			this.checkInvert.Name = "checkInvert";
 			this.checkInvert.Size = new System.Drawing.Size(104, 24);
-			this.checkInvert.TabIndex = 17;
+			this.checkInvert.TabIndex = 1;
 			this.checkInvert.Text = "Invert";
 			this.checkInvert.UseVisualStyleBackColor = true;
 			this.checkInvert.CheckStateChanged += new System.EventHandler(this.OnChange);
@@ -264,7 +265,7 @@ namespace vJoySerialFeeder
 			this.numericDeadband.Location = new System.Drawing.Point(83, 329);
 			this.numericDeadband.Name = "numericDeadband";
 			this.numericDeadband.Size = new System.Drawing.Size(53, 20);
-			this.numericDeadband.TabIndex = 20;
+			this.numericDeadband.TabIndex = 6;
 			this.numericDeadband.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// label7
@@ -278,8 +279,10 @@ namespace vJoySerialFeeder
 			// 
 			// AxisSetupForm
 			// 
+			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(271, 422);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.numericDeadband);
@@ -305,6 +308,8 @@ namespace vJoySerialFeeder
 			this.MinimizeBox = false;
 			this.Name = "AxisSetupForm";
 			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Axis";
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericExpo)).EndInit();
