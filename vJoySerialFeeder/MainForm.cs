@@ -167,6 +167,7 @@ namespace vJoySerialFeeder
 			comboPorts.Enabled = false;
 			buttonPortSetup.Enabled = false;
 			buttonPortsRefresh.Enabled = false;
+			buttonProtocolSetup.Enabled = false;
 			buttonConnect.Text = "Disconnect";
 			comboJoysticks.Enabled = false;
 			connected = true;
@@ -192,6 +193,7 @@ namespace vJoySerialFeeder
 			comboPorts.Enabled = true;
 			buttonPortSetup.Enabled = true;
 			buttonPortsRefresh.Enabled = true;
+			buttonProtocolSetup.Enabled = true;
 			buttonConnect.Text = "Connect";
 			connected = false;
 			toolStripStatusLabel.Text = "Disconnected";
@@ -403,6 +405,7 @@ namespace vJoySerialFeeder
         void ComboProtocolSelectedIndexChanged(object sender, EventArgs e)
         {
         	buttonProtocolSetup.Visible = createSerialReader().IsConfigurable();
+        	protocolConfig = "";
         }
 	}
 }

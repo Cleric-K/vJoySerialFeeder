@@ -98,6 +98,10 @@
       <DependentUpon>MonitorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="MultiWiiReader.cs" />
+    <Compile Include="MultiWiiSetupForm.cs" />
+    <Compile Include="MultiWiiSetupForm.Designer.cs">
+      <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources.Designer.cs">
@@ -131,6 +135,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MonitorForm.resx">
       <DependentUpon>MonitorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MultiWiiSetupForm.resx">
+      <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

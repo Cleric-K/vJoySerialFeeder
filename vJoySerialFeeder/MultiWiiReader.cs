@@ -7,6 +7,7 @@
 using System;
 using System.IO.Ports;
 using System.Timers;
+using System.Windows.Forms;
 
 namespace vJoySerialFeeder
 {
@@ -26,22 +27,24 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public class MultiWiiReader : SerialReader
 	{
+		const int DEFAULT_UPDATE_RATE = 15;
 		const byte MSP_RC = 105; // get RC channels command code
 		static readonly byte[] RC_COMMAND = new byte[] {(byte)'$', (byte)'M', (byte)'<', 0/*size*/, MSP_RC/*command*/, MSP_RC/*checksum*/};
 		const int PROTOCOL_MAX_LENGTH = 0xff;
 		const int COMMAND_INDEX = 4;
 		
 			
-		private Timer timer;
+		private System.Timers.Timer timer;
 	
 		
 		public override void Start()
 		{
-			serialPort.ReadTimeout = 500;
+			int updateRate = parseConfig(config);
+			serialPort.ReadTimeout = Math.Max(200, updateRate*2);
 			Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
 			
-			// request RC data from MultiWii every 25 milliseconds
-			timer = new Timer(25);
+			// request RC data from MultiWii every `updateRate` milliseconds
+			timer = new System.Timers.Timer(updateRate);
 			timer.Elapsed += delegate(object sender, ElapsedEventArgs e) {
 					serialPort.Write(RC_COMMAND, 0, RC_COMMAND.Length); 
 				};
@@ -103,5 +106,32 @@ namespace vJoySerialFeeder
 			return p;
 		}
 		
+		public override bool IsConfigurable() {
+			return true;
+		}
+		
+		public override string Configure(string config)
+		{
+			var d = new MultiWiiSetupForm(parseConfig(config));
+			d.ShowDialog();
+			if(d.DialogResult == DialogResult.OK) {
+				return d.UpdateRate.ToString();
+			}
+			return null;
+		}
+		
+		/// <summary>
+		/// MultiWii configuration - just a simple number for the update rate
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		private int parseConfig(string config) {
+			try {
+				return int.Parse(config);
+			}
+			catch(Exception) {
+				return DEFAULT_UPDATE_RATE;
+			}
+		}
 	}
 }
