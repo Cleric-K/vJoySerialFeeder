@@ -203,20 +203,6 @@ namespace vJoySerialFeeder
 				+" (" + (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms)";
 		}
 		
-		Mapping addAxis() {
-			var ax = new AxisMapping();
-			mappings.Add(ax);
-			panelMappings.Controls.Add(ax.GetControl());
-			return ax;
-		}
-		
-		Mapping addButton() {
-			var ax = new ButtonMapping();
-			mappings.Add(ax);
-			panelMappings.Controls.Add(ax.GetControl());
-			return ax;
-		}
-		
 		void addMapping(Mapping m) {
 			mappings.Add(m);
 			panelMappings.Controls.Add(m.GetControl());
