@@ -36,7 +36,7 @@ namespace vJoySerialFeeder
 		
 		private double updateRate;
 		
-		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader)};
+		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader)};
 		
 		public MainForm()
 		{
@@ -142,6 +142,7 @@ namespace vJoySerialFeeder
 		
 		private void connect() {
 			string errmsg;
+
 			if(comboJoysticks.SelectedItem != null && (errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
 				MessageBox.Show(errmsg);
 				return;
@@ -152,7 +153,7 @@ namespace vJoySerialFeeder
 			var sp = useCustomSerialParameters ?
 				serialParameters
 				: serialReader.GetDefaultSerialParameters();
-			
+
 			try {
 				serialPort = new SerialPort((string)comboPorts.SelectedItem, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
 				serialPort.Open();

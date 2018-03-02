@@ -113,6 +113,7 @@
     <Compile Include="PortSetupForm.Designer.cs">
       <DependentUpon>PortSetupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SbusReader.cs" />
     <Compile Include="SerialReader.cs" />
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
