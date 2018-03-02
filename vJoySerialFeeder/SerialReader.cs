@@ -60,6 +60,8 @@ namespace vJoySerialFeeder
 			/// small reads or waiting too long for more data than it is actually needed
 			/// </summary>
 			public int FrameLength { get; set; }
+			
+			public bool Empty { get { return length == 0 && sp.BytesToRead == 0; } }
 									
 			/// <summary>
 			/// Moves the Buffer data so that 'newStart' will be at index 0.
@@ -86,6 +88,12 @@ namespace vJoySerialFeeder
 		/// the ReadChannels method should put its data in this array.
 		/// </summary>
 		protected int[] channelData;
+		
+			/// <summary>
+		/// Override this to return true if protocol should display protocol 'Setup' butto
+		/// </summary>
+		/// <returns></returns>
+		public virtual bool Configurable { get { return false; } }
 		
 		public void Init(SerialPort sp, int[] channelData, string config)
 		{
@@ -117,14 +125,6 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <returns></returns>
 		public abstract Configuration.SerialParameters GetDefaultSerialParameters();
-		
-		/// <summary>
-		/// Override this to return yes if protocl should display protocol 'Setup' butto
-		/// </summary>
-		/// <returns></returns>
-		public virtual bool IsConfigurable() {
-			return false;
-		}
 		
 		/// <summary>
 		/// Override this to display a dialog or whatever.

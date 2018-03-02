@@ -405,7 +405,7 @@ namespace vJoySerialFeeder
         
         void ComboProtocolSelectedIndexChanged(object sender, EventArgs e)
         {
-        	buttonProtocolSetup.Visible = createSerialReader().IsConfigurable();
+        	buttonProtocolSetup.Visible = createSerialReader().Configurable;
         	protocolConfig = "";
         }
 	}

@@ -6,7 +6,7 @@
  */
 using System;
 using System.IO.Ports;
-using System.Timers;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace vJoySerialFeeder
@@ -32,66 +32,91 @@ namespace vJoySerialFeeder
 		static readonly byte[] RC_COMMAND = new byte[] {(byte)'$', (byte)'M', (byte)'<', 0/*size*/, MSP_RC/*command*/, MSP_RC/*checksum*/};
 		const int PROTOCOL_MAX_LENGTH = 0xff;
 		const int COMMAND_INDEX = 4;
-		
-			
-		private System.Timers.Timer timer;
+
+		private double lastSuccessfulRead;
+		private int updateRate;
 	
 		
 		public override void Start()
 		{
-			int updateRate = parseConfig(config);
-			serialPort.ReadTimeout = Math.Max(200, updateRate*2);
+			updateRate = parseConfig(config);
+			serialPort.ReadTimeout = 500;
+			serialPort.WriteTimeout = 500;
 			Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
-			
-			// request RC data from MultiWii every `updateRate` milliseconds
-			timer = new System.Timers.Timer(updateRate);
-			timer.Elapsed += delegate(object sender, ElapsedEventArgs e) {
-					serialPort.Write(RC_COMMAND, 0, RC_COMMAND.Length); 
-				};
-			timer.Start();
+			lastSuccessfulRead = 0;
 		}
 		
 		public override void Stop()
 		{
-			timer.Stop();
 		}
 		
 		public override int ReadChannels()
 		{
-			int idx;
-			int ch = 0;
-			byte checksum, len;
-
-			if(!(Buffer[0] == (byte)'$' && Buffer[1] == (byte)'M' && Buffer[2] == (byte)'>')) {
-				// incorrect magic signature, try parsing from next index
-				System.Diagnostics.Debug.WriteLine("Resyncing");
-				Buffer.Slide(1);
-				return 0;
-			}
-			
-			len = Buffer[3];
-			checksum = len;
-			idx = 4;
-			
-			while(idx < 5 + len) {
-				checksum ^= Buffer[idx++];
-			}
-			
-			if(Buffer[idx++] == checksum) {
-				// correct checksum
-				if(Buffer[4] == MSP_RC) {
-					var data_start = 5; // first data byte
-					while(data_start + 1 < 5 + len)
-						channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
-
-					Buffer.FrameLength = idx + 1; // use for next get
+			try {
+				int idx;
+				int ch = 0;
+				byte checksum, len;
+				double now, timeDiff;
+				
+				now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+				timeDiff = now - lastSuccessfulRead; // time elapsed since last read
+				
+				if(timeDiff < updateRate) {
+					// not yet time for update 
+					Thread.Sleep((int)(updateRate - timeDiff));
+					now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 				}
+				
+				if(Buffer.Empty)
+					// send request to the FC
+					serialPort.Write(RC_COMMAND, 0, RC_COMMAND.Length);
+				
+				lastSuccessfulRead = 0;
+	
+				if(!(Buffer[0] == (byte)'$' && Buffer[1] == (byte)'M' && Buffer[2] == (byte)'>')) {
+					// incorrect magic signature, try parsing from next index
+					System.Diagnostics.Debug.WriteLine("Resyncing");
+					Buffer.Slide(1);
+					lastSuccessfulRead = 0;
+					return 0;
+				}
+				
+				len = Buffer[3];
+				checksum = len;
+				idx = 4;
+				
+				while(idx < 5 + len) {
+					checksum ^= Buffer[idx++];
+				}
+				
+				if(Buffer[idx++] == checksum) {
+					// correct checksum
+					if(Buffer[4] == MSP_RC) {
+						var data_start = 5; // first data byte
+						while(data_start + 1 < 5 + len)
+							channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
+	
+						Buffer.FrameLength = idx + 1; // use for next get
+						
+						lastSuccessfulRead = now;
+					}
+					else {
+						System.Diagnostics.Debug.WriteLine("Unexpected MSP resopnse command");
+					}
+				}
+				else {
+					System.Diagnostics.Debug.WriteLine("Bad checksum");
+				}
+				
+				Buffer.Slide(idx);
+				return ch;
+				
 			}
-			// else incorrect checksum
-			
-			Buffer.Slide(idx);
-			return ch;
-			
+			catch(TimeoutException ex) {
+				// if timeout occurs we better send another request asap
+				lastSuccessfulRead = 0;
+				throw ex;
+			}
 		}
 		
 		
@@ -106,9 +131,7 @@ namespace vJoySerialFeeder
 			return p;
 		}
 		
-		public override bool IsConfigurable() {
-			return true;
-		}
+		public override bool Configurable { get { return true; } }
 		
 		public override string Configure(string config)
 		{

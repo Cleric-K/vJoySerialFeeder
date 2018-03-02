@@ -124,6 +124,7 @@
     <value>MultiWii Serial Protocol is Client/Server based.
 We send requests and the fligh controller (FC) responds.
 "Update Rate" tells how often we want to query the FC.
-The actual rate could be slower depending on the FC.</value>
+The actual rate could be slower depending on the FC.
+Setting a value of 0 will update as fast as possible.</value>
   </data>
 </root>

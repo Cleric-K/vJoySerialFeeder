@@ -62,11 +62,6 @@ namespace vJoySerialFeeder
 									0,
 									0,
 									0});
-			this.numericRate.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
 			this.numericRate.Name = "numericRate";
 			this.numericRate.Size = new System.Drawing.Size(49, 20);
 			this.numericRate.TabIndex = 1;
