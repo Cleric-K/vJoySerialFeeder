@@ -207,8 +207,8 @@ namespace vJoySerialFeeder
 				mapping.Paint();
 			}
 			toolStripStatusLabel.Text = "Connected, "+ActiveChannels
-				+" channels available, Update Rate "+Math.Round(updateRate)+" Hz"
-				+" (" + (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms)";
+				+" channels available, "+Math.Round(updateRate)+" Updates per second / "
+				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
 		}
 		
 		void addMapping(Mapping m) {
@@ -257,7 +257,7 @@ namespace vJoySerialFeeder
 			serialReader.Init(serialPort, Channels, protocolConfig);
 			serialReader.Start();
 			
-			double nextUpdateTime = 0, prevTime = 0;
+			double nextUIUpdateTime = 0, nextRateUpdateTime = 0, prevTime = 0;
 			double updateSum = 0;
 			int updateCount = 0;
 			
@@ -285,20 +285,31 @@ namespace vJoySerialFeeder
 				VJoy.SetState();
 				
 				double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-				// update UI on every 100ms
+				
+				// since the time between frames may vary we sum the times here
+				// and later publish the average
 				if(now > prevTime && ActiveChannels > 0) {
 					updateSum += 1000.0/(now - prevTime);
 					updateCount++;
 				}
 				
-				if(now >= nextUpdateTime) {
-					nextUpdateTime = now + 100;
-					if(ActiveChannels == 0)
-						updateRate = 0;
-					else if(updateCount > 0) {
-						updateRate = updateSum/updateCount;
-						updateSum = updateCount = 0;
+				// update UI on every 100ms
+				if(now >= nextUIUpdateTime) {
+					nextUIUpdateTime = now + 100;
+					
+					// update the Rate on evert 500ms
+					if(now >= nextRateUpdateTime) {
+						nextRateUpdateTime = now + 500;
+						
+						if(ActiveChannels == 0)
+							updateRate = 0;
+						else if(updateCount > 0) {
+							updateRate = updateSum/updateCount;
+							updateSum = updateCount = 0;
+						}
 					}
+					
+					// will emit the ChannelDataUpdate event on the UI thread
 					backgroundWorker.ReportProgress(0);
 				}
 				
