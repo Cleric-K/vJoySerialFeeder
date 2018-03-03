@@ -29,12 +29,12 @@ namespace vJoySerialFeeder
 		{
 			UpdateRate = (int)numericRate.Value;
 			DialogResult = DialogResult.OK;
-			Dispose();
+			Close();
 		}
 		
 		void ButtonCancelClick(object sender, EventArgs e)
 		{
-			Dispose();
+			Close();
 		}
 	}
 }
