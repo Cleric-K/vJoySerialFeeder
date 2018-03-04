@@ -27,7 +27,7 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public class MultiWiiReader : SerialReader
 	{
-		const int DEFAULT_UPDATE_RATE = 15;
+		const int DEFAULT_UPDATE_RATE = 10;
 		const byte MSP_RC = 105; // get RC channels command code
 		static readonly byte[] RC_COMMAND = new byte[] {(byte)'$', (byte)'M', (byte)'<', 0/*size*/, MSP_RC/*command*/, MSP_RC/*checksum*/};
 		const int PROTOCOL_MAX_LENGTH = 0xff;
