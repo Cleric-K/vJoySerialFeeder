@@ -19,9 +19,8 @@ namespace vJoySerialFeeder
 	{
 		static Pen linePen, inputPen, outputPen;
 		
-		public ButtonMapping.ButtonParameters Parameters {get {return parameters; } }
-		 
-		private ButtonMapping.ButtonParameters parameters;
+		public ButtonMapping.ButtonParameters Parameters {get ; private set; }
+		
 		private ButtonMapping buttonMapping;
 		private bool initialized = false;
 		private int calibrationStep;
@@ -43,20 +42,20 @@ namespace vJoySerialFeeder
 			InitializeComponent();
 			
 			buttonMapping = m;
-			this.parameters = buttonMapping.Parameters;
+			this.Parameters = buttonMapping.Parameters;
 			
 			DialogResult = DialogResult.Cancel;
 			
 			MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
 		
-			Disposed += delegate(object sender, EventArgs e) {
+			Disposed += (object sender, EventArgs e) => {
 				MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate;
 			};
 			
-			checkInvert.Checked = parameters.invert;
-			checkTwoThresholds.Checked = parameters.notch;
-			numericThresh1.Value = parameters.thresh1;
-			numericThresh2.Value = parameters.thresh2;
+			checkInvert.Checked = Parameters.invert;
+			checkTwoThresholds.Checked = Parameters.notch;
+			numericThresh1.Value = Parameters.thresh1;
+			numericThresh2.Value = Parameters.thresh2;
 			
 			initialized = true;
 			
@@ -83,10 +82,12 @@ namespace vJoySerialFeeder
 					numericThresh2.Value = numericThresh1.Value;
 			}
 			
-			parameters.notch = checkTwoThresholds.Checked;
-			parameters.invert = checkInvert.Checked;
-			parameters.thresh1 = (int)numericThresh1.Value;
-			parameters.thresh2 = (int)numericThresh2.Value;
+			Parameters = new ButtonMapping.ButtonParameters() {
+				notch = checkTwoThresholds.Checked,
+				invert = checkInvert.Checked,
+				thresh1 = (int)numericThresh1.Value,
+				thresh2 = (int)numericThresh2.Value
+			};
 			
 			pictureBox.Invalidate();
 		}
@@ -117,20 +118,21 @@ namespace vJoySerialFeeder
 			const int padding = 30;
 			int p, x, y;
 			bool val;
+			var par = Parameters;
 			var w = pictureBox.Width - 2*padding;
 			var h = pictureBox.Height - 2*padding;
 			int max;
 
-			int y1 = !parameters.invert ? padding + h : padding;
-			int y2 = parameters.invert ? padding + h : padding;
+			int y1 = !par.invert ? padding + h : padding;
+			int y2 = par.invert ? padding + h : padding;
 
 			GraphicsPath graphPath = new GraphicsPath();
 			List<Point> points = new List<Point>();
 
-			if(parameters.notch) {
-				max = parameters.thresh2 + parameters.thresh1;
-				int t1 = (int)(parameters.thresh1/(double)max*w);
-				int t2 = (int)(parameters.thresh2/(double)max*w);
+			if(par.notch) {
+				max = par.thresh2 + par.thresh1;
+				int t1 = (int)(par.thresh1/(double)max*w);
+				int t2 = (int)(par.thresh2/(double)max*w);
 
 				points.Add(new Point(padding, y1));     // left start point
 				points.Add(new Point(padding+t1, y1));  // left horizontal
@@ -140,7 +142,7 @@ namespace vJoySerialFeeder
 				points.Add(new Point(padding+w, y1));   // right horizontal
 			}
 			else {
-				max = 2*parameters.thresh1;
+				max = 2*par.thresh1;
 
 				points.Add(new Point(padding, y1));      // left start point
 				points.Add(new Point(padding+w/2, y1));  // left horizontal
@@ -152,9 +154,9 @@ namespace vJoySerialFeeder
 			e.Graphics.DrawPath(linePen, graphPath);
 
 			p = Math.Min(max, Math.Max(0, buttonMapping.ChannelValue)); // clamp
-			val = parameters.Transform(p);
+			val = par.Transform(p);
 			x = padding + (int)(p/(double)max*w);
-			y = !parameters.Transform(p) ? padding + h: padding;
+			y = !par.Transform(p) ? padding + h: padding;
 
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);

@@ -106,7 +106,7 @@ namespace vJoySerialFeeder
 			// 
 			this.toolTip1.AutomaticDelay = 0;
 			this.toolTip1.AutoPopDelay = 15000;
-			this.toolTip1.InitialDelay = 500;
+			this.toolTip1.InitialDelay = 100;
 			this.toolTip1.IsBalloon = true;
 			this.toolTip1.ReshowDelay = 100;
 			// 

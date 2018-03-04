@@ -19,9 +19,8 @@ namespace vJoySerialFeeder
 	{
 		static Pen linePen, inputPen, outputPen;
 		
-		public AxisMapping.AxisParameters Parameters { get { return parameters; } }
+		public AxisMapping.AxisParameters Parameters { get ; private set;}
 		private AxisMapping axisMapping;
-		private AxisMapping.AxisParameters parameters;
 		
 		private bool badValues;
 		private bool initialized = false;
@@ -43,23 +42,23 @@ namespace vJoySerialFeeder
 			InitializeComponent();
 			
 			this.axisMapping = axisMapping;
-			this.parameters = axisMapping.Parameters;
+			this.Parameters = axisMapping.Parameters;
 			
 			DialogResult = DialogResult.Cancel;
 			
 			MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
 		
-			Disposed += delegate(object sender, EventArgs e) {
+			Disposed += (object sender, EventArgs e) => {
 				MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate;
 			};
 			
-			numericMin.Value = parameters.Min;
-			numericMax.Value = parameters.Max;
-			numericCenter.Value = parameters.Center;
-			numericExpo.Value = parameters.Expo;
-			numericDeadband.Value = parameters.Deadband;
-			checkInvert.Checked = parameters.Invert;
-			checkSymmetric.Checked = parameters.Symmetric;
+			numericMin.Value = Parameters.Min;
+			numericMax.Value = Parameters.Max;
+			numericCenter.Value = Parameters.Center;
+			numericExpo.Value = Parameters.Expo;
+			numericDeadband.Value = Parameters.Deadband;
+			checkInvert.Checked = Parameters.Invert;
+			checkSymmetric.Checked = Parameters.Symmetric;
 			
 			initialized = true;
 			OnChange(null, null);
@@ -103,13 +102,16 @@ namespace vJoySerialFeeder
 				numericDeadband.Enabled = false;
 			}
 			
-			parameters.Min = (int)numericMin.Value;
-			parameters.Max = (int)numericMax.Value;
-			parameters.Center = (int)numericCenter.Value;
-			parameters.Expo = (int)numericExpo.Value;
-			parameters.Invert = checkInvert.Checked;
-			parameters.Symmetric = checkSymmetric.Checked;
-			parameters.Deadband = (int)numericDeadband.Value;
+			Parameters = new AxisMapping.AxisParameters() {
+				Min = (int)numericMin.Value,
+				Max = (int)numericMax.Value,
+				Center = (int)numericCenter.Value,
+				Expo = (int)numericExpo.Value,
+				Invert = checkInvert.Checked,
+				Symmetric = checkSymmetric.Checked,
+				Deadband = (int)numericDeadband.Value
+			};
+			
 			pictureBox.Invalidate();
 			badValues = false;
 		}
@@ -121,6 +123,7 @@ namespace vJoySerialFeeder
 			const int padding = 30;
 			int p, x, y;
 			double val;
+			var par = Parameters;
 			var w = pictureBox.Width - 2*padding;
 			var h = pictureBox.Height - 2*padding;
 
@@ -128,8 +131,8 @@ namespace vJoySerialFeeder
 			List<Point> points = new List<Point>();
 
 			for(var i=0; i<=w; i++) {
-				p = (int)Math.Round(parameters.Min + (parameters.Max-parameters.Min)*(double)i/w);
-				val = parameters.Transform(p);
+				p = (int)Math.Round(par.Min + (par.Max-par.Min)*(double)i/w);
+				val = par.Transform(p);
 				y = (int)Math.Round(padding+h-val*h);
 				
 				points.Add(new Point(padding+i, y));
@@ -138,12 +141,12 @@ namespace vJoySerialFeeder
 			graphPath.AddLines(points.ToArray());
 			e.Graphics.DrawPath(linePen, graphPath);
 
-			p = Math.Min(parameters.Max, Math.Max(parameters.Min, axisMapping.ChannelValue)); // clamp
-			val = parameters.Transform(p);
-			if(parameters.Max == parameters.Min)
+			p = Math.Min(par.Max, Math.Max(par.Min, axisMapping.ChannelValue)); // clamp
+			val = par.Transform(p);
+			if(par.Max == par.Min)
 				x = padding + w/2;
 			else
-				x = padding + (int)((double)(p-parameters.Min)/(parameters.Max-parameters.Min)*w);
+				x = padding + (int)((double)(p-par.Min)/(par.Max-par.Min)*w);
 			y = padding + h - (int)(val*h);
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);

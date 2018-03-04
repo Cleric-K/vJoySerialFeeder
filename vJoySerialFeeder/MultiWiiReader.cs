@@ -122,25 +122,30 @@ namespace vJoySerialFeeder
 		
 		public override Configuration.SerialParameters GetDefaultSerialParameters()
 		{
-			Configuration.SerialParameters p;
-			p.BaudRate = 115200;
-			p.DataBits = 8;
-			p.Parity = Parity.None;
-			p.StopBits = StopBits.One;
-			
-			return p;
+			return new Configuration.SerialParameters() {
+				BaudRate = 115200,
+				DataBits = 8,
+				Parity = Parity.None,
+				StopBits = StopBits.One
+			};
 		}
 		
 		public override bool Configurable { get { return true; } }
 		
+		/// <summary>
+		/// Show the MultiWii configuration
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
 		public override string Configure(string config)
 		{
-			var d = new MultiWiiSetupForm(parseConfig(config));
-			d.ShowDialog();
-			if(d.DialogResult == DialogResult.OK) {
-				return d.UpdateRate.ToString();
+			using(var d = new MultiWiiSetupForm(parseConfig(config))) {
+				d.ShowDialog();
+				if(d.DialogResult == DialogResult.OK) {
+					return d.UpdateRate.ToString();
+				}
+				return null;
 			}
-			return null;
 		}
 		
 		/// <summary>

@@ -15,9 +15,7 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public partial class ButtonBitmapSetupForm : Form
 	{
-		public ButtonBitmapMapping.BitButtonParameters Parameters { get {return parameters;} }
-		private ButtonBitmapMapping.BitButtonParameters parameters;
-
+		public ButtonBitmapMapping.BitButtonParameters Parameters { get; private set; }
 
 		public ButtonBitmapSetupForm(int bit, ButtonBitmapMapping.BitButtonParameters Params)
 		{
@@ -40,10 +38,12 @@ namespace vJoySerialFeeder
 
 		void ButtonOKClick(object sender, EventArgs e)
 		{
-			parameters.Enabled = checkEnable.Checked;
-			parameters.Button = (uint)numericButton.Value-1;
-			parameters.Invert = checkInvert.Checked;
-
+			Parameters = new ButtonBitmapMapping.BitButtonParameters() {
+				Enabled = checkEnable.Checked,
+				Button = (uint)numericButton.Value-1,
+				Invert = checkInvert.Checked 
+			};
+			
 			DialogResult = DialogResult.OK;
 			Close();
 		}
