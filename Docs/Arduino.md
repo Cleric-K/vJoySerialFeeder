@@ -48,6 +48,6 @@ A 6-pin JST SM connector is glued to the case:
 The cable connecting the controller with the Arduino Nano:
 ![RC](images/ard4.jpg)
 
-In VJoySerialFeeder select the correct COM port, baud rate is 115200 (you can change it in the sketch). Select IBUS protocol and hit **connect**.
+In VJoySerialFeeder select the correct COM port. Select `IBUS` protocol and hit `connect`.
 
 Map your channels and enjoy!
