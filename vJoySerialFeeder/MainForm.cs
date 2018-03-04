@@ -419,5 +419,10 @@ namespace vJoySerialFeeder
         	buttonProtocolSetup.Visible = createSerialReader().Configurable;
         	protocolConfig = "";
         }
+        
+        void ButtonHelpClick(object sender, EventArgs e)
+        {
+        	System.Diagnostics.Process.Start("https://github.com/Cleric-K/vJoySerialFeeder/blob/master/docs/MANUAL.md");
+        }
 	}
 }
