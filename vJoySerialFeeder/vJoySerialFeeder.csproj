@@ -88,6 +88,10 @@
     </Compile>
     <Compile Include="ButtonMapping.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="SbusSetupForm.cs" />
+    <Compile Include="SbusSetupForm.Designer.cs">
+      <DependentUpon>SbusSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -146,6 +150,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PortSetupForm.resx">
       <DependentUpon>PortSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SbusSetupForm.resx">
+      <DependentUpon>SbusSetupForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

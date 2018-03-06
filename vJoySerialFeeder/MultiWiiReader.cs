@@ -39,7 +39,8 @@ namespace vJoySerialFeeder
 		
 		public override void Start()
 		{
-			updateRate = parseConfig(config);
+			parseConfig(config);
+			
 			serialPort.ReadTimeout = 500;
 			serialPort.WriteTimeout = 500;
 			Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
@@ -139,10 +140,12 @@ namespace vJoySerialFeeder
 		/// <returns></returns>
 		public override string Configure(string config)
 		{
-			using(var d = new MultiWiiSetupForm(parseConfig(config))) {
+			parseConfig(config);
+			using(var d = new MultiWiiSetupForm(updateRate)) {
 				d.ShowDialog();
 				if(d.DialogResult == DialogResult.OK) {
-					return d.UpdateRate.ToString();
+					updateRate = d.UpdateRate;
+					return buildConfig();
 				}
 				return null;
 			}
@@ -153,13 +156,17 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		private int parseConfig(string config) {
+		private void parseConfig(string config) {
 			try {
-				return int.Parse(config);
+				updateRate = int.Parse(config);
 			}
 			catch(Exception) {
-				return DEFAULT_UPDATE_RATE;
+				updateRate = DEFAULT_UPDATE_RATE;
 			}
+		}
+		
+		private string buildConfig() {
+			return updateRate.ToString();
 		}
 	}
 }

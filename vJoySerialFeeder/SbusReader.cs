@@ -6,6 +6,7 @@
  */
 using System;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace vJoySerialFeeder
 {
@@ -42,11 +43,18 @@ namespace vJoySerialFeeder
 		private const byte FIRST_BYTE = 0x0f;
 		private const byte LAST_BYTE = 0x00;
 		private const int FRAME_LENGTH = 25; // sbus frame is always 25 bytes
+		private const int NUM_CHANNELS = 16;
+		private const int SBUS_CH_BITS = 11;
+		private const int SBUS_CH_MASK = (1<<SBUS_CH_BITS)-1;
+		
+		private bool useRawInput;
 	
 		public override void Start()
 		{
 			Buffer.FrameLength = FRAME_LENGTH;
 			serialPort.ReadTimeout = 500;
+			
+			parseConfig(config);
 		}
 		
 		public override void Stop()
@@ -63,29 +71,62 @@ namespace vJoySerialFeeder
 				return 0;
 			}
 			
-			// too lazy to compute the offsets myself ... took them from
-			// https://github.com/zendes/SBUS/blob/master/SBUS.cpp
-			channelData[0]  = ((Buffer[1]    |Buffer[2]<<8)                 & 0x07FF);
-			channelData[1]  = ((Buffer[2]>>3 |Buffer[3]<<5)                 & 0x07FF);
-			channelData[2]  = ((Buffer[3]>>6 |Buffer[4]<<2 |Buffer[5]<<10)  & 0x07FF);
-			channelData[3]  = ((Buffer[5]>>1 |Buffer[6]<<7)                 & 0x07FF);
-			channelData[4]  = ((Buffer[6]>>4 |Buffer[7]<<4)                 & 0x07FF);
-			channelData[5]  = ((Buffer[7]>>7 |Buffer[8]<<1 |Buffer[9]<<9)   & 0x07FF);
-			channelData[6]  = ((Buffer[9]>>2 |Buffer[10]<<6)                & 0x07FF);
-			channelData[7]  = ((Buffer[10]>>5|Buffer[11]<<3)                & 0x07FF);
-			channelData[8]  = ((Buffer[12]   |Buffer[13]<<8)                & 0x07FF);
-			channelData[9]  = ((Buffer[13]>>3|Buffer[14]<<5)                & 0x07FF);
-			channelData[10] = ((Buffer[14]>>6|Buffer[15]<<2|Buffer[16]<<10) & 0x07FF);
-			channelData[11] = ((Buffer[16]>>1|Buffer[17]<<7)                & 0x07FF);
-			channelData[12] = ((Buffer[17]>>4|Buffer[18]<<4)                & 0x07FF);
-			channelData[13] = ((Buffer[18]>>7|Buffer[19]<<1|Buffer[20]<<9)  & 0x07FF);
-			channelData[14] = ((Buffer[20]>>2|Buffer[21]<<6)                & 0x07FF);
-			channelData[15] = ((Buffer[21]>>5|Buffer[22]<<3)                & 0x07FF);
+			int inputbits = 0;
+			int inputbitsavailable = 0;
+			int bufIdx = 1;
 			
-			// do not check the flags byte, we don't really need anything from there
+			// channel parser based on
+			// https://github.com/opentx/opentx/blob/6bd38ce13a89ade70aa8e83914063464a8d9750a/radio/src/sbus.cpp#L50
+			
+			for (var i=0; i<NUM_CHANNELS; i++) {
+			    while (inputbitsavailable < SBUS_CH_BITS) {
+		      		inputbits |= Buffer[bufIdx++] << inputbitsavailable;
+		      		inputbitsavailable += 8;
+			    }
+			
+				var v = inputbits & SBUS_CH_MASK;
+				
+				if(useRawInput) {
+					channelData[i] = v;
+				}
+				else {
+					// OpenTX sends channel data with in its own values. We can prescale them to the standard 1000 - 2000 range.
+					// Thanks to @fape for providing the raw data:
+					// min   mid   max
+					// 172   992   1811
+	
+					// http://www.wolframalpha.com/input/?i=linear+fit+%7B172,+1000%7D,+%7B1811,+2000%7D,+%7B992,+1500%7D
+					// slightly adjusted to give better results in integer math
+					channelData[i] = (610127*v + 895364000)/1000000;
+				}
+
+			    inputbitsavailable -= SBUS_CH_BITS;
+			    inputbits >>= SBUS_CH_BITS;
+			}	
+			
+			// do not check the flags byte, we don't really need anything from there	
 			
 			Buffer.Slide(FRAME_LENGTH);
-			return 16;
+			return NUM_CHANNELS;
+		}
+		
+		public override bool Configurable {
+			get { return true; }
+		}
+		
+		public override string Configure(string config)
+		{
+			parseConfig(config);
+			
+			using(var d = new SbusSetupForm(useRawInput)) {
+				d.ShowDialog();
+				if(d.DialogResult == DialogResult.OK) {
+					useRawInput = d.UseRawInput;
+					return buildConfig();
+				}
+					
+				return null;
+			}
 		}
 		
 		public override Configuration.SerialParameters GetDefaultSerialParameters()
@@ -96,6 +137,14 @@ namespace vJoySerialFeeder
 				Parity = Parity.Even,
 				StopBits = StopBits.Two
 			};
+		}
+		
+		private void parseConfig(string config) {
+			useRawInput = "raw".Equals(config);
+		}
+		
+		private string buildConfig() {
+			return useRawInput ? "raw" : "";
 		}
 	}
 }
