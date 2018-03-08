@@ -29,7 +29,13 @@ namespace vJoySerialFeeder
 			
 			public byte this[int index] {
 				get {
-					if(index >= length) {
+					if(index >= buf.Length) {
+						// this shouldn't really ever happen, but just to be sure
+						index = length = 0;
+						throw new IndexOutOfRangeException("Buffer overrun");
+					}
+					
+					while(index >= length) {
 						// need more data
 						int bytesToGet;
 						
@@ -44,10 +50,6 @@ namespace vJoySerialFeeder
 						}
 							
 						length += sp.Read(buf, length, bytesToGet);
-						
-						if(index >= length)
-							// still not enought bytes, even after reading some more
-							throw new IndexOutOfRangeException();
 					}
 					return buf[index];
 				}
