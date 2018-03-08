@@ -3,8 +3,6 @@
  * User: Cleric
  * Date: 7.2.2018 г.
  * Time: 21:21 ч.
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
 using System.Collections.Generic;
