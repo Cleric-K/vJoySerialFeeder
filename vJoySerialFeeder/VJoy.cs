@@ -93,8 +93,8 @@ namespace vJoySerialFeeder
 			joystick.RelinquishVJD(id);
 		}
 		
-		public void SetAxis(double value, int axis) {
-			// axis values seem to range between -0x7fff to 0x7fff
+		public void SetAxis(float value, int axis) {
+			// vjoy accepts axis values from 0 to 32767 (0x7fff)
 			int v = (int)(value*0x7fff); 
 
 			switch((Axes)axis) {

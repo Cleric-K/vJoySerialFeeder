@@ -58,8 +58,6 @@ namespace vJoySerialFeeder
 			thresh1 = 1500
 		};
 		
-		private bool pushed;
-		
 
 		private FlowLayoutPanel panel;
 		private NumericUpDown channelSpinner;
@@ -81,16 +79,20 @@ namespace vJoySerialFeeder
 			return bm;
 		}
 		
+		protected override float Transform(int val)
+		{
+			return Parameters.Transform(Input) ? 1f : 0f;
+		}
+			
 		
 		public override void UpdateJoystick(VJoy vjoy)
 		{
-			pushed = Parameters.Transform(ChannelValue);
-			vjoy.SetButton(pushed, Button);
+			vjoy.SetButton(Output > 0, Button);
 		}
 		
 		public override void Paint()
 		{
-			inputLabel.Text = ChannelValue.ToString();
+			inputLabel.Text = Input.ToString();
 			buttonStateBox.Invalidate();
 		}
 		
@@ -113,6 +115,7 @@ namespace vJoySerialFeeder
 		
 		private void onButtonStatePaint(object sender, PaintEventArgs e)
 		{	
+			bool pushed = Output > 0;
 			e.Graphics.FillEllipse(pushed ? BRUSH_PUSHED : BRUSH_NOT_PUSHED,
 			                       30, 0, 18, 18);
 			e.Graphics.DrawEllipse(Pens.Black, 

@@ -37,13 +37,13 @@ namespace vJoySerialFeeder
 			/// </summary>
 			/// <param name="val">raw channel integer</param>
 			/// <returns>double in the range [0; 1]</returns>
-			public double Transform(int val) {
+			public float Transform(int val) {
 				if(Max <= Min || Symmetric && (Center <= Min || Center >= Max))
 					// invalid parameters
 					return 0;
 				
 				bool neg = false;
-				double v = Math.Max(Min, val);
+				float v = Math.Max(Min, val);
 				v = Math.Min(Max, v);
 				
 				// map v to [0; 1]
@@ -59,10 +59,10 @@ namespace vJoySerialFeeder
 				}
 	
 				if(Symmetric && Deadband > 0) {
-					double d = Deadband/100.01; // do not divide at exactly 100 to avoid deadband becoming 1
+					float d = Deadband/100.01f; // do not divide at exactly 100 to avoid deadband becoming 1
 					if(v < d)
 						// inside deadband
-						return 0.5;
+						return 0.5f;
 
 					// map [d; 1] -> [0; 1]
 					var b = d/(d-1);
@@ -75,7 +75,7 @@ namespace vJoySerialFeeder
 					/// axis = x * super
 					/// we also apply normalization to keep max value at 1
 					/// super = (1-factor) / (1 - factor*x)
-					double factor = Math.Abs(Expo)/ 100.01; // do not divide at exactly 100 to avoid factor becoming 1
+					float factor = Math.Abs(Expo)/ 100.01f; // do not divide at exactly 100 to avoid factor becoming 1
 					if(Expo > 0)
 						v = v*(1-factor)/(1-v*factor);
 					else
@@ -89,7 +89,7 @@ namespace vJoySerialFeeder
 					// map [0; 1] to [0.5; 1] if !neg
 					if(neg)
 						v = -v;
-					v = v/2 + 0.5;
+					v = v/2 + 0.5f;
 				}
 				
 				if(Invert)
@@ -111,12 +111,16 @@ namespace vJoySerialFeeder
 			Symmetric = true
 		};
 		
-		private double lastTransformedValue;
 		private FlowLayoutPanel panel;
 		private NumericUpDown channelSpinner;
 		private ComboBox joystickAxisDropdown;
 		private Label inputLabel;
 		private PictureBox progressBox;
+		
+		protected override float Transform(int val)
+		{
+			return Parameters.Transform(val);
+		}
 		
 		public override Mapping Copy()
 		{
@@ -138,14 +142,13 @@ namespace vJoySerialFeeder
 		
 		public override void Paint()
 		{
-			inputLabel.Text = ChannelValue.ToString();
+			inputLabel.Text = Input.ToString();
 			progressBox.Invalidate();
 		}
 		
 		public override void UpdateJoystick(VJoy vjoy)
 		{
-			lastTransformedValue = Parameters.Transform(ChannelValue);
-			vjoy.SetAxis(lastTransformedValue, Axis);
+			vjoy.SetAxis(Output, Axis);
 		}
 		
 		
@@ -170,7 +173,7 @@ namespace vJoySerialFeeder
 			// http://csharphelper.com/blog/2016/07/display-text-progressbar-c/
 			
 			e.Graphics.FillRectangle(
-				Brushes.LightGreen, 0, 0, (float)(progressBox.ClientSize.Width * lastTransformedValue),
+				Brushes.LightGreen, 0, 0, (progressBox.ClientSize.Width * Output),
 				progressBox.ClientSize.Height);
 			// Draw the text.
 			e.Graphics.TextRenderingHint =
@@ -178,7 +181,7 @@ namespace vJoySerialFeeder
 			using (StringFormat sf = new StringFormat()) {
 				sf.Alignment = StringAlignment.Center;
 				sf.LineAlignment = StringAlignment.Center;
-				int percent = (int)(lastTransformedValue * 100);
+				int percent = (int)(Output * 100);
 				e.Graphics.DrawString(
 					percent.ToString() + "%",
 					progressBox.Font, Brushes.Black,
@@ -269,5 +272,6 @@ namespace vJoySerialFeeder
 			
 			panel.ResumeLayout();
 		}
+
 	}
 }

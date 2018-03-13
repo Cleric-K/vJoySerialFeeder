@@ -22,7 +22,20 @@ namespace vJoySerialFeeder
 		/// <summary>
 		/// Helper property to get the Channel value
 		/// </summary>
-		public int ChannelValue { get { return MainForm.Instance.Channels[Channel]; } }
+		private int _input;
+		public int Input { 
+			get { return _input; }
+			set {
+				_input = value;
+				Output = Transform(value);
+			}
+		}
+		
+		/// <summary>
+		/// This is the transformed by the mapping value.
+		/// The mapping is responsible for setting it.
+		/// </summary>
+		public float Output { get; protected set; }
 		
 		/// <summary>
 		/// Every mapping has a single channel to get data from (although this is not forced)
@@ -31,11 +44,19 @@ namespace vJoySerialFeeder
 		public int Channel;
 		
 		/// <summary>
+		/// Tells if this mapping is no longer in the interface
+		/// </summary>
+		public bool Removed { get; private set; }
+		
+		/// <summary>
 		/// If the mapping wants to remove itself it MUST call this method.
 		/// </summary>
 		internal void Remove() {
 			MainForm.Instance.RemoveMapping(this);
+			Removed = true;
 		}
+		
+		abstract protected float Transform(int val);
 		
 		/// <summary>
 		/// This method should return a Control element which will be placed in the MainFrame

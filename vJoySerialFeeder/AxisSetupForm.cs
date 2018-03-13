@@ -70,11 +70,11 @@ namespace vJoySerialFeeder
 			pictureBox.Invalidate();
 			
 			if(calibrationStep == 1) {
-				numericCenter.Value = axisMapping.ChannelValue;
+				numericCenter.Value = axisMapping.Input;
 			}
 			else if(calibrationStep == 2) {
-				numericMin.Value = Math.Min(numericMin.Value, axisMapping.ChannelValue);
-				numericMax.Value = Math.Max(numericMax.Value, axisMapping.ChannelValue);
+				numericMin.Value = Math.Min(numericMin.Value, axisMapping.Input);
+				numericMax.Value = Math.Max(numericMax.Value, axisMapping.Input);
 			}
 		}
 		
@@ -141,7 +141,7 @@ namespace vJoySerialFeeder
 			graphPath.AddLines(points.ToArray());
 			e.Graphics.DrawPath(linePen, graphPath);
 
-			p = Math.Min(par.Max, Math.Max(par.Min, axisMapping.ChannelValue)); // clamp
+			p = Math.Min(par.Max, Math.Max(par.Min, axisMapping.Input)); // clamp
 			val = par.Transform(p);
 			if(par.Max == par.Min)
 				x = padding + w/2;
@@ -150,7 +150,7 @@ namespace vJoySerialFeeder
 			y = padding + h - (int)(val*h);
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);
-			e.Graphics.DrawString(axisMapping.ChannelValue.ToString(), DefaultFont, Brushes.Green, x, h+padding);
+			e.Graphics.DrawString(axisMapping.Input.ToString(), DefaultFont, Brushes.Green, x, h+padding);
 			e.Graphics.DrawString(((int)(val*100)).ToString()+"%", DefaultFont, Brushes.Red, 0, y);
 		}
 		void ButtonCancelClick(object sender, EventArgs e)
@@ -182,7 +182,7 @@ namespace vJoySerialFeeder
 					break;
 				case 2:
 					labelCalibrate.Text = "Move the input to its extents several times and press Done";
-					numericMin.Value = numericMax.Value = axisMapping.ChannelValue;
+					numericMin.Value = numericMax.Value = axisMapping.Input;
 					buttonCalibrate.Text = "Done";
 					break;
 				case 3:

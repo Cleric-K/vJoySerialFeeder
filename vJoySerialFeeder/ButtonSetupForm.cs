@@ -153,14 +153,14 @@ namespace vJoySerialFeeder
 			graphPath.AddLines(points.ToArray());
 			e.Graphics.DrawPath(linePen, graphPath);
 
-			p = Math.Min(max, Math.Max(0, buttonMapping.ChannelValue)); // clamp
+			p = Math.Min(max, Math.Max(0, buttonMapping.Input)); // clamp
 			val = par.Transform(p);
 			x = padding + (int)(p/(double)max*w);
 			y = !par.Transform(p) ? padding + h: padding;
 
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);
-			e.Graphics.DrawString(buttonMapping.ChannelValue.ToString(), DefaultFont, Brushes.Green, x, h+padding);
+			e.Graphics.DrawString(buttonMapping.Input.ToString(), DefaultFont, Brushes.Green, x, h+padding);
 			e.Graphics.DrawString(val ? "On" : "Off", DefaultFont, Brushes.Red, 0, y);
 		}
 		
@@ -178,13 +178,13 @@ namespace vJoySerialFeeder
 					break;
 				case 1:
 					labelCalibrate.Text = "Set the input to the On position and press Done";
-					calibrationOff = buttonMapping.ChannelValue;
+					calibrationOff = buttonMapping.Input;
 					buttonCalibrate.Text = "Done";
 					break;
 				case 2:
 					labelCalibrate.Text = "Calibration complete";
 					buttonCalibrate.Text = "Calibrate";
-					calibrationOn = buttonMapping.ChannelValue;
+					calibrationOn = buttonMapping.Input;
 					calibrationStep = 0;
 					checkTwoThresholds.Enabled = true;
 					

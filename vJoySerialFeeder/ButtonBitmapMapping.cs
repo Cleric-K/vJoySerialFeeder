@@ -57,16 +57,26 @@ namespace vJoySerialFeeder
 			bitStyle.Alignment = StringAlignment.Center;
 			bitStyle.FormatFlags = StringFormatFlags.NoWrap | StringFormatFlags.NoClip;
 		}
+		
+		protected override float Transform(int val)
+		{
+			for(var i=0; i<16; i++) {
+				var p = Parameters[i];
+				if(p.Enabled && p.Invert)
+					val ^= 1<<i;
+			}
+			return val;
+		}
 
 		public override void UpdateJoystick(VJoy vjoy)
 		{
-			int v = ChannelValue;
+			int v = (int)Output;
+			
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
 				if(p.Enabled)
-					vjoy.SetButton(((v&(1<<i))!=0)^p.Invert, p.Button);
+					vjoy.SetButton(((v&(1<<i))!=0), p.Button);
 			}
-
 		}
 
 		public override void Paint()
@@ -102,7 +112,7 @@ namespace vJoySerialFeeder
 
 		private void onInputBitsPaint(object sender, PaintEventArgs e)
 		{
-			var v = ChannelValue;
+			var v = Input;
 
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
