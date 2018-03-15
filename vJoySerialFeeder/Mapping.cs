@@ -35,7 +35,7 @@ namespace vJoySerialFeeder
 		/// This is the transformed by the mapping value.
 		/// The mapping is responsible for setting it.
 		/// </summary>
-		public float Output { get; protected set; }
+		public float Output { get; set; }
 		
 		/// <summary>
 		/// Every mapping has a single channel to get data from (although this is not forced)

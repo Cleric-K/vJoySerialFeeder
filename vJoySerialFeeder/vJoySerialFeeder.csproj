@@ -47,6 +47,7 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization">
@@ -74,6 +75,7 @@
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ButtonMapping.cs" />
+    <Compile Include="ComAutomation.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="SbusSetupForm.cs" />
     <Compile Include="SbusSetupForm.Designer.cs">

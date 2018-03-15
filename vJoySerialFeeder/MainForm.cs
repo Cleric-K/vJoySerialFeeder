@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO.Ports;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace vJoySerialFeeder
@@ -24,7 +25,10 @@ namespace vJoySerialFeeder
 		
 		public event EventHandler ChannelDataUpdate;
 		
+		public int MappingCount { get { return mappings.Count; } }
+		
 		private List<Mapping> mappings = new List<Mapping>();
+		public Mapping MappingAt(int i) { return mappings.ElementAt(i); }
 		private bool connected = false;
 		private SerialPort serialPort;
 		private SerialReader serialReader;
@@ -37,6 +41,8 @@ namespace vJoySerialFeeder
 		private double updateRate;
 		
 		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader)};
+		
+		private ComAutomation comAutomation;
 		
 		public MainForm()
 		{
@@ -74,6 +80,8 @@ namespace vJoySerialFeeder
 			}
 			
 			toolStripStatusLabel.Text = "Disconnected";
+			
+			comAutomation = ComAutomation.GetInstance();
 		}
 		
 		/// <summary>
@@ -282,8 +290,12 @@ namespace vJoySerialFeeder
 						m.Input = Channels[m.Channel];
 						m.UpdateJoystick(VJoy);
 					}
+					
+					VJoy.SetState();
+					
+					comAutomation.Dispatch();
 				}
-				VJoy.SetState();
+				
 				
 				double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 				
