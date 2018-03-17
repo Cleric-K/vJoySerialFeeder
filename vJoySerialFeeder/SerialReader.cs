@@ -6,6 +6,7 @@
  */
 using System;
 using System.IO.Ports;
+using System.Runtime.InteropServices;
 
 namespace vJoySerialFeeder
 {
@@ -80,8 +81,6 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		
-		
 		protected SerialPort serialPort;
 		protected SerialBuffer Buffer;
 		protected string config;
@@ -97,10 +96,9 @@ namespace vJoySerialFeeder
 		/// <returns></returns>
 		public virtual bool Configurable { get { return false; } }
 		
-		public void Init(SerialPort sp, int[] channelData, string config)
+		public void Init(int[] channelData, string config)
 		{
-			serialPort = sp;
-			Buffer = new SerialBuffer(sp);
+			Buffer = new SerialBuffer(serialPort);
 			this.channelData = channelData;
 			this.config = config;
 		}
@@ -139,5 +137,107 @@ namespace vJoySerialFeeder
 		public virtual string Configure(string config) {
 			throw new NotImplementedException("You must implement this yourself");
 		}
+
+
+
+        public virtual bool OpenPort(string port, Configuration.SerialParameters sp) {
+            try
+            {
+                serialPort = new SerialPort(port, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
+                serialPort.Open();
+
+                return true;
+            }
+            catch(Exception) {
+                if(System.Environment.OSVersion.Platform == PlatformID.Unix) {
+                    // mono on linux has trouble opening serial ports with non standard baud rates
+                    return OpenLinuxPortCustomBaudRate(port, sp);
+                }
+                return false;
+            }
+        }
+
+        public virtual void ClosePort() {
+            serialPort.Close();
+            serialPort = null;
+        }
+
+        bool OpenLinuxPortCustomBaudRate(string port, Configuration.SerialParameters sp) {
+            try {
+                // first try to open with safe baudrate
+                serialPort = new SerialPort(port, 9600, sp.Parity, sp.DataBits, sp.StopBits);
+                serialPort.Open();
+                // it worked, no try to set the custom baud rate
+                if (!SetLinuxCustomBaudRate(port, sp.BaudRate))
+                {
+                    serialPort.Close();
+                    return false;
+                }
+                return true;
+            }
+            catch(Exception) {
+                return false;
+            }
+        }
+
+
+        internal class Linux
+        {
+            [StructLayout(LayoutKind.Sequential)]
+            internal struct Termios2 {
+                internal uint c_iflag;       /* input mode flags */
+                internal uint c_oflag;       /* output mode flags */
+                internal uint c_cflag;       /* control mode flags */
+                internal uint c_lflag;       /* local mode flags */
+                internal byte c_line;            /* line discipline */
+                [MarshalAs(UnmanagedType.ByValArray, SizeConst = 19)]
+                internal byte[] c_cc;        /* control characters */
+                internal int c_ispeed;       /* input speed */
+                internal int c_ospeed;       /* output speed */
+            }
+
+            [DllImport("libc")]
+            internal static extern int open([MarshalAs(UnmanagedType.LPStr)]string path, uint flag);
+
+            [DllImport("libc")]
+            internal static extern int close(int handle);
+
+            [DllImport("libc")]
+            internal static extern int ioctl(int handle, uint request, ref Termios2 termios2);
+
+
+        }
+
+        bool SetLinuxCustomBaudRate(string port, int baud) {
+            // based on code from https://gist.github.com/lategoodbye/f2d76134aa6c404cd92c
+
+            int fd = Linux.open(port, 0 /*O_RDONLY*/);
+            if (fd < 0) return false;
+
+            try
+            {
+                Linux.Termios2 t2 = new Linux.Termios2();
+
+                int e = Linux.ioctl(fd, 2150388778 /*TCGETS2*/, ref t2);
+                if (e < 0) return false;
+
+                t2.c_cflag &= ~(uint)4111 /*CBAUD*/;
+                t2.c_cflag |= 4096 /*BOTHER*/;
+                t2.c_ispeed = baud;
+                t2.c_ospeed = baud;
+
+                e = Linux.ioctl(fd, 1076646955 /*TCSETS2*/, ref t2);
+                if (e < 0) return false;
+
+                e = Linux.ioctl(fd, 2150388778 /*TCGETS2*/, ref t2);
+                if (e < 0) return false;
+
+                return true;
+            }
+            finally
+            {
+                Linux.close(fd);
+            }
+        }
 	}
 }

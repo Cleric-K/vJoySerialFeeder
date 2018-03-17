@@ -8,12 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>vJoySerialFeeder</RootNamespace>
     <AssemblyName>vJoySerialFeeder</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <TargetFrameworkProfile />
     <NoWin32Manifest>False</NoWin32Manifest>
     <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <ApplicationIcon>Joystick-icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -21,6 +19,8 @@
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -53,7 +53,6 @@
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -116,6 +115,8 @@
     </Compile>
     <Compile Include="VJoy.cs" />
     <Compile Include="WebSocket.cs" />
+    <Compile Include="VJoyWindows.cs" />
+    <Compile Include="VJoyLinux.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">

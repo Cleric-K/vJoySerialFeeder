@@ -30,12 +30,12 @@ namespace vJoySerialFeeder
 		private List<Mapping> mappings = new List<Mapping>();
 		public Mapping MappingAt(int i) { return i >= mappings.Count ? null : mappings[i]; }
 		private bool connected = false;
-		private SerialPort serialPort;
 		private SerialReader serialReader;
 		private string protocolConfig = "";
 		
 		private Configuration config;
 		private bool useCustomSerialParameters;
+
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
@@ -55,12 +55,32 @@ namespace vJoySerialFeeder
 			Instance = this;
 			 
 			Channels = new int[256];
-			VJoy = new VJoy();
-			
-			if(!VJoy.Init())
-				Application.Exit();
+
+            switch (Environment.OSVersion.Platform) {
+                case PlatformID.Win32NT:
+                    VJoy = new VJoyWindows();
+                    break;
+                case PlatformID.Unix:
+                    VJoy = new VJoyLinux();
+                    break;
+                default:
+                    MessageBox.Show("Unsupported platform");
+                    Application.Exit();
+                    break;
+            }
+
+            string err;
+            if ((err = VJoy.Init()) != null)
+                MessageBox.Show(err);
 			
 			comboProtocol.SelectedIndex = 0;
+
+            comboPorts.FormattingEnabled = true;
+            comboPorts.Format += (o, e) =>
+            {
+                // strip /dev/ on Linux, to be more compact
+                e.Value = e.Value.ToString().Replace("/dev/", "");
+            };
 			reloadComPorts();
 			reloadJoysticks();
 			ChannelDataUpdate += onChannelDataUpdate;
@@ -125,7 +145,7 @@ namespace vJoySerialFeeder
 			if(!connected) {
 				// load this stuff only if not connected
 				comboProtocol.SelectedIndex = p.Protocol;
-				comboPorts.SelectedItem = p.COMPort;
+                comboPorts.SelectedItem = p.COMPort;
 				useCustomSerialParameters = p.UseCustomSerialParameters;
 				serialParameters = p.SerialParameters;
 				protocolConfig = p.ProtocolConfiguration;
@@ -147,7 +167,7 @@ namespace vJoySerialFeeder
 		private void reloadComPorts() {
 			object prevPort = comboPorts.SelectedItem;
 			comboPorts.Items.Clear();
-			comboPorts.Items.AddRange(SerialPort.GetPortNames());
+            comboPorts.Items.AddRange(SerialPort.GetPortNames());
 			comboPorts.SelectedItem = prevPort;
 			if(comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
 				comboPorts.SelectedIndex = 0;
@@ -180,15 +200,11 @@ namespace vJoySerialFeeder
 				serialParameters
 				: serialReader.GetDefaultSerialParameters();
 
-			try {
-				serialPort = new SerialPort((string)comboPorts.SelectedItem, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
-				serialPort.Open();
-			}
-			catch(Exception) {
-				MessageBox.Show("Can not open the port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				VJoy.Release();
-				return;
-			}
+            if(!serialReader.OpenPort((string)comboPorts.SelectedItem, sp)) {
+                MessageBox.Show("Can not open the port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                VJoy.Release();
+                return;
+            }
 
 			comboProtocol.Enabled = false;
 			comboPorts.Enabled = false;
@@ -211,9 +227,8 @@ namespace vJoySerialFeeder
 		private void disconnect2() {
 			VJoy.Release();
 			try {
-				serialPort.Close();
+                serialReader.ClosePort();
 			} catch(Exception) {}
-			serialPort = null;
 			
 			ActiveChannels = 0;
 			comboProtocol.Enabled = true;
@@ -280,7 +295,7 @@ namespace vJoySerialFeeder
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			serialReader.Init(serialPort, Channels, protocolConfig);
+			serialReader.Init(Channels, protocolConfig);
 			serialReader.Start();
 			
 			double nextUIUpdateTime = 0, nextRateUpdateTime = 0, prevTime = 0;
@@ -378,7 +393,7 @@ namespace vJoySerialFeeder
 			var p = new Configuration.Profile();
 				
 			p.Protocol = comboProtocol.SelectedIndex;
-			p.COMPort = comboPorts.Text;
+            p.COMPort = (string)comboPorts.SelectedItem;
 			p.UseCustomSerialParameters = useCustomSerialParameters;
 			p.SerialParameters = serialParameters;
 			p.ProtocolConfiguration = protocolConfig;
