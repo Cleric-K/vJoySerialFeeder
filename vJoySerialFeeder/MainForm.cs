@@ -31,7 +31,7 @@ namespace vJoySerialFeeder
 		private string protocolConfig = "";
 		
 		private Configuration config;
-		private bool useCustomSerialParameters = true;
+		private bool useCustomSerialParameters;
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
