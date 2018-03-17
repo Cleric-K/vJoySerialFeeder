@@ -51,7 +51,7 @@ namespace vJoySerialFeeder
 		/// vJoy button id
 		/// </summary>
 		[DataMember]
-		public uint Button = 1;
+		public uint Button;
 		
 		[DataMember]
 		public ButtonParameters Parameters = new ButtonParameters {
