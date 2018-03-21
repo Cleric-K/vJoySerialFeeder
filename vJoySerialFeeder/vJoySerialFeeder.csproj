@@ -37,6 +37,8 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
+    <StartAction>Project</StartAction>
+    <StartArguments>-wsport 40000</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -113,6 +115,7 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="VJoy.cs" />
+    <Compile Include="WebSocket.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">

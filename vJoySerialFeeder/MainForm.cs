@@ -28,7 +28,7 @@ namespace vJoySerialFeeder
 		public int MappingCount { get { return mappings.Count; } }
 		
 		private List<Mapping> mappings = new List<Mapping>();
-		public Mapping MappingAt(int i) { return mappings.ElementAt(i); }
+		public Mapping MappingAt(int i) { return i >= mappings.Count ? null : mappings[i]; }
 		private bool connected = false;
 		private SerialPort serialPort;
 		private SerialReader serialReader;
@@ -43,8 +43,9 @@ namespace vJoySerialFeeder
 		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader)};
 		
 		private ComAutomation comAutomation;
+		private WebSocket webSocket;
 		
-		public MainForm()
+		public MainForm(string[] args)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -81,7 +82,24 @@ namespace vJoySerialFeeder
 			
 			toolStripStatusLabel.Text = "Disconnected";
 			
-			comAutomation = ComAutomation.GetInstance();
+			// initialize COM on windows platforms
+			if(System.Environment.OSVersion.Platform == PlatformID.Win32NT)
+				comAutomation = ComAutomation.GetInstance();
+			
+			// initialize websocket if requested with command line arguments
+			for(var i=0; i<args.Length; i++) {
+				if(args[i].Equals("-wsport")) {
+					try {
+						var port = int.Parse(args[i+1]);
+						webSocket = new WebSocket(40000);
+						break;
+					}
+					catch(Exception) {
+						MessageBox.Show("Invalid PORT after -wsport option");
+					}
+				}
+				
+			}
 		}
 		
 		/// <summary>
@@ -287,13 +305,18 @@ namespace vJoySerialFeeder
 				}
 				if(ActiveChannels > 0) {
 					foreach(Mapping m in mappings) {
-						m.Input = Channels[m.Channel];
+						if(m.Channel < ActiveChannels)
+							m.Input = Channels[m.Channel];
 						m.UpdateJoystick(VJoy);
 					}
 					
 					VJoy.SetState();
 					
-					comAutomation.Dispatch();
+					if(comAutomation != null)
+						comAutomation.Dispatch();
+					
+					if(webSocket != null)
+						webSocket.Dispatch();
 				}
 				
 				
