@@ -123,7 +123,7 @@ namespace vJoySerialFeeder
 			comboPorts.Items.Clear();
 			comboPorts.Items.AddRange(SerialPort.GetPortNames());
 			comboPorts.SelectedItem = prevPort;
-			if(comboPorts.SelectedItem == null)
+			if(comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
 				comboPorts.SelectedIndex = 0;
 		}
 		
