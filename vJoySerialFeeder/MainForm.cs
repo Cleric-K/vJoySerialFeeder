@@ -58,10 +58,10 @@ namespace vJoySerialFeeder
 
             switch (Environment.OSVersion.Platform) {
                 case PlatformID.Win32NT:
-                    VJoy = new VJoyWindows();
+					VJoy = (VJoy)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyWindows"));
                     break;
                 case PlatformID.Unix:
-                    VJoy = new VJoyLinux();
+                    VJoy = (VJoy)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyLinux"));
                     break;
                 default:
                     MessageBox.Show("Unsupported platform");

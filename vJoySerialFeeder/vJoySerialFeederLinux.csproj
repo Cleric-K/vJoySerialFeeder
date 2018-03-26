@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
-    <ProjectGuid>{9C8FF460-8AAE-4BBB-B365-0D67C6016A0D}</ProjectGuid>
+    <ProjectGuid>{9C8FF460-8AAE-4BBB-B365-0D67C6016A0E}</ProjectGuid>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -17,12 +17,12 @@
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
     <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
-    <IntermediateOutputPath>obj\windows\$(Configuration)\</IntermediateOutputPath>
+    <IntermediateOutputPath>obj\linux\$(Configuration)\</IntermediateOutputPath>
     <WarningLevel>4</WarningLevel>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <BaseIntermediateOutputPath>obj\windows\</BaseIntermediateOutputPath>
-    <OutputPath>bin\windows\$(Configuration)</OutputPath>
+    <BaseIntermediateOutputPath>obj\linux\</BaseIntermediateOutputPath>
+    <OutputPath>bin\linux\$(Configuration)</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -55,9 +55,6 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="vJoyInterfaceWrap">
-      <HintPath>Lib\vJoy_x86\vJoyInterfaceWrap.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AxisSetupForm.cs" />
@@ -114,7 +111,7 @@
     </Compile>
     <Compile Include="VJoy.cs" />
     <Compile Include="WebSocket.cs" />
-    <Compile Include="VJoyWindows.cs" />
+    <Compile Include="VJoyLinux.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">
@@ -147,17 +144,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ContentWithTargetPath Include="Lib\vJoy_x86\vJoyInterface.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>vJoyInterface.dll</TargetPath>
-    </ContentWithTargetPath>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

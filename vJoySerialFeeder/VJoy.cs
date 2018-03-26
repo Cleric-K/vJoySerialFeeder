@@ -7,7 +7,6 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using vJoyInterfaceWrap;
 
 namespace vJoySerialFeeder
 {
