@@ -17,8 +17,9 @@ namespace vJoySerialFeeder
 	/// <summary>
 	/// Implementing interaction with vJoySerialFeeder via WebSocket
 	/// 
-	/// The implementation of WebSocket is minimal, but compliant with RFC6455:
-	/// https://tools.ietf.org/html/rfc6455#section-7.1.1
+	/// The implementation of WebSocket is minimal, but compliant with RFC6455
+	/// (https://tools.ietf.org/html/rfc6455#section-7.1.1),
+	/// with the following exceptions:
 	///  * no fragmented messages
 	///  * no packets longer than 125 bytes
 	///  * no subprotocols, no extensions
@@ -33,14 +34,14 @@ namespace vJoySerialFeeder
 		/// </summary>
 		class Subscription {
 			internal readonly int mappingIndex;
-			internal bool OnOutputChangeOnly;
+			internal bool IgnoreInputChanges;
 			
 			int? Input;
 			float? Output;
 			
-			internal Subscription(int i, bool oo) {
+			internal Subscription(int i, bool ignInp) {
 				mappingIndex = i;
-				OnOutputChangeOnly = oo;
+				IgnoreInputChanges = ignInp;
 			}
 			
 			/// <summary>
@@ -51,7 +52,7 @@ namespace vJoySerialFeeder
 			/// <param name="Output"></param>
 			/// <returns></returns>
 			internal bool Update(int Input, float Output) {
-				bool upd = this.Output != Output || (!OnOutputChangeOnly && this.Input != Input);
+				bool upd = this.Output != Output || (!IgnoreInputChanges && this.Input != Input);
 				this.Input = Input;
 				this.Output = Output;
 				return upd;
@@ -397,7 +398,7 @@ namespace vJoySerialFeeder
 					if(sub.mappingIndex == mIdx) {
 						// already subscribed
 						if(subInput)
-							sub.OnOutputChangeOnly = false;
+							sub.IgnoreInputChanges = false;
 						return;
 					}
 				}

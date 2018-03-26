@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace vJoySerialFeeder
 {
 	/// <summary>
-	/// Description of ComAutomation.
+	/// Implements COM OLE Automation
 	/// </summary>
 	/// 
 	public class ComAutomation
@@ -26,6 +26,8 @@ namespace vJoySerialFeeder
 		
 		/// 
 		/// IClassFactory declaration
+		/// 
+		/// We need this to support COM CreateInstance
 		/// 
 		[ComImport()]
 		[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
@@ -59,10 +61,10 @@ namespace vJoySerialFeeder
 			
 			
 			/// <summary>
-			/// Remove handler `h`
+			/// Detach handler `h`
 			/// </summary>
 			/// <param name="h"></param>
-			public void RemoveHandler(dynamic h) {
+			public void DetachHandler(dynamic h) {
 				var handlers = ComAutomation.instance.handlers;
 				lock(handlers) {
 					for(int i = handlers.Count-1; i >= 0; i--) {
@@ -92,12 +94,13 @@ namespace vJoySerialFeeder
 		[ComVisible(true)]
 		public class Mappings {
 			public MappingWrapper Item(int index) {
-				return new MappingWrapper(MainForm.Instance.MappingAt(index-1));
+				var m = MainForm.Instance.MappingAt(index-1);
+				if(m == null)
+					return null;
+				return new MappingWrapper(m);
 			}
 			
 			public int Count { get { return MainForm.Instance.MappingCount; } }
-			
-			public MappingWrapper Test { get { return Item(1); } }
 		}
 		
 		
@@ -137,7 +140,7 @@ namespace vJoySerialFeeder
 				return m.GetType().Name;
 			}
 			
-			public void AttachHandler(dynamic h) {
+			public void AttachOutputHandler(dynamic h) {
 				attachHandler(h, true);
 			}
 			
@@ -145,7 +148,7 @@ namespace vJoySerialFeeder
 				attachHandler(h, false);
 			}
 			
-			public void RemoveHandler(dynamic h) {
+			public void DetachHandler(dynamic h) {
 				var handlers = ComAutomation.instance.handlers;
 				lock(handlers) {
 					for(int i = handlers.Count-1; i >= 0; i--) {
@@ -168,17 +171,17 @@ namespace vJoySerialFeeder
 			internal float? Output;
 	
 			internal readonly Mapping Mapping;
-			internal readonly bool OnOutputChangeOnly;
+			internal readonly bool IgnoreInputChanges;
 			
 			internal dynamic handlerObject;
 
 			int numFails;
 			
 			
-			internal Handler(Mapping m, dynamic h, bool oo) {
+			internal Handler(Mapping m, dynamic h, bool ignInput) {
 				handlerObject = h;
 				Mapping = m;
-				OnOutputChangeOnly = oo;
+				IgnoreInputChanges = ignInput;
 			}
 			
 			/// <summary>
@@ -190,7 +193,7 @@ namespace vJoySerialFeeder
 			/// <returns></returns>
 			internal bool SetValues(int i, float o) {
 				var r = Output != o ||
-							(!OnOutputChangeOnly && Input != i);
+							(!IgnoreInputChanges && Input != i);
 								
 				Input = i;
 				Output = o;
@@ -294,11 +297,16 @@ namespace vJoySerialFeeder
 			
 			var clsid = new Guid(CLSID);
 			
+			// register the object in the Running Object Table with a File Moniker
+			// This allows for example from VBScript to do: GetObject('vJoySerialFeeder.1')
 			hr = CreateFileMoniker(PROGID, out mon);
 			hr = GetRunningObjectTable(0, out rot);
-			
-			hr = RegisterActiveObject(comObj, ref clsid, 0 /*ACTIVEOBJECT_STRONG*/, out areg);
 			rot.Register(1 /*ROTFLAGS_REGISTRATIONKEEPSALIVE*/, comObj, mon);
+			
+			// register the object in the Running Object Table by CLSID.
+			hr = RegisterActiveObject(comObj, ref clsid, 0 /*ACTIVEOBJECT_STRONG*/, out areg);
+			
+			// register the object as Out-of-Proces object, which allows go do CreateObject()
 			hr = CoRegisterClassObject(clsid, comObj,
 			                      4 /*CLSCTX_LOCAL_SERVER*/,
 			                      1 /*REGCLS_MULTIPLEUSE*/,
