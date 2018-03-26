@@ -213,7 +213,7 @@ namespace vJoySerialFeeder
 			panel.Controls.Add(label);
 			
 			channelSpinner = new NumericUpDown();
-			channelSpinner.Minimum = 1;
+			channelSpinner.Minimum = 0;
 			channelSpinner.Maximum = 255;
 			channelSpinner.Size = new Size(42, 20);
 			channelSpinner.Value = Channel+1;

@@ -51,7 +51,7 @@ namespace vJoySerialFeeder
 		/// vJoy button id
 		/// </summary>
 		[DataMember]
-		public uint Button;
+		public int Button;
 		
 		[DataMember]
 		public ButtonParameters Parameters = new ButtonParameters {
@@ -87,7 +87,8 @@ namespace vJoySerialFeeder
 		
 		public override void UpdateJoystick(VJoy vjoy)
 		{
-			vjoy.SetButton(Output > 0, Button);
+			if(Button >= 0)
+				vjoy.SetButton(Output > 0, (uint)Button);
 		}
 		
 		public override void Paint()
@@ -110,7 +111,7 @@ namespace vJoySerialFeeder
 		
 		private void onButtonChange(object sender, EventArgs e)
 		{
-			Button = (uint)buttonSpinner.Value - 1;
+			Button = (int)buttonSpinner.Value - 1;
 		}
 		
 		private void onButtonStatePaint(object sender, PaintEventArgs e)
@@ -148,7 +149,7 @@ namespace vJoySerialFeeder
 			panel.Controls.Add(label);
 			
 			channelSpinner = new NumericUpDown();
-			channelSpinner.Minimum = 1;
+			channelSpinner.Minimum = 0;
 			channelSpinner.Maximum = 255;
 			channelSpinner.Size = new Size(42, 20);
 			channelSpinner.Value = Channel + 1;
@@ -162,7 +163,7 @@ namespace vJoySerialFeeder
 			panel.Controls.Add(label);
 			
 			buttonSpinner = new NumericUpDown();
-			buttonSpinner.Minimum = 1;
+			buttonSpinner.Minimum = 0;
 			buttonSpinner.Maximum = 128;
 			buttonSpinner.Size = new Size(42, 20);
 			buttonSpinner.Value = Button + 1;

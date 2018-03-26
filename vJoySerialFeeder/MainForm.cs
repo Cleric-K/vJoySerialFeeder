@@ -305,7 +305,7 @@ namespace vJoySerialFeeder
 				}
 				if(ActiveChannels > 0) {
 					foreach(Mapping m in mappings) {
-						if(m.Channel < ActiveChannels)
+						if(m.Channel >= 0 && m.Channel < ActiveChannels)
 							m.Input = Channels[m.Channel];
 						m.UpdateJoystick(VJoy);
 					}

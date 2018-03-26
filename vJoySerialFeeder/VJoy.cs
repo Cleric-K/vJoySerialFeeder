@@ -24,7 +24,8 @@ namespace vJoySerialFeeder
 			Ry,
 			Rz,
 			Sl0,
-			Sl1
+			Sl1,
+			None
 		};
 
 
