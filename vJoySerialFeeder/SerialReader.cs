@@ -50,7 +50,10 @@ namespace vJoySerialFeeder
 							System.Diagnostics.Debug.WriteLine("Read beyond frame");
 						}
 							
-						length += sp.Read(buf, length, bytesToGet);
+                        var read = sp.Read(buf, length, bytesToGet);
+                        if (read == 0)
+                            throw new InvalidOperationException("Serial read error");
+                        length += read;
 					}
 					return buf[index];
 				}
