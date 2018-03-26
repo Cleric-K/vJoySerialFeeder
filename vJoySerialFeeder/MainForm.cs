@@ -146,6 +146,8 @@ namespace vJoySerialFeeder
 				// load this stuff only if not connected
 				comboProtocol.SelectedIndex = p.Protocol;
                 comboPorts.SelectedItem = p.COMPort;
+                if (comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
+                    comboPorts.SelectedIndex = 0;
 				useCustomSerialParameters = p.UseCustomSerialParameters;
 				serialParameters = p.SerialParameters;
 				protocolConfig = p.ProtocolConfiguration;
