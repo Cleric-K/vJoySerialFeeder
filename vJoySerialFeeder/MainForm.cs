@@ -299,6 +299,10 @@ namespace vJoySerialFeeder
 				try {
 					ActiveChannels = serialReader.ReadChannels();
 				}
+				catch(InvalidOperationException ex) {
+					System.Diagnostics.Debug.WriteLine(ex.Message);
+					backgroundWorker.CancelAsync();
+				}
 				catch(Exception ex) {
 					ActiveChannels = 0;
 					System.Diagnostics.Debug.WriteLine(ex.Message);
