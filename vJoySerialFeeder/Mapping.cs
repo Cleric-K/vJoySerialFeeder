@@ -35,7 +35,13 @@ namespace vJoySerialFeeder
 		/// This is the transformed by the mapping value.
 		/// The mapping is responsible for setting it.
 		/// </summary>
-		public float Output { get; set; }
+		private float _output;
+		public float Output {
+			get { return _output; }
+			set {
+				_output = Clamp(value);
+			}
+		}
 		
 		/// <summary>
 		/// Every mapping has a single channel to get data from (although this is not forced)
@@ -56,6 +62,20 @@ namespace vJoySerialFeeder
 			Removed = true;
 		}
 		
+		/// <summary>
+		/// Should restrict the output value to the meaningful ranges for
+		/// the mapping type. It is used by Scripts and Interaction.
+		/// </summary>
+		/// <param name="val"></param>
+		/// <returns></returns>
+		abstract protected float Clamp(float val);
+		
+		/// <summary>
+		/// This method should do the actual work of transforming the integer channel
+		/// value to the output value that is meaningful for the mapping type.
+		/// </summary>
+		/// <param name="val"></param>
+		/// <returns></returns>
 		abstract protected float Transform(int val);
 		
 		/// <summary>

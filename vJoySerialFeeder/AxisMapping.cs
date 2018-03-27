@@ -122,6 +122,11 @@ namespace vJoySerialFeeder
 			return Parameters.Transform(val);
 		}
 		
+		protected override float Clamp(float val)
+		{
+			return val > 1f ? 1.0f : val < 0f ? 0f : val;
+		}
+		
 		public override Mapping Copy()
 		{
 			var am = new AxisMapping();
@@ -181,7 +186,7 @@ namespace vJoySerialFeeder
 			using (StringFormat sf = new StringFormat()) {
 				sf.Alignment = StringAlignment.Center;
 				sf.LineAlignment = StringAlignment.Center;
-				int percent = (int)(Output * 100);
+				int percent = (int)Math.Round(Output * 100f);
 				e.Graphics.DrawString(
 					percent.ToString() + "%",
 					progressBox.Font, Brushes.Black,

@@ -67,6 +67,12 @@ namespace vJoySerialFeeder
 			}
 			return val;
 		}
+		
+		protected override float Clamp(float val)
+		{
+			int v = (int)val;
+			return (float)(v < 0 ? 0 : v > 0xffff ? 0xffff : v);
+		}
 
 		public override void UpdateJoystick(VJoy vjoy)
 		{

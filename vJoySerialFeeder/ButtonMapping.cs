@@ -83,6 +83,11 @@ namespace vJoySerialFeeder
 		{
 			return Parameters.Transform(Input) ? 1f : 0f;
 		}
+		
+		protected override float Clamp(float val)
+		{
+			return val > 0 ? 1 : 0;
+		}
 			
 		
 		public override void UpdateJoystick(VJoy vjoy)
