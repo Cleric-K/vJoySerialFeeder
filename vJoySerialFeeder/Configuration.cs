@@ -42,6 +42,14 @@ namespace vJoySerialFeeder
 			public string ProtocolConfiguration = "";
 			[DataMember]
 			public string LuaScript;
+			
+			
+			public override bool Equals(object obj)
+			{
+				if (obj == null)
+					return false;
+				return serialize(this, ProfileSerializer).Equals(serialize(obj, ProfileSerializer));
+			}
 		}
 		
 		/// <summary>
@@ -71,8 +79,13 @@ namespace vJoySerialFeeder
 		public Dictionary<string, Profile> Profiles = new Dictionary<string, Profile>();
 		
 	
-		private static DataContractJsonSerializer Serializer = new DataContractJsonSerializer(
+		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
+				new Type[] {typeof(AxisMapping), typeof(ButtonMapping), typeof(ButtonBitmapMapping)}
+			);
+		
+		private static DataContractJsonSerializer ProfileSerializer = new DataContractJsonSerializer(
+				typeof(Profile),
 				new Type[] {typeof(AxisMapping), typeof(ButtonMapping), typeof(ButtonBitmapMapping)}
 			);
 		
@@ -91,7 +104,7 @@ namespace vJoySerialFeeder
 				try {
 					var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
 					ms.Position = 0;
-					return (Configuration)Serializer.ReadObject(ms);
+					return (Configuration)ConfigSerializer.ReadObject(ms);
 				}
 				catch(SerializationException ) {
 					MessageBox.Show("Could not load configuration");
@@ -102,12 +115,7 @@ namespace vJoySerialFeeder
 		}
 		
 		public void Save() {
-			var ms = new MemoryStream();
-			Serializer.WriteObject(ms, this);
-			ms.Position = 0;
-			var json = new StreamReader(ms).ReadToEnd();
-			//System.Diagnostics.Debug.WriteLine(json);
-			Settings.Default.config = json;
+			Settings.Default.config = serialize(this, ConfigSerializer);
 			Settings.Default.Save();
 		}
 		
@@ -128,6 +136,13 @@ namespace vJoySerialFeeder
 		public void DeleteProfile(string name) {
 			if(Profiles.ContainsKey(name))
 				Profiles.Remove(name);
+		}
+		
+		static string serialize(object obj, DataContractJsonSerializer ser) {
+			var ms = new MemoryStream();
+			ser.WriteObject(ms, obj);
+			ms.Position = 0;
+			return new StreamReader(ms).ReadToEnd();
 		}
 	}
 }

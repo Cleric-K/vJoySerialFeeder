@@ -35,6 +35,7 @@ namespace vJoySerialFeeder
 		private string protocolConfig = "";
 		
 		private Configuration config;
+		private Configuration.Profile currentProfile;
 		private bool useCustomSerialParameters;
 
 		private Configuration.SerialParameters serialParameters;
@@ -76,8 +77,6 @@ namespace vJoySerialFeeder
             string err;
             if ((err = VJoy.Init()) != null)
                 MessageBox.Show(err);
-			
-			comboProtocol.SelectedIndex = 0;
 
             comboPorts.FormattingEnabled = true;
             comboPorts.Format += (o, e) =>
@@ -99,10 +98,13 @@ namespace vJoySerialFeeder
 				defaultProfile = config.GetProfile(first);
 				comboProfiles.Text = first;
 			}
+			
 			if(defaultProfile != null) {
 				comboProfiles.Text = config.DefaultProfile;
 				loadProfile(defaultProfile);
 			}
+			else
+				resetProfile();
 			
 			toolStripStatusLabel.Text = "Disconnected";
 			
@@ -150,7 +152,7 @@ namespace vJoySerialFeeder
 			
 			if(!connected) {
 				// load this stuff only if not connected
-				comboProtocol.SelectedIndex = p.Protocol;
+				comboProtocol.SelectedIndex = p.Protocol < comboProtocol.Items.Count ? p.Protocol : 0;
                 comboPorts.SelectedItem = p.COMPort;
                 if (comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
                     comboPorts.SelectedIndex = 0;
@@ -158,12 +160,35 @@ namespace vJoySerialFeeder
 				serialParameters = p.SerialParameters;
 				protocolConfig = p.ProtocolConfiguration;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
+				if(comboJoysticks.SelectedItem == null && comboJoysticks.Items.Count > 0)
+					comboJoysticks.SelectedIndex = 0;
 				luaScript = p.LuaScript;
 			}
 			
 			foreach(var m in p.Mappings) {
 				addMapping(m.Copy());
 			}
+			
+			currentProfile = p;
+		}
+		
+		private Configuration.Profile buildProfile() {
+			var p = new Configuration.Profile();
+				
+			p.Protocol = comboProtocol.SelectedIndex;
+            p.COMPort = (string)comboPorts.SelectedItem;
+			p.UseCustomSerialParameters = useCustomSerialParameters;
+			p.SerialParameters = serialParameters;
+			p.ProtocolConfiguration = protocolConfig;
+			p.VJoyInstance = comboJoysticks.Text;
+			p.LuaScript = luaScript;
+
+			p.Mappings = new List<Mapping>();
+			
+			foreach (var m in mappings)
+				p.Mappings.Add(m.Copy());
+			
+			return p;
 		}
 		
 		private void reloadProfiles() {
@@ -171,6 +196,13 @@ namespace vJoySerialFeeder
 			Array.Sort(ps);
 			comboProfiles.Items.Clear();
 			comboProfiles.Items.AddRange(ps);
+		}
+		
+		private void resetProfile() {
+			// reset profile
+			loadProfile(new Configuration.Profile());
+			comboProfiles.Text = config.DefaultProfile = "";
+			currentProfile = buildProfile();
 		}
 		
 		private void reloadComPorts() {
@@ -410,22 +442,9 @@ namespace vJoySerialFeeder
 			if(name.Length == 0) {
 				MessageBox.Show("Enter a profile name");
 				return;
-			}
+			}			
 			
-			var p = new Configuration.Profile();
-				
-			p.Protocol = comboProtocol.SelectedIndex;
-            p.COMPort = (string)comboPorts.SelectedItem;
-			p.UseCustomSerialParameters = useCustomSerialParameters;
-			p.SerialParameters = serialParameters;
-			p.ProtocolConfiguration = protocolConfig;
-			p.VJoyInstance = comboJoysticks.Text;
-			p.LuaScript = luaScript;
-
-			p.Mappings = new List<Mapping>();
-			
-			foreach (var m in mappings)
-				p.Mappings.Add(m.Copy());
+			var p = buildProfile();
 			
 			config.PutProfile(name, p);
 			config.DefaultProfile = name;
@@ -525,6 +544,31 @@ namespace vJoySerialFeeder
         				initLuaScript();
         		}
         	}
+        }
+        
+        void MainFormFormClosing(object sender, FormClosingEventArgs e)
+        {
+        	// check if profile needs saving
+        	if(!buildProfile().Equals(currentProfile)) {
+        		var res = MessageBox.Show("There are unsaved changes in your Profile! Are you sure you want to quit?",
+        		             "Profile not saved", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+				if(res == DialogResult.No)
+				    e.Cancel = true;
+        	}
+        }
+        
+        void ButtonNewProfileClick(object sender, EventArgs e)
+        {
+        	if(!buildProfile().Equals(currentProfile)) {
+        		var res = MessageBox.Show("There are unsaved changes in your Profile! Are you sure you want to discard them?",
+        		             "Profile not saved", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+        		if(res == DialogResult.No) {
+        			return;
+        		}
+				    
+        	}
+        	
+        	resetProfile();
         }
 	}
 }

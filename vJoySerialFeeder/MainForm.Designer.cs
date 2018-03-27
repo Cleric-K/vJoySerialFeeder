@@ -77,6 +77,7 @@ namespace vJoySerialFeeder
         	this.buttonProtocolSetup = new System.Windows.Forms.Button();
         	this.buttonHelp = new System.Windows.Forms.Button();
         	this.buttonScripting = new System.Windows.Forms.Button();
+        	this.buttonNewProfile = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -96,7 +97,7 @@ namespace vJoySerialFeeder
         	this.buttonAddAxis.Location = new System.Drawing.Point(12, 81);
         	this.buttonAddAxis.Name = "buttonAddAxis";
         	this.buttonAddAxis.Size = new System.Drawing.Size(66, 23);
-        	this.buttonAddAxis.TabIndex = 10;
+        	this.buttonAddAxis.TabIndex = 12;
         	this.buttonAddAxis.Text = "Add Axis";
         	this.buttonAddAxis.UseVisualStyleBackColor = true;
         	this.buttonAddAxis.Click += new System.EventHandler(this.ButtonAddAxisClick);
@@ -106,7 +107,7 @@ namespace vJoySerialFeeder
         	this.buttonAddButton.Location = new System.Drawing.Point(84, 81);
         	this.buttonAddButton.Name = "buttonAddButton";
         	this.buttonAddButton.Size = new System.Drawing.Size(75, 23);
-        	this.buttonAddButton.TabIndex = 11;
+        	this.buttonAddButton.TabIndex = 13;
         	this.buttonAddButton.Text = "Add Button";
         	this.buttonAddButton.UseVisualStyleBackColor = true;
         	this.buttonAddButton.Click += new System.EventHandler(this.ButtonAddButtonClick);
@@ -118,7 +119,7 @@ namespace vJoySerialFeeder
         	this.comboPorts.Location = new System.Drawing.Point(566, 11);
         	this.comboPorts.Name = "comboPorts";
         	this.comboPorts.Size = new System.Drawing.Size(67, 21);
-        	this.comboPorts.TabIndex = 6;
+        	this.comboPorts.TabIndex = 8;
         	// 
         	// label1
         	// 
@@ -134,7 +135,7 @@ namespace vJoySerialFeeder
         	this.buttonConnect.Location = new System.Drawing.Point(640, 10);
         	this.buttonConnect.Name = "buttonConnect";
         	this.buttonConnect.Size = new System.Drawing.Size(75, 23);
-        	this.buttonConnect.TabIndex = 8;
+        	this.buttonConnect.TabIndex = 10;
         	this.buttonConnect.Text = "Connect";
         	this.buttonConnect.UseVisualStyleBackColor = true;
         	this.buttonConnect.Click += new System.EventHandler(this.ButtonConnectClick);
@@ -144,7 +145,7 @@ namespace vJoySerialFeeder
         	this.buttonPortsRefresh.Location = new System.Drawing.Point(640, 39);
         	this.buttonPortsRefresh.Name = "buttonPortsRefresh";
         	this.buttonPortsRefresh.Size = new System.Drawing.Size(75, 23);
-        	this.buttonPortsRefresh.TabIndex = 9;
+        	this.buttonPortsRefresh.TabIndex = 11;
         	this.buttonPortsRefresh.Text = "Refresh";
         	this.buttonPortsRefresh.UseVisualStyleBackColor = true;
         	this.buttonPortsRefresh.Click += new System.EventHandler(this.ButtonPortsRefreshClick);
@@ -164,7 +165,7 @@ namespace vJoySerialFeeder
         	this.comboJoysticks.Location = new System.Drawing.Point(360, 12);
         	this.comboJoysticks.Name = "comboJoysticks";
         	this.comboJoysticks.Size = new System.Drawing.Size(72, 21);
-        	this.comboJoysticks.TabIndex = 4;
+        	this.comboJoysticks.TabIndex = 5;
         	// 
         	// label3
         	// 
@@ -178,37 +179,37 @@ namespace vJoySerialFeeder
         	// comboProfiles
         	// 
         	this.comboProfiles.FormattingEnabled = true;
-        	this.comboProfiles.Location = new System.Drawing.Point(55, 9);
+        	this.comboProfiles.Location = new System.Drawing.Point(60, 9);
         	this.comboProfiles.Name = "comboProfiles";
-        	this.comboProfiles.Size = new System.Drawing.Size(99, 21);
+        	this.comboProfiles.Size = new System.Drawing.Size(144, 21);
         	this.comboProfiles.TabIndex = 0;
         	// 
         	// buttonLoadProfile
         	// 
-        	this.buttonLoadProfile.Location = new System.Drawing.Point(13, 38);
+        	this.buttonLoadProfile.Location = new System.Drawing.Point(60, 39);
         	this.buttonLoadProfile.Name = "buttonLoadProfile";
         	this.buttonLoadProfile.Size = new System.Drawing.Size(40, 20);
-        	this.buttonLoadProfile.TabIndex = 1;
+        	this.buttonLoadProfile.TabIndex = 2;
         	this.buttonLoadProfile.Text = "Load";
         	this.buttonLoadProfile.UseVisualStyleBackColor = true;
         	this.buttonLoadProfile.Click += new System.EventHandler(this.ButtonLoadProfileClick);
         	// 
         	// buttonSaveProfile
         	// 
-        	this.buttonSaveProfile.Location = new System.Drawing.Point(59, 38);
+        	this.buttonSaveProfile.Location = new System.Drawing.Point(106, 39);
         	this.buttonSaveProfile.Name = "buttonSaveProfile";
         	this.buttonSaveProfile.Size = new System.Drawing.Size(40, 20);
-        	this.buttonSaveProfile.TabIndex = 2;
+        	this.buttonSaveProfile.TabIndex = 3;
         	this.buttonSaveProfile.Text = "Save";
         	this.buttonSaveProfile.UseVisualStyleBackColor = true;
         	this.buttonSaveProfile.Click += new System.EventHandler(this.ButtonSaveProfileClick);
         	// 
         	// buttonDeleteProfile
         	// 
-        	this.buttonDeleteProfile.Location = new System.Drawing.Point(105, 38);
+        	this.buttonDeleteProfile.Location = new System.Drawing.Point(152, 39);
         	this.buttonDeleteProfile.Name = "buttonDeleteProfile";
         	this.buttonDeleteProfile.Size = new System.Drawing.Size(49, 20);
-        	this.buttonDeleteProfile.TabIndex = 3;
+        	this.buttonDeleteProfile.TabIndex = 4;
         	this.buttonDeleteProfile.Text = "Delete";
         	this.buttonDeleteProfile.UseVisualStyleBackColor = true;
         	this.buttonDeleteProfile.Click += new System.EventHandler(this.ButtonDeleteProfileClick);
@@ -269,7 +270,7 @@ namespace vJoySerialFeeder
         	this.comboProtocol.Location = new System.Drawing.Point(360, 39);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
-        	this.comboProtocol.TabIndex = 5;
+        	this.comboProtocol.TabIndex = 6;
         	this.comboProtocol.SelectedIndexChanged += new System.EventHandler(this.ComboProtocolSelectedIndexChanged);
         	// 
         	// buttonMonitor
@@ -277,7 +278,7 @@ namespace vJoySerialFeeder
         	this.buttonMonitor.Location = new System.Drawing.Point(520, 81);
         	this.buttonMonitor.Name = "buttonMonitor";
         	this.buttonMonitor.Size = new System.Drawing.Size(114, 23);
-        	this.buttonMonitor.TabIndex = 13;
+        	this.buttonMonitor.TabIndex = 16;
         	this.buttonMonitor.Text = "Channel Monitor";
         	this.buttonMonitor.UseVisualStyleBackColor = true;
         	this.buttonMonitor.Click += new System.EventHandler(this.ButtonMonitorClick);
@@ -287,7 +288,7 @@ namespace vJoySerialFeeder
         	this.buttonBitmappedButton.Location = new System.Drawing.Point(166, 81);
         	this.buttonBitmappedButton.Name = "buttonBitmappedButton";
         	this.buttonBitmappedButton.Size = new System.Drawing.Size(133, 23);
-        	this.buttonBitmappedButton.TabIndex = 12;
+        	this.buttonBitmappedButton.TabIndex = 14;
         	this.buttonBitmappedButton.Text = "Add Bit-mapped Button";
         	this.buttonBitmappedButton.UseVisualStyleBackColor = true;
         	this.buttonBitmappedButton.Click += new System.EventHandler(this.ButtonBitmappedButtonClick);
@@ -297,7 +298,7 @@ namespace vJoySerialFeeder
         	this.buttonPortSetup.Location = new System.Drawing.Point(566, 39);
         	this.buttonPortSetup.Name = "buttonPortSetup";
         	this.buttonPortSetup.Size = new System.Drawing.Size(68, 23);
-        	this.buttonPortSetup.TabIndex = 7;
+        	this.buttonPortSetup.TabIndex = 9;
         	this.buttonPortSetup.Text = "Port Setup";
         	this.buttonPortSetup.UseVisualStyleBackColor = true;
         	this.buttonPortSetup.Click += new System.EventHandler(this.ButtonPortSetupClick);
@@ -307,7 +308,7 @@ namespace vJoySerialFeeder
         	this.buttonProtocolSetup.Location = new System.Drawing.Point(439, 38);
         	this.buttonProtocolSetup.Name = "buttonProtocolSetup";
         	this.buttonProtocolSetup.Size = new System.Drawing.Size(46, 23);
-        	this.buttonProtocolSetup.TabIndex = 22;
+        	this.buttonProtocolSetup.TabIndex = 7;
         	this.buttonProtocolSetup.Text = "Setup";
         	this.buttonProtocolSetup.UseVisualStyleBackColor = true;
         	this.buttonProtocolSetup.Click += new System.EventHandler(this.ButtonProtocolSetupClick);
@@ -317,7 +318,7 @@ namespace vJoySerialFeeder
         	this.buttonHelp.Location = new System.Drawing.Point(640, 81);
         	this.buttonHelp.Name = "buttonHelp";
         	this.buttonHelp.Size = new System.Drawing.Size(75, 23);
-        	this.buttonHelp.TabIndex = 23;
+        	this.buttonHelp.TabIndex = 17;
         	this.buttonHelp.Text = "Help";
         	this.buttonHelp.UseVisualStyleBackColor = true;
         	this.buttonHelp.Click += new System.EventHandler(this.ButtonHelpClick);
@@ -327,16 +328,27 @@ namespace vJoySerialFeeder
         	this.buttonScripting.Location = new System.Drawing.Point(306, 81);
         	this.buttonScripting.Name = "buttonScripting";
         	this.buttonScripting.Size = new System.Drawing.Size(75, 23);
-        	this.buttonScripting.TabIndex = 24;
+        	this.buttonScripting.TabIndex = 15;
         	this.buttonScripting.Text = "Scripting";
         	this.buttonScripting.UseVisualStyleBackColor = true;
         	this.buttonScripting.Click += new System.EventHandler(this.ButtonScriptingClick);
+        	// 
+        	// buttonNewProfile
+        	// 
+        	this.buttonNewProfile.Location = new System.Drawing.Point(13, 39);
+        	this.buttonNewProfile.Name = "buttonNewProfile";
+        	this.buttonNewProfile.Size = new System.Drawing.Size(41, 20);
+        	this.buttonNewProfile.TabIndex = 1;
+        	this.buttonNewProfile.Text = "New";
+        	this.buttonNewProfile.UseVisualStyleBackColor = true;
+        	this.buttonNewProfile.Click += new System.EventHandler(this.ButtonNewProfileClick);
         	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonNewProfile);
         	this.Controls.Add(this.buttonScripting);
         	this.Controls.Add(this.buttonHelp);
         	this.Controls.Add(this.buttonProtocolSetup);
@@ -367,11 +379,13 @@ namespace vJoySerialFeeder
         	this.Name = "MainForm";
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         	this.Text = "vJoySerialFeeder";
+        	this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
         	this.statusStrip1.ResumeLayout(false);
         	this.statusStrip1.PerformLayout();
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonNewProfile;
         private System.Windows.Forms.Button buttonScripting;
         private System.Windows.Forms.Button buttonHelp;
         private System.Windows.Forms.Button buttonProtocolSetup;
