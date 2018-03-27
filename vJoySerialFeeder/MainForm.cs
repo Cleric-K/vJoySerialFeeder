@@ -40,7 +40,7 @@ namespace vJoySerialFeeder
 		
 		private double updateRate;
 		
-		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader)};
+		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader), typeof(DummyReader)};
 		
 		private ComAutomation comAutomation;
 		private WebSocket webSocket;
@@ -279,7 +279,7 @@ namespace vJoySerialFeeder
 		{
 			// trick to make mouse wheel scroll possible without
 			// explicitly focusing on the panel
-			if(ContainsFocus)
+			if(!ContainsFocus)
 				panelMappings.Focus();
 		}
 		void ButtonPortsRefreshClick(object sender, EventArgs e)

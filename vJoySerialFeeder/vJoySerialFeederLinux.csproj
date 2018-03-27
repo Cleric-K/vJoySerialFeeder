@@ -74,6 +74,11 @@
     <Compile Include="ButtonMapping.cs" />
     <Compile Include="ComAutomation.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="DummyReader.cs" />
+    <Compile Include="DummySetupForm.cs" />
+    <Compile Include="DummySetupForm.Designer.cs">
+      <DependentUpon>DummySetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SbusSetupForm.cs" />
     <Compile Include="SbusSetupForm.Designer.cs">
       <DependentUpon>SbusSetupForm.cs</DependentUpon>

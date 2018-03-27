@@ -77,6 +77,11 @@
     <Compile Include="ButtonMapping.cs" />
     <Compile Include="ComAutomation.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="DummyReader.cs" />
+    <Compile Include="DummySetupForm.cs" />
+    <Compile Include="DummySetupForm.Designer.cs">
+      <DependentUpon>DummySetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SbusSetupForm.cs" />
     <Compile Include="SbusSetupForm.Designer.cs">
       <DependentUpon>SbusSetupForm.cs</DependentUpon>
@@ -125,6 +130,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ButtonSetupForm.resx">
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DummySetupForm.resx">
+      <DependentUpon>DummySetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
