@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -316,7 +317,7 @@ namespace vJoySerialFeeder
 							throw new Exception("No such mapping");
 							
 						float val;
-						if(!float.TryParse(parts[2], out val))
+						if(!float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out val))
 							throw new Exception("Bad value");
 						
 						if(cmd.Equals("set_input"))
@@ -365,7 +366,8 @@ namespace vJoySerialFeeder
 		}
 		
 		void sendMappingData(Socket sock, int mi, Mapping m) {
-			sendMessage(sock, "{\"mapping\":"+mi+",\"input\":"+m.Input+",\"output\":"+m.Output+"}");
+			sendMessage(sock, "{\"mapping\":"+mi+",\"input\":"+m.Input
+			            +",\"output\":"+m.Output.ToString(CultureInfo.InvariantCulture)+"}");
 		}
 		
 		void sendMessage(Socket sock, string msg) {;
