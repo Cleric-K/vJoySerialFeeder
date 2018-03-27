@@ -1250,4 +1250,11 @@
         //////////////////////////////////8=
 </value>
   </data>
+  <data name="script_template" xml:space="preserve">
+    <value>function init()
+end
+
+function update()
+end</value>
+  </data>
 </root>

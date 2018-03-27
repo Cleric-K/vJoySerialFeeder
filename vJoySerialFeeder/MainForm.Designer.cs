@@ -76,6 +76,7 @@ namespace vJoySerialFeeder
         	this.buttonPortSetup = new System.Windows.Forms.Button();
         	this.buttonProtocolSetup = new System.Windows.Forms.Button();
         	this.buttonHelp = new System.Windows.Forms.Button();
+        	this.buttonScripting = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -264,7 +265,7 @@ namespace vJoySerialFeeder
         	        	        	"IBUS",
         	        	        	"MultiWii",
         	        	        	"SBUS",
-        	                        "Dummy"});
+        	        	        	"Dummy"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 39);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
@@ -321,11 +322,22 @@ namespace vJoySerialFeeder
         	this.buttonHelp.UseVisualStyleBackColor = true;
         	this.buttonHelp.Click += new System.EventHandler(this.ButtonHelpClick);
         	// 
+        	// buttonScripting
+        	// 
+        	this.buttonScripting.Location = new System.Drawing.Point(306, 81);
+        	this.buttonScripting.Name = "buttonScripting";
+        	this.buttonScripting.Size = new System.Drawing.Size(75, 23);
+        	this.buttonScripting.TabIndex = 24;
+        	this.buttonScripting.Text = "Scripting";
+        	this.buttonScripting.UseVisualStyleBackColor = true;
+        	this.buttonScripting.Click += new System.EventHandler(this.ButtonScriptingClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonScripting);
         	this.Controls.Add(this.buttonHelp);
         	this.Controls.Add(this.buttonProtocolSetup);
         	this.Controls.Add(this.buttonPortSetup);
@@ -360,6 +372,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonScripting;
         private System.Windows.Forms.Button buttonHelp;
         private System.Windows.Forms.Button buttonProtocolSetup;
         private System.Windows.Forms.Button buttonPortSetup;

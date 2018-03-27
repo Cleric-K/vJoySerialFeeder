@@ -40,6 +40,8 @@ namespace vJoySerialFeeder
 			public SerialParameters SerialParameters;
 			[DataMember]
 			public string ProtocolConfiguration = "";
+			[DataMember]
+			public string LuaScript;
 		}
 		
 		/// <summary>

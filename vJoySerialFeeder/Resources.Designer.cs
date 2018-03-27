@@ -69,5 +69,18 @@ namespace vJoySerialFeeder {
 				return ((System.Drawing.Icon)(obj));
 			}
 		}
+		
+		/// <summary>
+		///   Looks up a localized string similar to function init()
+		///end
+		///
+		///function update()
+		///end.
+		/// </summary>
+		internal static string script_template {
+			get {
+				return ResourceManager.GetString("script_template", resourceCulture);
+			}
+		}
 	}
 }

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
 using System.Windows.Forms;
+using MoonSharp.Interpreter;
 
 namespace vJoySerialFeeder
 {
@@ -44,6 +45,9 @@ namespace vJoySerialFeeder
 		
 		private ComAutomation comAutomation;
 		private WebSocket webSocket;
+		
+		private Lua lua;
+		private string luaScript;
 		
 		public MainForm(string[] args)
 		{
@@ -120,6 +124,8 @@ namespace vJoySerialFeeder
 				}
 				
 			}
+			
+			
 		}
 		
 		/// <summary>
@@ -152,6 +158,7 @@ namespace vJoySerialFeeder
 				serialParameters = p.SerialParameters;
 				protocolConfig = p.ProtocolConfiguration;
 				comboJoysticks.SelectedItem = p.VJoyInstance;
+				luaScript = p.LuaScript;
 			}
 			
 			foreach(var m in p.Mappings) {
@@ -192,7 +199,7 @@ namespace vJoySerialFeeder
 			string errmsg;
 
 			if(comboJoysticks.SelectedItem != null && (errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
-				MessageBox.Show(errmsg);
+				MessageBox.Show(errmsg, "VJoy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 				return;
 			}
 
@@ -203,7 +210,7 @@ namespace vJoySerialFeeder
 				: serialReader.GetDefaultSerialParameters();
 
             if(!serialReader.OpenPort((string)comboPorts.SelectedItem, sp)) {
-                MessageBox.Show("Can not open the port", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Can not open the port", "Serial Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 VJoy.Release();
                 return;
             }
@@ -216,6 +223,8 @@ namespace vJoySerialFeeder
 			buttonConnect.Text = "Disconnect";
 			comboJoysticks.Enabled = false;
 			connected = true;
+			
+			initLuaScript();
 			
 			backgroundWorker.RunWorkerAsync();
 		}
@@ -319,6 +328,7 @@ namespace vJoySerialFeeder
 				catch(InvalidOperationException ex) {
 					System.Diagnostics.Debug.WriteLine(ex.Message);
 					backgroundWorker.CancelAsync();
+					continue;
 				}
 				catch(Exception ex) {
 					ActiveChannels = 0;
@@ -328,6 +338,16 @@ namespace vJoySerialFeeder
 					foreach(Mapping m in mappings) {
 						if(m.Channel >= 0 && m.Channel < ActiveChannels)
 							m.Input = Channels[m.Channel];
+					}
+					
+					try {
+						lua.Update();
+					}
+					catch(InterpreterException ex) {
+						MessageBox.Show("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					}
+					
+					foreach(Mapping m in mappings) {
 						m.UpdateJoystick(VJoy);
 					}
 					
@@ -400,6 +420,7 @@ namespace vJoySerialFeeder
 			p.SerialParameters = serialParameters;
 			p.ProtocolConfiguration = protocolConfig;
 			p.VJoyInstance = comboJoysticks.Text;
+			p.LuaScript = luaScript;
 
 			p.Mappings = new List<Mapping>();
 			
@@ -480,6 +501,30 @@ namespace vJoySerialFeeder
         void ButtonHelpClick(object sender, EventArgs e)
         {
         	System.Diagnostics.Process.Start("https://github.com/Cleric-K/vJoySerialFeeder/blob/master/Docs/MANUAL.md");
+        }
+        
+        void initLuaScript() {
+        	try{
+				lua = new Lua(luaScript);
+				lua.Init(VJoy, Channels);
+			}
+			catch(InterpreterException ex) {
+				MessageBox.Show("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+        }
+        
+        void ButtonScriptingClick(object sender, EventArgs e)
+        {
+        	using(var d = new LuaEditorForm(luaScript)) {
+        		d.ShowDialog();
+        		
+        		if(d.DialogResult == DialogResult.OK) {
+        			luaScript = d.ScriptSource;
+        			if(connected)
+        				// reinitialize script
+        				initLuaScript();
+        		}
+        	}
         }
 	}
 }
