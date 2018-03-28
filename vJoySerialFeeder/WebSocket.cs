@@ -77,7 +77,7 @@ namespace vJoySerialFeeder
 		bool started;
 		
 		public WebSocket(int port) {
-			listener = new TcpListener(IPAddress.Any, 40000);
+			listener = new TcpListener(IPAddress.Any, port);
 			listener.Start();
 			listener.BeginAcceptSocket(acceptConnection, null);
 			

@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO.Ports;
 using System.Linq;
+using System.Net.Sockets;
 using System.Windows.Forms;
 using MoonSharp.Interpreter;
 
@@ -71,7 +72,7 @@ namespace vJoySerialFeeder
                     vJoyEnumerator = (VJoyCollectionBase)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyCollectionLinux"));
                     break;
                 default:
-                    MessageBox.Show("Unsupported platform");
+                    ErrorMessageBox("Unsupported platform", "Fatal");
                     Application.Exit();
                     break;
             }
@@ -128,7 +129,9 @@ namespace vJoySerialFeeder
 		
 		
 		
-		
+		void ErrorMessageBox(string message, string title) {
+			MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
 			
 		private void loadProfile(Configuration.Profile p) {
 			if(connected)
@@ -223,7 +226,7 @@ namespace vJoySerialFeeder
 					VJoy = vJoyEnumerator.GetVJoy(comboJoysticks.SelectedItem.ToString());
 				}
 				catch(VJoyBase.VJoyException ex) {
-					MessageBox.Show(ex.Message, "VJoy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					ErrorMessageBox(ex.Message, "VJoy Error");
 					return;
 				}
 			}
@@ -235,7 +238,7 @@ namespace vJoySerialFeeder
 				: serialReader.GetDefaultSerialParameters();
 
             if(!serialReader.OpenPort((string)comboPorts.SelectedItem, sp)) {
-                MessageBox.Show("Can not open the port", "Serial Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ErrorMessageBox("Can not open the port", "Serial Error");
                 VJoy.Release();
                 return;
             }
@@ -300,13 +303,26 @@ namespace vJoySerialFeeder
 				lua.Init(VJoy, Channels);
 			}
 			catch(InterpreterException ex) {
-				MessageBox.Show("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				ErrorMessageBox("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error");
 			}
         }   
 		
 		void StartStopWebSocket() {
-			if(config.WebSocketEnabled && webSocket == null)
-				webSocket = new WebSocket(config.WebSocketPort);
+			if(config.WebSocketEnabled && webSocket == null) {
+				try {
+					webSocket = new WebSocket(config.WebSocketPort);
+				}
+				catch(SocketException ex) {
+					if(ex.SocketErrorCode == SocketError.AddressAlreadyInUse) {
+						ErrorMessageBox("Port already in use!", "WebSocket Listener");
+					}
+					else
+						ErrorMessageBox(ex.Message, "WebSocket Listener");
+					webSocket = null;
+					config.WebSocketEnabled = false;
+					config.Save();
+				}
+			}
 			else if(!config.WebSocketEnabled && webSocket != null) {
 				webSocket.Stop();
 				webSocket = null;
@@ -323,7 +339,7 @@ namespace vJoySerialFeeder
 		
 		
 		
-		// Background Worker for doing the main job
+		#region Background Worker for doing the main job
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
@@ -347,9 +363,8 @@ namespace vJoySerialFeeder
 				}
 				catch(InvalidOperationException ex) {
 					System.Diagnostics.Debug.WriteLine(ex.Message);
-					this.Invoke((Action)( () => MessageBox.Show("The Serial Port was Disconnected!",
-					                                   "Disconnect", MessageBoxButtons.OK,
-					                                   MessageBoxIcon.Error) ));
+					this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
+					                                            "Disconnect")));
 					backgroundWorker.CancelAsync();
 					continue;
 				}
@@ -368,8 +383,8 @@ namespace vJoySerialFeeder
 					}
 					catch(InterpreterException ex) {
 						this.Invoke((Action)( () =>
-						            MessageBox.Show("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
-						                  "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
+						            ErrorMessageBox("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
+						                  "Lua Error")));
 					}
 					
 					foreach(Mapping m in mappings) {
@@ -432,6 +447,7 @@ namespace vJoySerialFeeder
 			ChannelDataUpdate(this, e);
 		}
 		
+		#endregion
 		
 		
 		
@@ -441,8 +457,7 @@ namespace vJoySerialFeeder
 		
 		
 		
-		
-		// UI Event handlers
+		#region UI Event handlers
 	
 		void ButtonAddAxisClick(object sender, EventArgs e)
 		{
@@ -612,12 +627,26 @@ namespace vJoySerialFeeder
         	using(var d = new OptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
         		d.ShowDialog();
         		if(d.DialogResult == DialogResult.OK) {
-        			config.WebSocketEnabled = d.WebSocketEnabled;
-        			config.WebSocketPort = d.WebSocketPort;
+        			if(config.WebSocketEnabled && d.WebSocketEnabled
+        			   && config.WebSocketPort != d.WebSocketPort) {
+        				// changing port
+        				config.WebSocketEnabled = false;
+        				StartStopWebSocket(); // stop
+        				
+        				config.WebSocketEnabled = true;
+        				config.WebSocketPort = d.WebSocketPort;
+        				StartStopWebSocket(); // start
+        			}
+        			else {
+	        			config.WebSocketEnabled = d.WebSocketEnabled;
+	        			config.WebSocketPort = d.WebSocketPort;
+	        			StartStopWebSocket();
+        			}
         			config.Save();
-        			StartStopWebSocket();
         		}
         	}
         }
+        
+        #endregion
 	}
 }
