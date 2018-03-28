@@ -1,45 +1,46 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Windows.Forms;
+
 using vJoyInterfaceWrap;
 
 namespace vJoySerialFeeder
 {
-    public class VJoyWindows : VJoy
+	/// <summary>
+	/// Implements vJoy
+	/// </summary>
+    public class VJoyVJoy : VJoyBase
     {
         private vJoy joystick;
         private vJoy.JoystickState state;
-        private uint id;
+        private int id;
 
-        public VJoyWindows()
+        public VJoyVJoy()
         {
             // Create one joystick object
             joystick = new vJoy();
             state = new vJoy.JoystickState();
         }
 
-        public override string Init()
+        public override void Acquire(string id)
         {
-            // Get the driver attributes (Vendor ID, Product ID, Version Number)
+        	// Get the driver attributes (Vendor ID, Product ID, Version Number)
             if (!joystick.vJoyEnabled())
-                return "vJoy driver not enabled: Failed Getting vJoy attributes.\n";
+            	throw new VJoyException("vJoy driver not enabled: Failed Getting vJoy attributes.");
 
             UInt32 DllVer = 0, DrvVer = 0;
 
             bool match = joystick.DriverMatch(ref DllVer, ref DrvVer);
             if (!match)
-                return String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})\n", DrvVer, DllVer);
-
-
-            return null;
-        }
-
-        public override string Acquire(uint id)
-        {
-            this.id = id;
+            	throw new VJoyException(String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})", DrvVer, DllVer));
+            
+            
+            if(!int.TryParse(id, out this.id))
+            	throw new VJoyException(String.Format("Invalid joystcik id {0}", id));
 
             // Get the state of the requested device
-            VjdStat status = joystick.GetVJDStatus(id);
+            VjdStat status = joystick.GetVJDStatus((uint)this.id);
             switch (status)
             {
                 case VjdStat.VJD_STAT_OWN:
@@ -49,37 +50,32 @@ namespace vJoySerialFeeder
                     //MessageBox.Show(String.Format("vJoy Device {0} is free\n", id));
                     break;
                 case VjdStat.VJD_STAT_BUSY:
-                    return String.Format("vJoy Device {0} is already owned by another feeder\nCannot continue\n", id);
+                    throw new VJoyException(String.Format("vJoy Device {0} is already owned by another feeder\nCannot continue", id));
                 case VjdStat.VJD_STAT_MISS:
-                    return String.Format("vJoy Device {0} is not installed or disabled\nCannot continue\n", id);
+                    throw new VJoyException(String.Format("vJoy Device {0} is not installed or disabled\nCannot continue", id));
                 default:
-                    return String.Format("vJoy Device {0} general error\nCannot continue\n", id);
+                    throw new VJoyException(String.Format("vJoy Device {0} general error\nCannot continue", id));
             };
 
             // Acquire the target
-            if ((status == VjdStat.VJD_STAT_OWN) || ((status == VjdStat.VJD_STAT_FREE) && (!joystick.AcquireVJD(id))))
-                return String.Format("Failed to acquire vJoy device number {0}.\n", id);
+            if ((status == VjdStat.VJD_STAT_OWN) || ((status == VjdStat.VJD_STAT_FREE) && (!joystick.AcquireVJD((uint)this.id))))
+            	throw new VJoyException(String.Format("Failed to acquire vJoy device number {0}.", id));
 
-            return null;
+            _reset();
         }
 
 
         public override void Release()
         {
-        	// reset state
-        	state = new vJoy.JoystickState();
-        	
-        	// center all axes
-        	foreach(var a in Enum.GetValues(typeof(Axes)))
-        		SetAxis(0.5, (int)a);
-        	
-            joystick.RelinquishVJD(id);
+        	_reset();
+        	joystick.RelinquishVJD((uint)id);
         }
 
-        public override void SetAxis(double value, int axis)
+        public override void SetAxis(int axis, double value)
         {
-             // vjoy accepts axis values from 0 to 32767 (0x7fff)
-            int v = (int)(value * 0x7fff);
+        	// there are conflicting sources but it seems
+            // vjoy accepts axis values from 1 to 32768 (0x8000)
+            int v = 1 + (int)(value * 0x7fff);
 
             switch ((Axes)axis)
             {
@@ -110,7 +106,7 @@ namespace vJoySerialFeeder
             }
         }
 
-        public override void SetButton(bool value, uint btn)
+        public override void SetButton(int btn, bool value)
         {
             if (value)
                 state.Buttons |= (uint)1 << (int)btn;
@@ -120,18 +116,29 @@ namespace vJoySerialFeeder
 
         public override void SetState()
         {
-            joystick.UpdateVJD(id, ref state);
+        	joystick.UpdateVJD((uint)id, ref state);
         }
 
-        public override object[] GetJoysticks()
+        public override List<string> GetJoysticks()
         {
-            ArrayList list = new ArrayList();
+            var list = new List<string>();
             for (uint i = 1; i <= 16; i++)
             {
                 if (joystick.isVJDExists(i))
                     list.Add(i.ToString());
             }
-            return list.ToArray();
+            return list;
+        }
+        
+        void _reset() {
+        	// reset state
+        	state = new vJoy.JoystickState();
+        	
+        	// center all axes
+        	foreach(var a in Enum.GetValues(typeof(Axes)))
+        		SetAxis((int)a, 0.5);
+        	
+        	SetState();
         }
     }
 }

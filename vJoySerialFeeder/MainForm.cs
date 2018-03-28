@@ -22,7 +22,7 @@ namespace vJoySerialFeeder
 		
 		public int[] Channels { get; private set; }
 		public int ActiveChannels { get ; private set; }
-		public VJoy VJoy { get; private set;}
+		public VJoyBase VJoy { get; private set;}
 		
 		public event EventHandler ChannelDataUpdate;
 		
@@ -33,6 +33,8 @@ namespace vJoySerialFeeder
 		private bool connected = false;
 		private SerialReader serialReader;
 		private string protocolConfig = "";
+		
+		private VJoyCollectionBase vJoyEnumerator;
 		
 		private Configuration config;
 		private Configuration.Profile currentProfile;
@@ -63,20 +65,16 @@ namespace vJoySerialFeeder
 
             switch (Environment.OSVersion.Platform) {
                 case PlatformID.Win32NT:
-					VJoy = (VJoy)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyWindows"));
+					vJoyEnumerator = (VJoyCollectionBase)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyCollectionWindows"));
                     break;
                 case PlatformID.Unix:
-                    VJoy = (VJoy)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyLinux"));
+                    vJoyEnumerator = (VJoyCollectionBase)Activator.CreateInstance(Type.GetType("vJoySerialFeeder.VJoyCollectionLinux"));
                     break;
                 default:
                     MessageBox.Show("Unsupported platform");
                     Application.Exit();
                     break;
             }
-
-            string err;
-            if ((err = VJoy.Init()) != null)
-                MessageBox.Show(err);
 
             comboPorts.FormattingEnabled = true;
             comboPorts.Format += (o, e) =>
@@ -209,7 +207,7 @@ namespace vJoySerialFeeder
 		private void reloadJoysticks() {
 			object prevJoy = comboJoysticks.SelectedItem;
 			comboJoysticks.Items.Clear();
-			comboJoysticks.Items.AddRange(VJoy.GetJoysticks());
+			comboJoysticks.Items.AddRange(vJoyEnumerator.GetJoysticks());
 			comboJoysticks.SelectedItem = prevJoy;
 			if(comboJoysticks.SelectedItem == null && comboJoysticks.Items.Count > 0)
 				comboJoysticks.SelectedIndex = 0;
@@ -220,11 +218,14 @@ namespace vJoySerialFeeder
 		}
 		
 		private void connect() {
-			string errmsg;
-
-			if(comboJoysticks.SelectedItem != null && (errmsg = VJoy.Acquire(uint.Parse(comboJoysticks.SelectedItem.ToString()))) != null) {
-				MessageBox.Show(errmsg, "VJoy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
+			if(comboJoysticks.SelectedItem != null) {
+				try {
+					VJoy = vJoyEnumerator.GetVJoy(comboJoysticks.SelectedItem.ToString());
+				}
+				catch(VJoyBase.VJoyException ex) {
+					MessageBox.Show(ex.Message, "VJoy Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					return;
+				}
 			}
 
 			serialReader = createSerialReader();

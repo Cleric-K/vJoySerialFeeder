@@ -90,10 +90,10 @@ namespace vJoySerialFeeder
 		}
 			
 		
-		public override void UpdateJoystick(VJoy vjoy)
+		public override void UpdateJoystick(VJoyBase vjoy)
 		{
 			if(Button >= 0)
-				vjoy.SetButton(Output > 0, (uint)Button);
+				vjoy.SetButton(Button, Output > 0);
 		}
 		
 		public override void Paint()

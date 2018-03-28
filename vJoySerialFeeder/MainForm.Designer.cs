@@ -170,11 +170,11 @@ namespace vJoySerialFeeder
         	// 
         	// label3
         	// 
-        	this.label3.Location = new System.Drawing.Point(276, 12);
+        	this.label3.Location = new System.Drawing.Point(266, 12);
         	this.label3.Name = "label3";
-        	this.label3.Size = new System.Drawing.Size(78, 21);
+        	this.label3.Size = new System.Drawing.Size(88, 21);
         	this.label3.TabIndex = 13;
-        	this.label3.Text = "vJoy instance:";
+        	this.label3.Text = "Virtual Joystick:";
         	this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         	// 
         	// comboProfiles
@@ -252,7 +252,7 @@ namespace vJoySerialFeeder
         	// 
         	// label6
         	// 
-        	this.label6.Location = new System.Drawing.Point(276, 39);
+        	this.label6.Location = new System.Drawing.Point(266, 38);
         	this.label6.Name = "label6";
         	this.label6.Size = new System.Drawing.Size(78, 21);
         	this.label6.TabIndex = 21;

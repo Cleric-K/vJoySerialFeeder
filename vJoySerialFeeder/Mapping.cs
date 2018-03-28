@@ -88,7 +88,7 @@ namespace vJoySerialFeeder
 		/// <summary>
 		/// This method gets called when the mapping should write its joystick.
 		/// </summary>
-		abstract public void UpdateJoystick(VJoy vjoy);
+		abstract public void UpdateJoystick(VJoyBase vjoy);
 		
 		/// <summary>
 		/// Request painting of the UI element.

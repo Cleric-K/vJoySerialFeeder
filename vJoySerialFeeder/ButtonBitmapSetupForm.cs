@@ -40,7 +40,7 @@ namespace vJoySerialFeeder
 		{
 			Parameters = new ButtonBitmapMapping.BitButtonParameters() {
 				Enabled = checkEnable.Checked,
-				Button = (uint)numericButton.Value-1,
+				Button = (int)numericButton.Value-1,
 				Invert = checkInvert.Checked 
 			};
 			

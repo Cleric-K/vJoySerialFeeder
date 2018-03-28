@@ -29,7 +29,7 @@ namespace vJoySerialFeeder
 		[DataContract]
 		public struct BitButtonParameters {
 			[DataMember]
-			public uint Button; // vJoy button id
+			public int Button; // vJoy button id
 			[DataMember]
 			public bool Invert, Enabled;
 		}
@@ -74,14 +74,14 @@ namespace vJoySerialFeeder
 			return (float)(v < 0 ? 0 : v > 0xffff ? 0xffff : v);
 		}
 
-		public override void UpdateJoystick(VJoy vjoy)
+		public override void UpdateJoystick(VJoyBase vjoy)
 		{
 			int v = (int)Output;
 			
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
 				if(p.Enabled)
-					vjoy.SetButton(((v&(1<<i))!=0), p.Button);
+					vjoy.SetButton(p.Button, ((v&(1<<i))!=0));
 			}
 		}
 

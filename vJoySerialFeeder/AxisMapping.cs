@@ -151,9 +151,9 @@ namespace vJoySerialFeeder
 			progressBox.Invalidate();
 		}
 		
-		public override void UpdateJoystick(VJoy vjoy)
+		public override void UpdateJoystick(VJoyBase vjoy)
 		{
-			vjoy.SetAxis(Output, Axis);
+			vjoy.SetAxis(Axis, Output);
 		}
 		
 		
@@ -234,7 +234,7 @@ namespace vJoySerialFeeder
 			joystickAxisDropdown = new ComboBox();
 			joystickAxisDropdown.DropDownStyle = ComboBoxStyle.DropDownList;
 			joystickAxisDropdown.Size = new Size(42, 20);
-			joystickAxisDropdown.Items.AddRange(Enum.GetNames(typeof(VJoy.Axes)));
+			joystickAxisDropdown.Items.AddRange(Enum.GetNames(typeof(VJoyBase.Axes)));
 			joystickAxisDropdown.SelectedIndex = Axis;
 			joystickAxisDropdown.SelectedIndexChanged += onAxisChange;
 			panel.Controls.Add(joystickAxisDropdown);

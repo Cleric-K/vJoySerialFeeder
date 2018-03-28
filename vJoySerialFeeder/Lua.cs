@@ -36,18 +36,18 @@ namespace vJoySerialFeeder
 		}
 		
 		internal class VJoyProxy {
-			VJoy vjoy;
+			VJoyBase vjoy;
 			
-			internal VJoyProxy(VJoy vj) {
+			internal VJoyProxy(VJoyBase vj) {
 				vjoy = vj;
 			}
 			
 			public void SetAxis(int axis, double value) {
-				vjoy.SetAxis(value, axis);
+				vjoy.SetAxis(axis, value);
 			}
 			
 			public void SetButton(int button, double value) {
-				vjoy.SetButton(value > 0, (uint)(button - 1));
+				vjoy.SetButton((button - 1), value > 0);
 			}
 		}
 		
@@ -66,7 +66,7 @@ namespace vJoySerialFeeder
 			script.DoString(scriptSource, null, "Script");
 		}
 		
-		public void Init(VJoy vjoy, int[] channels) {
+		public void Init(VJoyBase vjoy, int[] channels) {
 			update = null;
 			if(scriptSource == null)
 				return;
@@ -74,7 +74,7 @@ namespace vJoySerialFeeder
 			try {
 				// setup proxies
 				UserData.RegisterProxyType<MappingProxy, Mapping>(m => new MappingProxy(m));
-				UserData.RegisterProxyType<VJoyProxy, VJoy>(vj => new VJoyProxy(vj));
+				UserData.RegisterProxyType<VJoyProxy, VJoyBase>(vj => new VJoyProxy(vj));
 			
 				// setup globals
 				script.Globals["AXIS_X"] = 0;

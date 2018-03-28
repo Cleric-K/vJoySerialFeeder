@@ -38,7 +38,6 @@
     <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <StartAction>Project</StartAction>
-    <StartArguments>-wsport 40000</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DebugSymbols>False</DebugSymbols>
@@ -62,7 +61,7 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="vJoyInterfaceWrap">
-      <HintPath>Lib\vJoy_x86\vJoyInterfaceWrap.dll</HintPath>
+      <HintPath>Lib\vJoyInterfaceWrap.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -132,9 +131,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="VJoy.cs" />
+    <Compile Include="VJoyBase.cs" />
+    <Compile Include="VJoyCollectionBase.cs" />
+    <Compile Include="VJoyCollectionWindows.cs" />
+    <Compile Include="VJoyNone.cs" />
+    <Compile Include="VJoyVXBox.cs" />
     <Compile Include="WebSocket.cs" />
-    <Compile Include="VJoyWindows.cs" />
+    <Compile Include="VJoyVJoy.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">
@@ -183,9 +186,21 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="Lib\vJoy_x86\vJoyInterface.dll">
+    <ContentWithTargetPath Include="Lib\vJoyInterface.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>vJoyInterface.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\vXboxInterface.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>vXboxInterface.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\msvcp120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>msvcp120.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>msvcr120.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
