@@ -6,10 +6,12 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
 using System.Windows.Forms;
+
 using MoonSharp.Interpreter;
 
 namespace vJoySerialFeeder
@@ -121,8 +123,37 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <param name="m"></param>
 		public void RemoveMapping(Mapping m) {
-			panelMappings.Controls.Remove(m.GetControl());
+			panelMappings.SuspendLayout();
+			panelMappings.Controls.Remove(m.GetControl().Parent);
 			mappings.Remove(m);
+			reEnumerateMappings();
+			panelMappings.ResumeLayout();
+		}
+		
+		void addMapping(Mapping m) {
+			var fp = new FlowLayoutPanel();
+			fp.AutoSize = true;
+			fp.FlowDirection = FlowDirection.LeftToRight;
+			fp.WrapContents = false;
+			var label = new Label();
+			label.Size = new Size(30, 20);
+			label.TextAlign = ContentAlignment.BottomLeft;
+			fp.Controls.Add(label);
+			fp.Controls.Add(m.GetControl());
+			mappings.Add(m);
+			
+			panelMappings.SuspendLayout();
+			panelMappings.Controls.Add(fp);
+			reEnumerateMappings();
+			panelMappings.ResumeLayout();
+		}
+		
+		void reEnumerateMappings() {
+			var i = 1;
+			foreach(FlowLayoutPanel c in panelMappings.Controls) {
+				var l = c.Controls[0] as Label;
+				l.Text = i++ + ")";
+			}
 		}
 		
 		
@@ -290,12 +321,7 @@ namespace vJoySerialFeeder
 				+" channels available, "+Math.Round(updateRate)+" Updates per second / "
 				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
 		}
-		
-		void addMapping(Mapping m) {
-			mappings.Add(m);
-			panelMappings.Controls.Add(m.GetControl());
-		}
-		
+
 		
 		void initLuaScript() {
         	try{
@@ -527,6 +553,13 @@ namespace vJoySerialFeeder
 				return;
 			}
 			
+			if(!Configuration.ProfilesEqual(buildProfile(), currentProfile)) {
+        		var res = MessageBox.Show("There are unsaved changes in your Profile! If you load the requested profile the changes will be lost. Continue with loading?",
+        		             "Profile not saved", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+				if(res == DialogResult.No)
+				    return;
+        	}
+			
 			loadProfile(p);
 			
 			config.DefaultProfile = name;
@@ -600,7 +633,7 @@ namespace vJoySerialFeeder
         void MainFormFormClosing(object sender, FormClosingEventArgs e)
         {
         	// check if profile needs saving
-        	if(!buildProfile().Equals(currentProfile)) {
+        	if(!Configuration.ProfilesEqual(buildProfile(), currentProfile)) {
         		var res = MessageBox.Show("There are unsaved changes in your Profile! Are you sure you want to quit?",
         		             "Profile not saved", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
 				if(res == DialogResult.No)
@@ -610,7 +643,7 @@ namespace vJoySerialFeeder
         
         void ButtonNewProfileClick(object sender, EventArgs e)
         {
-        	if(!buildProfile().Equals(currentProfile)) {
+        	if(!Configuration.ProfilesEqual(buildProfile(), currentProfile)) {
         		var res = MessageBox.Show("There are unsaved changes in your Profile! Are you sure you want to discard them?",
         		             "Profile not saved", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
         		if(res == DialogResult.No) {

@@ -42,14 +42,6 @@ namespace vJoySerialFeeder
 			public string ProtocolConfiguration = "";
 			[DataMember]
 			public string LuaScript;
-			
-			
-			public override bool Equals(object obj)
-			{
-				if (obj == null)
-					return false;
-				return serialize(this, ProfileSerializer).Equals(serialize(obj, ProfileSerializer));
-			}
 		}
 		
 		/// <summary>
@@ -141,6 +133,14 @@ namespace vJoySerialFeeder
 		public void DeleteProfile(string name) {
 			if(Profiles.ContainsKey(name))
 				Profiles.Remove(name);
+		}
+		
+		public static bool ProfilesEqual(Profile p1, Profile p2) {
+			if(p1 == null && p2 == null)
+				return true;
+			if(p1 == null || p2 == null)
+				return false;
+			return serialize(p1, ProfileSerializer).Equals(serialize(p2, ProfileSerializer));
 		}
 		
 		static string serialize(object obj, DataContractJsonSerializer ser) {
