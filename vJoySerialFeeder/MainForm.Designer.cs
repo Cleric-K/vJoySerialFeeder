@@ -78,6 +78,7 @@ namespace vJoySerialFeeder
         	this.buttonHelp = new System.Windows.Forms.Button();
         	this.buttonScripting = new System.Windows.Forms.Button();
         	this.buttonNewProfile = new System.Windows.Forms.Button();
+        	this.buttonOptions = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
@@ -275,7 +276,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonMonitor
         	// 
-        	this.buttonMonitor.Location = new System.Drawing.Point(520, 81);
+        	this.buttonMonitor.Location = new System.Drawing.Point(488, 81);
         	this.buttonMonitor.Name = "buttonMonitor";
         	this.buttonMonitor.Size = new System.Drawing.Size(114, 23);
         	this.buttonMonitor.TabIndex = 16;
@@ -315,10 +316,10 @@ namespace vJoySerialFeeder
         	// 
         	// buttonHelp
         	// 
-        	this.buttonHelp.Location = new System.Drawing.Point(640, 81);
+        	this.buttonHelp.Location = new System.Drawing.Point(674, 81);
         	this.buttonHelp.Name = "buttonHelp";
-        	this.buttonHelp.Size = new System.Drawing.Size(75, 23);
-        	this.buttonHelp.TabIndex = 17;
+        	this.buttonHelp.Size = new System.Drawing.Size(41, 23);
+        	this.buttonHelp.TabIndex = 18;
         	this.buttonHelp.Text = "Help";
         	this.buttonHelp.UseVisualStyleBackColor = true;
         	this.buttonHelp.Click += new System.EventHandler(this.ButtonHelpClick);
@@ -343,11 +344,22 @@ namespace vJoySerialFeeder
         	this.buttonNewProfile.UseVisualStyleBackColor = true;
         	this.buttonNewProfile.Click += new System.EventHandler(this.ButtonNewProfileClick);
         	// 
+        	// buttonOptions
+        	// 
+        	this.buttonOptions.Location = new System.Drawing.Point(608, 81);
+        	this.buttonOptions.Name = "buttonOptions";
+        	this.buttonOptions.Size = new System.Drawing.Size(60, 23);
+        	this.buttonOptions.TabIndex = 17;
+        	this.buttonOptions.Text = "Options";
+        	this.buttonOptions.UseVisualStyleBackColor = true;
+        	this.buttonOptions.Click += new System.EventHandler(this.ButtonOptionsClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 522);
+        	this.Controls.Add(this.buttonOptions);
         	this.Controls.Add(this.buttonNewProfile);
         	this.Controls.Add(this.buttonScripting);
         	this.Controls.Add(this.buttonHelp);
@@ -385,6 +397,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonOptions;
         private System.Windows.Forms.Button buttonNewProfile;
         private System.Windows.Forms.Button buttonScripting;
         private System.Windows.Forms.Button buttonHelp;

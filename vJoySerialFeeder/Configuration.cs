@@ -78,6 +78,11 @@ namespace vJoySerialFeeder
 		[DataMember]
 		public Dictionary<string, Profile> Profiles = new Dictionary<string, Profile>();
 		
+		[DataMember]
+		public bool WebSocketEnabled;
+		
+		[DataMember]
+		public int WebSocketPort;
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),

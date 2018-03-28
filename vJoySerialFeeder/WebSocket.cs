@@ -30,6 +30,8 @@ namespace vJoySerialFeeder
 	/// </summary>
 	class WebSocket {
 		
+		public const int DEFAULT_PORT = 40000; 
+		
 		/// <summary>
 		/// Encapsulates a subscription for Mapping updates
 		/// </summary>
@@ -72,11 +74,22 @@ namespace vJoySerialFeeder
 		byte[] sendBuf = new byte[256];
 		Dictionary<Socket, List<Subscription>> subscriptions = new Dictionary<Socket, List<WebSocket.Subscription>>();
 		List<Socket> deadSockets = new List<Socket>();
+		bool started;
 		
 		public WebSocket(int port) {
 			listener = new TcpListener(IPAddress.Any, 40000);
 			listener.Start();
 			listener.BeginAcceptSocket(acceptConnection, null);
+			
+			started = true;
+		}
+		
+		public void Stop() {
+			if(!started)
+				return;
+			
+			listener.Stop();
+			started = false;
 		}
 	
 		void acceptConnection(IAsyncResult ar) {
@@ -85,9 +98,9 @@ namespace vJoySerialFeeder
 			
 			try {
 				// accept another connection asynchronously
-				listener.BeginAcceptSocket(acceptConnection, null);
-				
 				sock = listener.EndAcceptSocket(ar);
+				
+				listener.BeginAcceptSocket(acceptConnection, null);
 				
 				if(negotiate(sock))
 					receiveLoop(sock);
@@ -149,59 +162,71 @@ namespace vJoySerialFeeder
 		/// <param name="sock"></param>
 		void receiveLoop(Socket sock) {
 			var buf = new byte[256];
+			sock.ReceiveTimeout = 1000;
 			
 			while(true) {
-        		if(sock.Receive(buf, 2, SocketFlags.None) != 2)
-        			throw new Exception("Not enough data");
-        		
-        		// check FIN bit
-        		if((buf[0] & 0x80) == 0)
-        			throw new Exception("Fragmented frames not supported");
-        		
-        		// check MASK bit
-        		if((buf[1] & 0x80) == 0)
-        			throw new Exception("Client frames must be masked");
-        		
-        		// get length
-        		var len = buf[1] & 0x7f;
-        		if(len > 125)
-        			throw new Exception("Unsupported length");
-        		
-        		var opcode = buf[0] & 0xF; 
-        		
-        		var fullLen = len + 4; // 4 mask bytes
-        		if(sock.Receive(buf, fullLen, SocketFlags.None) != fullLen)
-        			throw new Exception("Not enough data");
-        		
-        		// unmask 
-				for(var i = 0; i<len; i++)
-					buf[4+i] ^= buf[i%4];
-        		
-        		switch(opcode) {
-        			case OP_TEXT:
-    					var msg = Encoding.UTF8.GetString(buf, 4, len);
-    					onMessage(sock, msg);
-        				
-						break;
-						
-        			case OP_PING:
-    					// ping
-    					// data to send with pong is the same as the one in buf,
-    					// just prepare the two header bytes
-    					buf[2] = 0x80 | OP_PONG;
-						buf[3] = (byte)len;
-						sock.Send(buf, 2, len+2, SocketFlags.None);
-        				
-        				break;
-        				
-        			case OP_CLOSE:
-        				// close frame
-        				sock.Close();
-        				return;
-        				
-        			default:
-        				throw new Exception("unsupported opcode "+opcode);
-        		}
+				try {
+	        		if(sock.Receive(buf, 2, SocketFlags.None) != 2)
+	        			throw new Exception("Not enough data");
+	        		
+	        		// check FIN bit
+	        		if((buf[0] & 0x80) == 0)
+	        			throw new Exception("Fragmented frames not supported");
+	        		
+	        		// check MASK bit
+	        		if((buf[1] & 0x80) == 0)
+	        			throw new Exception("Client frames must be masked");
+	        		
+	        		// get length
+	        		var len = buf[1] & 0x7f;
+	        		if(len > 125)
+	        			throw new Exception("Unsupported length");
+	        		
+	        		var opcode = buf[0] & 0xF; 
+	        		
+	        		var fullLen = len + 4; // 4 mask bytes
+	        		if(sock.Receive(buf, fullLen, SocketFlags.None) != fullLen)
+	        			throw new Exception("Not enough data");
+	        		
+	        		// unmask 
+					for(var i = 0; i<len; i++)
+						buf[4+i] ^= buf[i%4];
+	        		
+	        		switch(opcode) {
+	        			case OP_TEXT:
+	    					var msg = Encoding.UTF8.GetString(buf, 4, len);
+	    					onMessage(sock, msg);
+	        				
+							break;
+							
+	        			case OP_PING:
+	    					// ping
+	    					// data to send with pong is the same as the one in buf,
+	    					// just prepare the two header bytes
+	    					buf[2] = 0x80 | OP_PONG;
+							buf[3] = (byte)len;
+							sock.Send(buf, 2, len+2, SocketFlags.None);
+	        				
+	        				break;
+	        				
+	        			case OP_CLOSE:
+	        				// close frame
+	        				sock.Close();
+	        				return;
+	        				
+	        			default:
+	        				throw new Exception("unsupported opcode "+opcode);
+	        		}
+				}
+				catch(SocketException ex) {
+					if(ex.SocketErrorCode == SocketError.TimedOut) {
+						if(!started)
+							// WebSocket has been disabled
+							throw new Exception("Closing connection - WebSocket has been disabled");
+					}
+					else
+						throw ex;
+				}
         	}
 		}
 		

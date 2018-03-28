@@ -118,6 +118,10 @@ namespace vJoySerialFeeder
 			}
 		}
 		
+		public void Stop() {
+			update = null;
+		}
+		
 		private Mapping mapping(int index) {
 			return MainForm.Instance.MappingAt(index - 1);
 		}

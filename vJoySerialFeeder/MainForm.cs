@@ -112,22 +112,8 @@ namespace vJoySerialFeeder
 			if(System.Environment.OSVersion.Platform == PlatformID.Win32NT)
 				comAutomation = ComAutomation.GetInstance();
 			
-			// initialize websocket if requested with command line arguments
-			for(var i=0; i<args.Length; i++) {
-				if(args[i].Equals("-wsport")) {
-					try {
-						var port = int.Parse(args[i+1]);
-						webSocket = new WebSocket(40000);
-						break;
-					}
-					catch(Exception) {
-						MessageBox.Show("Invalid PORT after -wsport option");
-					}
-				}
-				
-			}
-			
-			
+			// initialize websocket if configured
+			StartStopWebSocket();
 		}
 		
 		/// <summary>
@@ -147,6 +133,9 @@ namespace vJoySerialFeeder
 		
 			
 		private void loadProfile(Configuration.Profile p) {
+			if(connected)
+				lua.Stop();
+			
 			while(mappings.Count > 0)
 				mappings[0].Remove();
 			
@@ -162,12 +151,15 @@ namespace vJoySerialFeeder
 				comboJoysticks.SelectedItem = p.VJoyInstance;
 				if(comboJoysticks.SelectedItem == null && comboJoysticks.Items.Count > 0)
 					comboJoysticks.SelectedIndex = 0;
-				luaScript = p.LuaScript;
 			}
 			
 			foreach(var m in p.Mappings) {
 				addMapping(m.Copy());
 			}
+			
+			luaScript = p.LuaScript;
+			if(connected)
+				initLuaScript();
 			
 			currentProfile = p;
 		}
@@ -299,42 +291,38 @@ namespace vJoySerialFeeder
 			mappings.Add(m);
 			panelMappings.Controls.Add(m.GetControl());
 		}
-	
-		void ButtonAddAxisClick(object sender, EventArgs e)
-		{
-			addMapping(new AxisMapping());
-		}
-
-		void ButtonAddButtonClick(object sender, EventArgs e)
-        {
-			addMapping(new ButtonMapping());
-        }
 		
-		void ButtonBitmappedButtonClick(object sender, EventArgs e)
-        {
-			addMapping(new ButtonBitmapMapping());
-        }
-
 		
-		void FlowLayoutPanel1MouseEnter(object sender, EventArgs e)
-		{
-			// trick to make mouse wheel scroll possible without
-			// explicitly focusing on the panel
-			if(!ContainsFocus)
-				panelMappings.Focus();
-		}
-		void ButtonPortsRefreshClick(object sender, EventArgs e)
-		{
-			reloadComPorts();
+		void initLuaScript() {
+        	try{
+				lua = new Lua(luaScript);
+				lua.Init(VJoy, Channels);
+			}
+			catch(InterpreterException ex) {
+				MessageBox.Show("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			}
+        }   
+		
+		void StartStopWebSocket() {
+			if(config.WebSocketEnabled && webSocket == null)
+				webSocket = new WebSocket(config.WebSocketPort);
+			else if(!config.WebSocketEnabled && webSocket != null) {
+				webSocket.Stop();
+				webSocket = null;
+			}
 		}
 		
-		void ButtonConnectClick(object sender, EventArgs e)
-		{
-			if(!connected)
-				connect();
-			else
-				disconnect();
-		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// Background Worker for doing the main job
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
@@ -346,8 +334,7 @@ namespace vJoySerialFeeder
 			int updateCount = 0;
 			
 			while(true) {
-				
-				
+				try{
 				if(backgroundWorker.CancellationPending) {
 					e.Cancel = true;
 					serialReader.Stop();
@@ -359,6 +346,9 @@ namespace vJoySerialFeeder
 				}
 				catch(InvalidOperationException ex) {
 					System.Diagnostics.Debug.WriteLine(ex.Message);
+					this.Invoke((Action)( () => MessageBox.Show("The Serial Port was Disconnected!",
+					                                   "Disconnect", MessageBoxButtons.OK,
+					                                   MessageBoxIcon.Error) ));
 					backgroundWorker.CancelAsync();
 					continue;
 				}
@@ -376,7 +366,9 @@ namespace vJoySerialFeeder
 						lua.Update();
 					}
 					catch(InterpreterException ex) {
-						MessageBox.Show("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+						this.Invoke((Action)( () =>
+						            MessageBox.Show("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
+						                  "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error)));
 					}
 					
 					foreach(Mapping m in mappings) {
@@ -424,6 +416,9 @@ namespace vJoySerialFeeder
 				
 				if(ActiveChannels > 0)
 					prevTime = now;
+				}
+				catch(Exception ex){
+					throw ex;}
 			}
 		}
 		void BackgroundWorkerRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -434,6 +429,54 @@ namespace vJoySerialFeeder
 		void BackgroundWorkerProgressChanged(object sender, System.ComponentModel.ProgressChangedEventArgs e)
 		{
 			ChannelDataUpdate(this, e);
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// UI Event handlers
+	
+		void ButtonAddAxisClick(object sender, EventArgs e)
+		{
+			addMapping(new AxisMapping());
+		}
+
+		void ButtonAddButtonClick(object sender, EventArgs e)
+        {
+			addMapping(new ButtonMapping());
+        }
+		
+		void ButtonBitmappedButtonClick(object sender, EventArgs e)
+        {
+			addMapping(new ButtonBitmapMapping());
+        }
+
+		
+		void FlowLayoutPanel1MouseEnter(object sender, EventArgs e)
+		{
+			// trick to make mouse wheel scroll possible without
+			// explicitly focusing on the panel
+			if(!ContainsFocus)
+				panelMappings.Focus();
+		}
+		void ButtonPortsRefreshClick(object sender, EventArgs e)
+		{
+			reloadComPorts();
+		}
+		
+		void ButtonConnectClick(object sender, EventArgs e)
+		{
+			if(!connected)
+				connect();
+			else
+				disconnect();
 		}
 		
 		void ButtonSaveProfileClick(object sender, EventArgs e)
@@ -449,6 +492,8 @@ namespace vJoySerialFeeder
 			config.PutProfile(name, p);
 			config.DefaultProfile = name;
 			config.Save();
+			
+			currentProfile = p;
 			
 			reloadProfiles();
 		}
@@ -522,16 +567,6 @@ namespace vJoySerialFeeder
         	System.Diagnostics.Process.Start("https://github.com/Cleric-K/vJoySerialFeeder/blob/master/Docs/MANUAL.md");
         }
         
-        void initLuaScript() {
-        	try{
-				lua = new Lua(luaScript);
-				lua.Init(VJoy, Channels);
-			}
-			catch(InterpreterException ex) {
-				MessageBox.Show("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-			}
-        }
-        
         void ButtonScriptingClick(object sender, EventArgs e)
         {
         	using(var d = new LuaEditorForm(luaScript)) {
@@ -569,6 +604,19 @@ namespace vJoySerialFeeder
         	}
         	
         	resetProfile();
+        }
+        
+        void ButtonOptionsClick(object sender, EventArgs e)
+        {
+        	using(var d = new OptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
+        		d.ShowDialog();
+        		if(d.DialogResult == DialogResult.OK) {
+        			config.WebSocketEnabled = d.WebSocketEnabled;
+        			config.WebSocketPort = d.WebSocketPort;
+        			config.Save();
+        			StartStopWebSocket();
+        		}
+        	}
         }
 	}
 }
