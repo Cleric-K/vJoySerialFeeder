@@ -99,6 +99,7 @@ namespace vJoySerialFeeder
 			try {
 				// accept another connection asynchronously
 				sock = listener.EndAcceptSocket(ar);
+                sock.Blocking = true;
 				
 				listener.BeginAcceptSocket(acceptConnection, null);
 				
@@ -219,7 +220,9 @@ namespace vJoySerialFeeder
 	        		}
 				}
 				catch(SocketException ex) {
-					if(ex.SocketErrorCode == SocketError.TimedOut) {
+					if(ex.SocketErrorCode == SocketError.TimedOut
+                       // linux seems to return 'WouldBlock'
+                       || ex.SocketErrorCode == SocketError.WouldBlock) {
 						if(!started)
 							// WebSocket has been disabled
 							throw new Exception("Closing connection - WebSocket has been disabled");

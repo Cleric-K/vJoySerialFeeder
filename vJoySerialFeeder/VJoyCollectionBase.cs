@@ -15,6 +15,6 @@ namespace vJoySerialFeeder
 	{
 		public abstract string[] GetJoysticks();
 			
-		public abstract VJoyBase GetVJoy(string jname);
+		public abstract VJoyBase GetVJoy(string name);
 	}
 }

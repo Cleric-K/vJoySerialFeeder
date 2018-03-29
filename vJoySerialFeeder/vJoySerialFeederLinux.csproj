@@ -49,6 +49,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MoonSharp.Interpreter">
+      <HintPath>Lib\MoonSharp.Interpreter.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization">
@@ -79,6 +82,13 @@
     <Compile Include="DummySetupForm.Designer.cs">
       <DependentUpon>DummySetupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lua.cs" />
+    <Compile Include="LuaEditorFormLinux.cs" />
+    <Compile Include="LuaEditorFormLinux.Designer.cs">
+      <DependentUpon>LuaEditorFormLinux.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OptionsForm.cs" />
+    <Compile Include="OptionsForm.Designer.cs" />
     <Compile Include="SbusSetupForm.cs" />
     <Compile Include="SbusSetupForm.Designer.cs">
       <DependentUpon>SbusSetupForm.cs</DependentUpon>
@@ -114,9 +124,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="VJoy.cs" />
+    <Compile Include="VJoyBase.cs" />
+    <Compile Include="VJoyCollectionBase.cs" />
+    <Compile Include="VJoyCollectionLinux.cs" />
+    <Compile Include="VJoyNone.cs" />
     <Compile Include="WebSocket.cs" />
-    <Compile Include="VJoyLinux.cs" />
+    <Compile Include="VJoyUinput.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AxisSetupForm.resx">
@@ -128,6 +141,9 @@
     <EmbeddedResource Include="ButtonSetupForm.resx">
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="LuaEditorFormLinux.resx">
+      <DependentUpon>LuaEditorFormLinux.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -136,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MultiWiiSetupForm.resx">
       <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OptionsForm.resx">
+      <DependentUpon>OptionsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -155,4 +174,14 @@
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy TabWidth="4" IndentWidth="4" RemoveTrailingWhitespace="True" NoTabsAfterNonTabs="False" FileWidth="80" TabsToSpaces="True" EolMarker="Windows" scope="text/x-csharp" />
+          <CSharpFormattingPolicy IndentBlock="True" IndentBraces="False" IndentSwitchSection="True" IndentSwitchCaseSection="True" LabelPositioning="OneLess" NewLinesForBracesInTypes="True" NewLinesForBracesInMethods="True" NewLinesForBracesInProperties="True" NewLinesForBracesInAccessors="True" NewLinesForBracesInAnonymousMethods="True" NewLinesForBracesInControlBlocks="True" NewLinesForBracesInAnonymousTypes="True" NewLinesForBracesInObjectCollectionArrayInitializers="True" NewLinesForBracesInLambdaExpressionBody="True" NewLineForElse="True" NewLineForCatch="True" NewLineForFinally="True" NewLineForMembersInObjectInit="True" NewLineForMembersInAnonymousTypes="True" NewLineForClausesInQuery="True" SpacingAfterMethodDeclarationName="False" SpaceWithinMethodDeclarationParenthesis="False" SpaceBetweenEmptyMethodDeclarationParentheses="False" SpaceAfterMethodCallName="False" SpaceWithinMethodCallParentheses="False" SpaceBetweenEmptyMethodCallParentheses="False" SpaceAfterControlFlowStatementKeyword="True" SpaceWithinExpressionParentheses="False" SpaceWithinCastParentheses="False" SpaceWithinOtherParentheses="False" SpaceAfterCast="False" SpacesIgnoreAroundVariableDeclaration="False" SpaceBeforeOpenSquareBracket="False" SpaceBetweenEmptySquareBrackets="False" SpaceWithinSquareBrackets="False" SpaceAfterColonInBaseTypeDeclaration="True" SpaceAfterComma="True" SpaceAfterDot="False" SpaceAfterSemicolonsInForStatement="True" SpaceBeforeColonInBaseTypeDeclaration="True" SpaceBeforeComma="False" SpaceBeforeDot="False" SpaceBeforeSemicolonsInForStatement="False" SpacingAroundBinaryOperator="Single" WrappingPreserveSingleLine="True" WrappingKeepStatementsOnSingleLine="True" PlaceSystemDirectiveFirst="True" scope="text/x-csharp" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>
