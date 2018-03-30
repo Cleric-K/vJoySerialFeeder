@@ -55,6 +55,9 @@ namespace vJoySerialFeeder
 		private Lua lua;
 		private string luaScript;
 		
+		private LuaOutputForm luaOutputDialog = new LuaOutputForm();
+		private MonitorForm monitorForm = new MonitorForm();
+		
 		public MainForm(string[] args)
 		{
 			//
@@ -165,8 +168,7 @@ namespace vJoySerialFeeder
 		}
 			
 		private void loadProfile(Configuration.Profile p) {
-			if(connected)
-				lua.Stop();
+			lua = null;
 			
 			while(mappings.Count > 0)
 				mappings[0].Remove();
@@ -190,8 +192,7 @@ namespace vJoySerialFeeder
 			}
 			
 			luaScript = p.LuaScript;
-			if(connected)
-				initLuaScript();
+			lua = new Lua(luaScript);
 			
 			currentProfile = p;
 		}
@@ -283,7 +284,7 @@ namespace vJoySerialFeeder
 			comboJoysticks.Enabled = false;
 			connected = true;
 			
-			initLuaScript();
+			lua = new Lua(luaScript);
 			
 			backgroundWorker.RunWorkerAsync();
 		}
@@ -321,17 +322,6 @@ namespace vJoySerialFeeder
 				+" channels available, "+Math.Round(updateRate)+" Updates per second / "
 				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
 		}
-
-		
-		void initLuaScript() {
-        	try{
-				lua = new Lua(luaScript);
-				lua.Init(VJoy, Channels);
-			}
-			catch(InterpreterException ex) {
-				ErrorMessageBox("Lua script initialization failed. Scripting is disabled:\n\n" + ex.DecoratedMessage, "Lua Error");
-			}
-        }   
 		
 		void StartStopWebSocket() {
 			if(config.WebSocketEnabled && webSocket == null) {
@@ -369,98 +359,101 @@ namespace vJoySerialFeeder
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
-			serialReader.Init(Channels, protocolConfig);
-			serialReader.Start();
-			
-			double nextUIUpdateTime = 0, nextRateUpdateTime = 0, prevTime = 0;
-			double updateSum = 0;
-			int updateCount = 0;
-			
-			while(true) {
-				try{
-				if(backgroundWorker.CancellationPending) {
-					e.Cancel = true;
-					serialReader.Stop();
-					return;
-				}
+			try {
+				serialReader.Init(Channels, protocolConfig);
+				serialReader.Start();
 				
-				try {
-					ActiveChannels = serialReader.ReadChannels();
-				}
-				catch(InvalidOperationException ex) {
-					System.Diagnostics.Debug.WriteLine(ex.Message);
-					this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
-					                                            "Disconnect")));
-					backgroundWorker.CancelAsync();
-					continue;
-				}
-				catch(Exception ex) {
-					ActiveChannels = 0;
-					System.Diagnostics.Debug.WriteLine(ex.Message);
-				}
-				if(ActiveChannels > 0) {
-					foreach(Mapping m in mappings) {
-						if(m.Channel >= 0 && m.Channel < ActiveChannels)
-							m.Input = Channels[m.Channel];
+				double nextUIUpdateTime = 0, nextRateUpdateTime = 0, prevTime = 0;
+				double updateSum = 0;
+				int updateCount = 0;
+				
+				while(true) {
+					if(backgroundWorker.CancellationPending) {
+						e.Cancel = true;
+						serialReader.Stop();
+						return;
 					}
 					
 					try {
-						lua.Update();
+						ActiveChannels = serialReader.ReadChannels();
 					}
-					catch(InterpreterException ex) {
-						this.Invoke((Action)( () =>
-						            ErrorMessageBox("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
-						                  "Lua Error")));
+					catch(InvalidOperationException ex) {
+						System.Diagnostics.Debug.WriteLine(ex.Message);
+						this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
+						                                            "Disconnect")));
+						backgroundWorker.CancelAsync();
+						continue;
 					}
-					
-					foreach(Mapping m in mappings) {
-						m.UpdateJoystick(VJoy);
+					catch(Exception ex) {
+						ActiveChannels = 0;
+						System.Diagnostics.Debug.WriteLine(ex.Message);
 					}
-					
-					VJoy.SetState();
-					
-					if(comAutomation != null)
-						comAutomation.Dispatch();
-					
-					if(webSocket != null)
-						webSocket.Dispatch();
-				}
-				
-				
-				double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-				
-				// since the time between frames may vary we sum the times here
-				// and later publish the average
-				if(now > prevTime && ActiveChannels > 0) {
-					updateSum += 1000.0/(now - prevTime);
-					updateCount++;
-				}
-				
-				// update UI on every 100ms
-				if(now >= nextUIUpdateTime) {
-					nextUIUpdateTime = now + 100;
-					
-					// update the Rate on evert 500ms
-					if(now >= nextRateUpdateTime) {
-						nextRateUpdateTime = now + 500;
-						
-						if(ActiveChannels == 0)
-							updateRate = 0;
-						else if(updateCount > 0) {
-							updateRate = updateSum/updateCount;
-							updateSum = updateCount = 0;
+					if(ActiveChannels > 0) {
+						foreach(Mapping m in mappings) {
+							if(m.Channel >= 0 && m.Channel < ActiveChannels)
+								m.Input = Channels[m.Channel];
 						}
+						
+						try {
+							lua.Update(VJoy, Channels);
+						}
+						catch(NullReferenceException) {}
+						catch(InterpreterException ex) {
+							this.Invoke((Action)( () =>
+							            ErrorMessageBox("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
+							                  "Lua Error")));
+						}
+						
+						foreach(Mapping m in mappings) {
+							m.UpdateJoystick(VJoy);
+						}
+						
+						VJoy.SetState();
+						
+						if(comAutomation != null)
+							comAutomation.Dispatch();
+						
+						if(webSocket != null)
+							webSocket.Dispatch();
 					}
 					
-					// will emit the ChannelDataUpdate event on the UI thread
-					backgroundWorker.ReportProgress(0);
+					
+					double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+					
+					// since the time between frames may vary we sum the times here
+					// and later publish the average
+					if(now > prevTime && ActiveChannels > 0) {
+						updateSum += 1000.0/(now - prevTime);
+						updateCount++;
+					}
+					
+					// update UI on every 100ms
+					if(now >= nextUIUpdateTime) {
+						nextUIUpdateTime = now + 100;
+						
+						// update the Rate on evert 500ms
+						if(now >= nextRateUpdateTime) {
+							nextRateUpdateTime = now + 500;
+							
+							if(ActiveChannels == 0)
+								updateRate = 0;
+							else if(updateCount > 0) {
+								updateRate = updateSum/updateCount;
+								updateSum = updateCount = 0;
+							}
+						}
+						
+						// will emit the ChannelDataUpdate event on the UI thread
+						backgroundWorker.ReportProgress(0);
+					}
+					
+					if(ActiveChannels > 0)
+						prevTime = now;
 				}
-				
-				if(ActiveChannels > 0)
-					prevTime = now;
-				}
-				catch(Exception ex){
-					throw ex;}
+			}
+			catch(Exception ex) {
+				this.Invoke((Action)( () =>
+				                     ErrorMessageBox(ex.ToString(), "Main Worker")));
 			}
 		}
 		void BackgroundWorkerRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
@@ -505,7 +498,7 @@ namespace vJoySerialFeeder
 		{
 			// trick to make mouse wheel scroll possible without
 			// explicitly focusing on the panel
-			if(!ContainsFocus)
+			if(ContainsFocus)
 				panelMappings.Focus();
 		}
 		void ButtonPortsRefreshClick(object sender, EventArgs e)
@@ -578,13 +571,6 @@ namespace vJoySerialFeeder
 			reloadProfiles();
 		}
         
-        void ButtonMonitorClick(object sender, EventArgs e)
-        {
-        	var f = new MonitorForm();
-        	f.Owner = this;
-        	f.Show();
-        } 
-        
         void ButtonPortSetupClick(object sender, EventArgs e)
         {
         	var sp = useCustomSerialParameters ?
@@ -609,25 +595,6 @@ namespace vJoySerialFeeder
         {
         	buttonProtocolSetup.Visible = createSerialReader().Configurable;
         	protocolConfig = "";
-        }
-        
-        void ButtonHelpClick(object sender, EventArgs e)
-        {
-        	System.Diagnostics.Process.Start("https://github.com/Cleric-K/vJoySerialFeeder/blob/master/Docs/MANUAL.md");
-        }
-        
-        void ButtonScriptingClick(object sender, EventArgs e)
-        {
-        	using(var d = new LuaEditorForm(luaScript)) {
-        		d.ShowDialog();
-        		
-        		if(d.DialogResult == DialogResult.OK) {
-        			luaScript = d.ScriptSource;
-        			if(connected)
-        				// reinitialize script
-        				initLuaScript();
-        		}
-        	}
         }
         
         void MainFormFormClosing(object sender, FormClosingEventArgs e)
@@ -655,7 +622,18 @@ namespace vJoySerialFeeder
         	resetProfile();
         }
         
-        void ButtonOptionsClick(object sender, EventArgs e)
+        
+        
+        
+        void ChannelMonitorMenuClick(object sender, EventArgs e)
+        {
+        	if(!monitorForm.Visible)
+	        	monitorForm.Show();
+        	else
+        		monitorForm.Hide();
+        }
+        
+        void OptionsMenuClick(object sender, EventArgs e)
         {
         	using(var d = new OptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
         		d.ShowDialog();
@@ -678,6 +656,39 @@ namespace vJoySerialFeeder
         			config.Save();
         		}
         	}
+        }
+        
+        void ExitMenuClick(object sender, EventArgs e)
+        {
+        	Close();
+        }
+        
+        void ScriptEditMenuClick(object sender, EventArgs e)
+        {
+        	using(var d = new LuaEditorForm(luaScript)) {
+        		d.ShowDialog();
+        		
+        		if(d.DialogResult == DialogResult.OK) {
+        			luaScript = d.ScriptSource;
+        			lua = new Lua(luaScript);
+        		}
+        	}
+        }
+        
+        void ScriptOutputMenuClick(object sender, EventArgs e)
+        {
+        	luaOutputDialog.Visible = !luaOutputDialog.Visible;
+        }
+        
+        void ManualMenuClick(object sender, EventArgs e)
+        {
+        	System.Diagnostics.Process.Start("https://github.com/Cleric-K/vJoySerialFeeder/blob/master/Docs/MANUAL.md");
+        }
+        
+        void MenuStrip1MenuActivate(object sender, EventArgs e)
+        {
+        	outputToolStripMenuItem.Checked = luaOutputDialog.Visible;
+        	channelMonitorToolStripMenuItem.Checked = monitorForm.Visible;
         }
         
         #endregion

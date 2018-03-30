@@ -352,8 +352,6 @@ namespace vJoySerialFeeder
 							m.Input = (int)val;
 						else
 							m.Output = val;
-						
-						Dispatch();
 							
 						break;
 						

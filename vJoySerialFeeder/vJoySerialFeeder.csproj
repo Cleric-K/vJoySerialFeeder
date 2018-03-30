@@ -92,6 +92,10 @@
     <Compile Include="LuaEditorForm.Designer.cs">
       <DependentUpon>LuaEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LuaOutputForm.cs" />
+    <Compile Include="LuaOutputForm.Designer.cs">
+      <DependentUpon>LuaOutputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="OptionsForm.cs" />
     <Compile Include="OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
@@ -154,6 +158,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="LuaEditorForm.resx">
       <DependentUpon>LuaEditorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LuaOutputForm.resx">
+      <DependentUpon>LuaOutputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

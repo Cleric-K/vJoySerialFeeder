@@ -71,22 +71,30 @@ namespace vJoySerialFeeder
         	this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
         	this.label6 = new System.Windows.Forms.Label();
         	this.comboProtocol = new System.Windows.Forms.ComboBox();
-        	this.buttonMonitor = new System.Windows.Forms.Button();
         	this.buttonBitmappedButton = new System.Windows.Forms.Button();
         	this.buttonPortSetup = new System.Windows.Forms.Button();
         	this.buttonProtocolSetup = new System.Windows.Forms.Button();
-        	this.buttonHelp = new System.Windows.Forms.Button();
-        	this.buttonScripting = new System.Windows.Forms.Button();
         	this.buttonNewProfile = new System.Windows.Forms.Button();
-        	this.buttonOptions = new System.Windows.Forms.Button();
+        	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+        	this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.channelMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.scriptingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.label2 = new System.Windows.Forms.Label();
         	this.statusStrip1.SuspendLayout();
+        	this.menuStrip1.SuspendLayout();
         	this.SuspendLayout();
         	// 
         	// panelMappings
         	// 
         	this.panelMappings.AutoScroll = true;
         	this.panelMappings.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-        	this.panelMappings.Location = new System.Drawing.Point(12, 110);
+        	this.panelMappings.Location = new System.Drawing.Point(12, 135);
         	this.panelMappings.Name = "panelMappings";
         	this.panelMappings.Size = new System.Drawing.Size(703, 378);
         	this.panelMappings.TabIndex = 2;
@@ -95,7 +103,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonAddAxis
         	// 
-        	this.buttonAddAxis.Location = new System.Drawing.Point(12, 81);
+        	this.buttonAddAxis.Location = new System.Drawing.Point(12, 106);
         	this.buttonAddAxis.Name = "buttonAddAxis";
         	this.buttonAddAxis.Size = new System.Drawing.Size(66, 23);
         	this.buttonAddAxis.TabIndex = 12;
@@ -105,7 +113,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonAddButton
         	// 
-        	this.buttonAddButton.Location = new System.Drawing.Point(84, 81);
+        	this.buttonAddButton.Location = new System.Drawing.Point(84, 106);
         	this.buttonAddButton.Name = "buttonAddButton";
         	this.buttonAddButton.Size = new System.Drawing.Size(75, 23);
         	this.buttonAddButton.TabIndex = 13;
@@ -117,14 +125,14 @@ namespace vJoySerialFeeder
         	// 
         	this.comboPorts.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         	this.comboPorts.FormattingEnabled = true;
-        	this.comboPorts.Location = new System.Drawing.Point(566, 11);
+        	this.comboPorts.Location = new System.Drawing.Point(566, 36);
         	this.comboPorts.Name = "comboPorts";
         	this.comboPorts.Size = new System.Drawing.Size(67, 21);
         	this.comboPorts.TabIndex = 8;
         	// 
         	// label1
         	// 
-        	this.label1.Location = new System.Drawing.Point(525, 11);
+        	this.label1.Location = new System.Drawing.Point(525, 36);
         	this.label1.Name = "label1";
         	this.label1.Size = new System.Drawing.Size(35, 21);
         	this.label1.TabIndex = 8;
@@ -133,7 +141,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonConnect
         	// 
-        	this.buttonConnect.Location = new System.Drawing.Point(640, 10);
+        	this.buttonConnect.Location = new System.Drawing.Point(640, 35);
         	this.buttonConnect.Name = "buttonConnect";
         	this.buttonConnect.Size = new System.Drawing.Size(75, 23);
         	this.buttonConnect.TabIndex = 10;
@@ -143,7 +151,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonPortsRefresh
         	// 
-        	this.buttonPortsRefresh.Location = new System.Drawing.Point(640, 39);
+        	this.buttonPortsRefresh.Location = new System.Drawing.Point(640, 64);
         	this.buttonPortsRefresh.Name = "buttonPortsRefresh";
         	this.buttonPortsRefresh.Size = new System.Drawing.Size(75, 23);
         	this.buttonPortsRefresh.TabIndex = 11;
@@ -163,14 +171,14 @@ namespace vJoySerialFeeder
         	// 
         	this.comboJoysticks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         	this.comboJoysticks.FormattingEnabled = true;
-        	this.comboJoysticks.Location = new System.Drawing.Point(360, 12);
+        	this.comboJoysticks.Location = new System.Drawing.Point(360, 37);
         	this.comboJoysticks.Name = "comboJoysticks";
         	this.comboJoysticks.Size = new System.Drawing.Size(72, 21);
         	this.comboJoysticks.TabIndex = 5;
         	// 
         	// label3
         	// 
-        	this.label3.Location = new System.Drawing.Point(266, 12);
+        	this.label3.Location = new System.Drawing.Point(266, 37);
         	this.label3.Name = "label3";
         	this.label3.Size = new System.Drawing.Size(88, 21);
         	this.label3.TabIndex = 13;
@@ -180,14 +188,14 @@ namespace vJoySerialFeeder
         	// comboProfiles
         	// 
         	this.comboProfiles.FormattingEnabled = true;
-        	this.comboProfiles.Location = new System.Drawing.Point(60, 9);
+        	this.comboProfiles.Location = new System.Drawing.Point(60, 34);
         	this.comboProfiles.Name = "comboProfiles";
         	this.comboProfiles.Size = new System.Drawing.Size(144, 21);
         	this.comboProfiles.TabIndex = 0;
         	// 
         	// buttonLoadProfile
         	// 
-        	this.buttonLoadProfile.Location = new System.Drawing.Point(60, 39);
+        	this.buttonLoadProfile.Location = new System.Drawing.Point(60, 64);
         	this.buttonLoadProfile.Name = "buttonLoadProfile";
         	this.buttonLoadProfile.Size = new System.Drawing.Size(40, 20);
         	this.buttonLoadProfile.TabIndex = 2;
@@ -197,7 +205,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonSaveProfile
         	// 
-        	this.buttonSaveProfile.Location = new System.Drawing.Point(106, 39);
+        	this.buttonSaveProfile.Location = new System.Drawing.Point(106, 64);
         	this.buttonSaveProfile.Name = "buttonSaveProfile";
         	this.buttonSaveProfile.Size = new System.Drawing.Size(40, 20);
         	this.buttonSaveProfile.TabIndex = 3;
@@ -207,7 +215,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonDeleteProfile
         	// 
-        	this.buttonDeleteProfile.Location = new System.Drawing.Point(152, 39);
+        	this.buttonDeleteProfile.Location = new System.Drawing.Point(152, 64);
         	this.buttonDeleteProfile.Name = "buttonDeleteProfile";
         	this.buttonDeleteProfile.Size = new System.Drawing.Size(49, 20);
         	this.buttonDeleteProfile.TabIndex = 4;
@@ -217,7 +225,7 @@ namespace vJoySerialFeeder
         	// 
         	// label4
         	// 
-        	this.label4.Location = new System.Drawing.Point(13, 9);
+        	this.label4.Location = new System.Drawing.Point(13, 34);
         	this.label4.Name = "label4";
         	this.label4.Size = new System.Drawing.Size(41, 21);
         	this.label4.TabIndex = 18;
@@ -227,9 +235,9 @@ namespace vJoySerialFeeder
         	// label5
         	// 
         	this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-        	this.label5.Location = new System.Drawing.Point(13, 68);
+        	this.label5.Location = new System.Drawing.Point(0, 93);
         	this.label5.Name = "label5";
-        	this.label5.Size = new System.Drawing.Size(702, 2);
+        	this.label5.Size = new System.Drawing.Size(730, 2);
         	this.label5.TabIndex = 19;
         	this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         	// 
@@ -237,7 +245,7 @@ namespace vJoySerialFeeder
         	// 
         	this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
         	        	        	this.toolStripStatusLabel});
-        	this.statusStrip1.Location = new System.Drawing.Point(0, 500);
+        	this.statusStrip1.Location = new System.Drawing.Point(0, 527);
         	this.statusStrip1.Name = "statusStrip1";
         	this.statusStrip1.Size = new System.Drawing.Size(730, 22);
         	this.statusStrip1.SizingGrip = false;
@@ -252,7 +260,7 @@ namespace vJoySerialFeeder
         	// 
         	// label6
         	// 
-        	this.label6.Location = new System.Drawing.Point(266, 38);
+        	this.label6.Location = new System.Drawing.Point(266, 63);
         	this.label6.Name = "label6";
         	this.label6.Size = new System.Drawing.Size(78, 21);
         	this.label6.TabIndex = 21;
@@ -268,25 +276,15 @@ namespace vJoySerialFeeder
         	        	        	"MultiWii",
         	        	        	"SBUS",
         	        	        	"Dummy"});
-        	this.comboProtocol.Location = new System.Drawing.Point(360, 39);
+        	this.comboProtocol.Location = new System.Drawing.Point(360, 64);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
         	this.comboProtocol.TabIndex = 6;
         	this.comboProtocol.SelectedIndexChanged += new System.EventHandler(this.ComboProtocolSelectedIndexChanged);
         	// 
-        	// buttonMonitor
-        	// 
-        	this.buttonMonitor.Location = new System.Drawing.Point(488, 81);
-        	this.buttonMonitor.Name = "buttonMonitor";
-        	this.buttonMonitor.Size = new System.Drawing.Size(114, 23);
-        	this.buttonMonitor.TabIndex = 16;
-        	this.buttonMonitor.Text = "Channel Monitor";
-        	this.buttonMonitor.UseVisualStyleBackColor = true;
-        	this.buttonMonitor.Click += new System.EventHandler(this.ButtonMonitorClick);
-        	// 
         	// buttonBitmappedButton
         	// 
-        	this.buttonBitmappedButton.Location = new System.Drawing.Point(166, 81);
+        	this.buttonBitmappedButton.Location = new System.Drawing.Point(166, 106);
         	this.buttonBitmappedButton.Name = "buttonBitmappedButton";
         	this.buttonBitmappedButton.Size = new System.Drawing.Size(133, 23);
         	this.buttonBitmappedButton.TabIndex = 14;
@@ -296,7 +294,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonPortSetup
         	// 
-        	this.buttonPortSetup.Location = new System.Drawing.Point(566, 39);
+        	this.buttonPortSetup.Location = new System.Drawing.Point(566, 64);
         	this.buttonPortSetup.Name = "buttonPortSetup";
         	this.buttonPortSetup.Size = new System.Drawing.Size(68, 23);
         	this.buttonPortSetup.TabIndex = 9;
@@ -306,7 +304,7 @@ namespace vJoySerialFeeder
         	// 
         	// buttonProtocolSetup
         	// 
-        	this.buttonProtocolSetup.Location = new System.Drawing.Point(439, 38);
+        	this.buttonProtocolSetup.Location = new System.Drawing.Point(439, 63);
         	this.buttonProtocolSetup.Name = "buttonProtocolSetup";
         	this.buttonProtocolSetup.Size = new System.Drawing.Size(46, 23);
         	this.buttonProtocolSetup.TabIndex = 7;
@@ -314,29 +312,9 @@ namespace vJoySerialFeeder
         	this.buttonProtocolSetup.UseVisualStyleBackColor = true;
         	this.buttonProtocolSetup.Click += new System.EventHandler(this.ButtonProtocolSetupClick);
         	// 
-        	// buttonHelp
-        	// 
-        	this.buttonHelp.Location = new System.Drawing.Point(674, 81);
-        	this.buttonHelp.Name = "buttonHelp";
-        	this.buttonHelp.Size = new System.Drawing.Size(41, 23);
-        	this.buttonHelp.TabIndex = 18;
-        	this.buttonHelp.Text = "Help";
-        	this.buttonHelp.UseVisualStyleBackColor = true;
-        	this.buttonHelp.Click += new System.EventHandler(this.ButtonHelpClick);
-        	// 
-        	// buttonScripting
-        	// 
-        	this.buttonScripting.Location = new System.Drawing.Point(306, 81);
-        	this.buttonScripting.Name = "buttonScripting";
-        	this.buttonScripting.Size = new System.Drawing.Size(75, 23);
-        	this.buttonScripting.TabIndex = 15;
-        	this.buttonScripting.Text = "Scripting";
-        	this.buttonScripting.UseVisualStyleBackColor = true;
-        	this.buttonScripting.Click += new System.EventHandler(this.ButtonScriptingClick);
-        	// 
         	// buttonNewProfile
         	// 
-        	this.buttonNewProfile.Location = new System.Drawing.Point(13, 39);
+        	this.buttonNewProfile.Location = new System.Drawing.Point(13, 64);
         	this.buttonNewProfile.Name = "buttonNewProfile";
         	this.buttonNewProfile.Size = new System.Drawing.Size(41, 20);
         	this.buttonNewProfile.TabIndex = 1;
@@ -344,32 +322,112 @@ namespace vJoySerialFeeder
         	this.buttonNewProfile.UseVisualStyleBackColor = true;
         	this.buttonNewProfile.Click += new System.EventHandler(this.ButtonNewProfileClick);
         	// 
-        	// buttonOptions
+        	// menuStrip1
         	// 
-        	this.buttonOptions.Location = new System.Drawing.Point(608, 81);
-        	this.buttonOptions.Name = "buttonOptions";
-        	this.buttonOptions.Size = new System.Drawing.Size(60, 23);
-        	this.buttonOptions.TabIndex = 17;
-        	this.buttonOptions.Text = "Options";
-        	this.buttonOptions.UseVisualStyleBackColor = true;
-        	this.buttonOptions.Click += new System.EventHandler(this.ButtonOptionsClick);
+        	this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.programToolStripMenuItem,
+        	        	        	this.scriptingToolStripMenuItem,
+        	        	        	this.helpToolStripMenuItem});
+        	this.menuStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
+        	this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+        	this.menuStrip1.Name = "menuStrip1";
+        	this.menuStrip1.Size = new System.Drawing.Size(730, 24);
+        	this.menuStrip1.TabIndex = 22;
+        	this.menuStrip1.Text = "menuMain";
+        	this.menuStrip1.MenuActivate += new System.EventHandler(this.MenuStrip1MenuActivate);
+        	// 
+        	// programToolStripMenuItem
+        	// 
+        	this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.channelMonitorToolStripMenuItem,
+        	        	        	this.optionsToolStripMenuItem,
+        	        	        	this.exitToolStripMenuItem});
+        	this.programToolStripMenuItem.Name = "programToolStripMenuItem";
+        	this.programToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+        	this.programToolStripMenuItem.Text = "Program";
+        	// 
+        	// channelMonitorToolStripMenuItem
+        	// 
+        	this.channelMonitorToolStripMenuItem.Name = "channelMonitorToolStripMenuItem";
+        	this.channelMonitorToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+        	this.channelMonitorToolStripMenuItem.Text = "Channel Monitor";
+        	this.channelMonitorToolStripMenuItem.Click += new System.EventHandler(this.ChannelMonitorMenuClick);
+        	// 
+        	// optionsToolStripMenuItem
+        	// 
+        	this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+        	this.optionsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+        	this.optionsToolStripMenuItem.Text = "Options";
+        	this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsMenuClick);
+        	// 
+        	// exitToolStripMenuItem
+        	// 
+        	this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+        	this.exitToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+        	this.exitToolStripMenuItem.Text = "Exit";
+        	this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuClick);
+        	// 
+        	// scriptingToolStripMenuItem
+        	// 
+        	this.scriptingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.editToolStripMenuItem,
+        	        	        	this.outputToolStripMenuItem});
+        	this.scriptingToolStripMenuItem.Name = "scriptingToolStripMenuItem";
+        	this.scriptingToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
+        	this.scriptingToolStripMenuItem.Text = "Script";
+        	// 
+        	// editToolStripMenuItem
+        	// 
+        	this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+        	this.editToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+        	this.editToolStripMenuItem.Text = "Edit";
+        	this.editToolStripMenuItem.Click += new System.EventHandler(this.ScriptEditMenuClick);
+        	// 
+        	// outputToolStripMenuItem
+        	// 
+        	this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
+        	this.outputToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+        	this.outputToolStripMenuItem.Text = "Output";
+        	this.outputToolStripMenuItem.Click += new System.EventHandler(this.ScriptOutputMenuClick);
+        	// 
+        	// helpToolStripMenuItem
+        	// 
+        	this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.manualToolStripMenuItem});
+        	this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+        	this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+        	this.helpToolStripMenuItem.Text = "Help";
+        	// 
+        	// manualToolStripMenuItem
+        	// 
+        	this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
+        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+        	this.manualToolStripMenuItem.Text = "Manual";
+        	this.manualToolStripMenuItem.Click += new System.EventHandler(this.ManualMenuClick);
+        	// 
+        	// label2
+        	// 
+        	this.label2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+        	this.label2.Location = new System.Drawing.Point(0, 25);
+        	this.label2.Name = "label2";
+        	this.label2.Size = new System.Drawing.Size(730, 2);
+        	this.label2.TabIndex = 23;
+        	this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-        	this.ClientSize = new System.Drawing.Size(730, 522);
-        	this.Controls.Add(this.buttonOptions);
+        	this.ClientSize = new System.Drawing.Size(730, 549);
+        	this.Controls.Add(this.label2);
         	this.Controls.Add(this.buttonNewProfile);
-        	this.Controls.Add(this.buttonScripting);
-        	this.Controls.Add(this.buttonHelp);
         	this.Controls.Add(this.buttonProtocolSetup);
         	this.Controls.Add(this.buttonPortSetup);
         	this.Controls.Add(this.buttonBitmappedButton);
-        	this.Controls.Add(this.buttonMonitor);
         	this.Controls.Add(this.comboProtocol);
         	this.Controls.Add(this.label6);
         	this.Controls.Add(this.statusStrip1);
+        	this.Controls.Add(this.menuStrip1);
         	this.Controls.Add(this.label5);
         	this.Controls.Add(this.label4);
         	this.Controls.Add(this.buttonDeleteProfile);
@@ -387,6 +445,7 @@ namespace vJoySerialFeeder
         	this.Controls.Add(this.panelMappings);
         	this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
         	this.Icon = global::vJoySerialFeeder.Resources.Joystick_icon;
+        	this.MainMenuStrip = this.menuStrip1;
         	this.MaximizeBox = false;
         	this.Name = "MainForm";
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -394,17 +453,26 @@ namespace vJoySerialFeeder
         	this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
         	this.statusStrip1.ResumeLayout(false);
         	this.statusStrip1.PerformLayout();
+        	this.menuStrip1.ResumeLayout(false);
+        	this.menuStrip1.PerformLayout();
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
-        private System.Windows.Forms.Button buttonOptions;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem outputToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem scriptingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem channelMonitorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Button buttonNewProfile;
-        private System.Windows.Forms.Button buttonScripting;
-        private System.Windows.Forms.Button buttonHelp;
         private System.Windows.Forms.Button buttonProtocolSetup;
         private System.Windows.Forms.Button buttonPortSetup;
         private System.Windows.Forms.Button buttonBitmappedButton;
-        private System.Windows.Forms.Button buttonMonitor;
         private System.Windows.Forms.ComboBox comboProtocol;
         private System.Windows.Forms.Label label6;
 	}

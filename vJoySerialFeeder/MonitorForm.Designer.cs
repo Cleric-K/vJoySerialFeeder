@@ -69,6 +69,8 @@ namespace vJoySerialFeeder
 			this.MinimizeBox = false;
 			this.Name = "MonitorForm";
 			this.Text = "Monitor";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MonitorFormFormClosing);
+			this.VisibleChanged += new System.EventHandler(this.MonitorFormVisibleChanged);
 			this.panel.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			this.ResumeLayout(false);

@@ -68,8 +68,15 @@ namespace vJoySerialFeeder
 				var handlers = ComAutomation.instance.handlers;
 				lock(handlers) {
 					for(int i = handlers.Count-1; i >= 0; i--) {
-						if(handlers[i].handlerObject == h)
+						try {
+							if(handlers[i].handlerObject == h)
+								handlers.RemoveAt(i);
+						}
+						catch(COMException) {
+							// if a handler COM object is no longer active
+							// the comparison will throw exception - remove it
 							handlers.RemoveAt(i);
+						}
 					}
 				}
 			}
@@ -122,18 +129,12 @@ namespace vJoySerialFeeder
 			
 			public int Input {
 				get { return m.Input; }
-				set {
-					m.Input = value;
-					ComAutomation.instance.Dispatch();
-				}
+				set { m.Input = value; }
 			}
 			
 			public float Output {
 				get { return m.Output; }
-				set {
-					m.Output = value;
-					ComAutomation.instance.Dispatch();
-				}
+				set { m.Output = value; }
 			}
 			
 			public string Type() {
@@ -153,9 +154,15 @@ namespace vJoySerialFeeder
 				lock(handlers) {
 					for(int i = handlers.Count-1; i >= 0; i--) {
 						var hi = handlers[i];
-						if(hi.handlerObject == h
-						  		&& hi.Mapping == m)
+						try{
+							if(hi.handlerObject == h && hi.Mapping == m)
+								handlers.RemoveAt(i);
+						}
+						catch(COMException) {
+							// if a handler COM object is no longer active
+							// the comparison will throw exception - remove it
 							handlers.RemoveAt(i);
+						}
 					}
 				}
 			}
@@ -204,7 +211,7 @@ namespace vJoySerialFeeder
 			internal void Execute() {
 				try {
 					// COM call
-					handlerObject.Handler(Input, Output);
+					handlerObject.OnUpdate(Input, Output);
 					numFails = 0;
 				}
 				catch(Exception e) {

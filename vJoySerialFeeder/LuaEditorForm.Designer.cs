@@ -101,6 +101,7 @@ namespace vJoySerialFeeder
 			this.editorBox.ContextMenuStrip = this.cMenu;
 			this.editorBox.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.editorBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+			this.editorBox.Font = new System.Drawing.Font("Courier New", 9.75F);
 			this.editorBox.IsReplaceMode = false;
 			this.editorBox.Language = FastColoredTextBoxNS.Language.Lua;
 			this.editorBox.LeftBracket = '(';
@@ -132,7 +133,7 @@ namespace vJoySerialFeeder
 			// 
 			// mCopy
 			// 
-			this.mCopy.Image = ((System.Drawing.Image)(resources.GetObject("mCopy.Image")));
+			this.mCopy.Image = global::vJoySerialFeeder.Resources.mCopy_Image;
 			this.mCopy.Name = "mCopy";
 			this.mCopy.Size = new System.Drawing.Size(122, 22);
 			this.mCopy.Text = "Copy";
@@ -140,7 +141,7 @@ namespace vJoySerialFeeder
 			// 
 			// mCut
 			// 
-			this.mCut.Image = ((System.Drawing.Image)(resources.GetObject("mCut.Image")));
+			this.mCut.Image = global::vJoySerialFeeder.Resources.mCut_Image;
 			this.mCut.Name = "mCut";
 			this.mCut.Size = new System.Drawing.Size(122, 22);
 			this.mCut.Text = "Cut";
@@ -148,7 +149,7 @@ namespace vJoySerialFeeder
 			// 
 			// mPaste
 			// 
-			this.mPaste.Image = ((System.Drawing.Image)(resources.GetObject("mPaste.Image")));
+			this.mPaste.Image = global::vJoySerialFeeder.Resources.mPaste_Image;
 			this.mPaste.Name = "mPaste";
 			this.mPaste.Size = new System.Drawing.Size(122, 22);
 			this.mPaste.Text = "Paste";
@@ -168,7 +169,7 @@ namespace vJoySerialFeeder
 			// 
 			// mUndo
 			// 
-			this.mUndo.Image = ((System.Drawing.Image)(resources.GetObject("mUndo.Image")));
+			this.mUndo.Image = global::vJoySerialFeeder.Resources.mUndo_Image;
 			this.mUndo.Name = "mUndo";
 			this.mUndo.Size = new System.Drawing.Size(122, 22);
 			this.mUndo.Text = "Undo";
@@ -176,7 +177,7 @@ namespace vJoySerialFeeder
 			// 
 			// mRedo
 			// 
-			this.mRedo.Image = ((System.Drawing.Image)(resources.GetObject("mRedo.Image")));
+			this.mRedo.Image = global::vJoySerialFeeder.Resources.mRedo_Image;
 			this.mRedo.Name = "mRedo";
 			this.mRedo.Size = new System.Drawing.Size(122, 22);
 			this.mRedo.Text = "Redo";
@@ -203,8 +204,9 @@ namespace vJoySerialFeeder
 			this.Controls.Add(this.editorBox);
 			this.Controls.Add(this.buttonTestCompile);
 			this.Controls.Add(this.buttonSave);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = global::vJoySerialFeeder.Resources.editor_icon;
 			this.Name = "LuaEditorForm";
+			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Lua Editor";
 			((System.ComponentModel.ISupportInitialize)(this.editorBox)).EndInit();

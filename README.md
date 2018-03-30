@@ -20,7 +20,7 @@ After data is received it can be _mapped_ to any vJoy axis or button in very fle
 You can dowload binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](http://www.icsharpcode.net/opensource/sd/)
 
 ## How to use it? ##
-Check out the [Manual](Docs/MANUAL.md).
+Check out the [Manual](Docs/README.md).
 
 ## Like it?
 If this software brought a smile on your face, you may shine back if you feel like it: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L5789HZB5NAX4&lc=BG&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)\

@@ -22,7 +22,7 @@ namespace vJoySerialFeeder
 				mapping = m;
 			}
 			
-			public string Type { get { return this.GetType().ToString(); } }
+			public string Type { get { return mapping.GetType().Name; } }
 			
 			public int Input {
 				get { return mapping.Input; }
@@ -43,17 +43,18 @@ namespace vJoySerialFeeder
 			}
 			
 			public void SetAxis(int axis, double value) {
-				vjoy.SetAxis(axis, value);
+				vjoy.SetAxis(axis - 1, value);
 			}
 			
 			public void SetButton(int button, double value) {
-				vjoy.SetButton((button - 1), value > 0);
+				vjoy.SetButton(button - 1, value > 0);
 			}
 		}
 		
 		
 		string scriptSource;
 		Script script;
+		bool initted;
 		Closure update;
 		
 		public Lua(string src)
@@ -77,36 +78,47 @@ namespace vJoySerialFeeder
 				UserData.RegisterProxyType<VJoyProxy, VJoyBase>(vj => new VJoyProxy(vj));
 			
 				// setup globals
-				script.Globals["AXIS_X"] = 0;
-				script.Globals["AXIS_Y"] = 1;
-				script.Globals["AXIS_Z"] = 2;
-				script.Globals["AXIS_RX"] = 3;
-				script.Globals["AXIS_RY"] = 4;
-				script.Globals["AXIS_RZ"] = 5;
-				script.Globals["AXIS_SL0"] = 6;
-				script.Globals["AXIS_SL1"] = 7;
+				script.Globals["AXIS_X"] = 1;
+				script.Globals["AXIS_Y"] = 2;
+				script.Globals["AXIS_Z"] = 3;
+				script.Globals["AXIS_RX"] = 4;
+				script.Globals["AXIS_RY"] = 5;
+				script.Globals["AXIS_RZ"] = 6;
+				script.Globals["AXIS_SL0"] = 7;
+				script.Globals["AXIS_SL1"] = 8;
 				
 				script.Globals["VJoy"] = vjoy;
-				script.Globals["Channel"] = (Func<int, int>)(index => channels[index-1]);
-				script.Globals["Mapping"] = (Func<int, Mapping>)(index => MainForm.Instance.MappingAt(index - 1));
+				script.Globals["Channel"] = (Func<int, int>)(index => {
+				                                              	if(index < 1 || index > channels.Length)
+				                                              		throw new ScriptRuntimeException("Invalid Channel index");
+				                                             	return channels[index-1];
+				                                             });
+				script.Globals["Mapping"] = (Func<int, Mapping>)(index => {
+				                                                 	var m = MainForm.Instance.MappingAt(index - 1);
+				                                                 	if(m == null)
+				                                                 		throw new ScriptRuntimeException("Invalid Mapping index");
+				                                                 	return m;
+				                                                 });
 				
 				// execute code
 				script.DoString(scriptSource, null, "Script");
-				
-				// call init function if defined
-				var initFunc = script.Globals.Get("init").Function;
-				if(initFunc != null)
-					initFunc.Call();
+				script.Options.DebugPrint = print;
 				
 				// save update function
 				update = script.Globals.Get("update").Function;
+				
+				initted = true;
 			}
 			catch(InterpreterException ex) {
 				throw ex;
 			}
 		}
 		
-		public void Update() {
+		public void Update(VJoyBase vjoy, int[] channels) {
+			if(!initted) {
+				Init(vjoy, channels);
+			}
+			
 			if(update != null) {
 				try {
 					update.Call();
@@ -118,12 +130,12 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		public void Stop() {
-			update = null;
-		}
-		
 		private Mapping mapping(int index) {
 			return MainForm.Instance.MappingAt(index - 1);
+		}
+		
+		private void print(string s) {
+			LuaOutputForm.Write(s + "\n");
 		}
 	}
 }

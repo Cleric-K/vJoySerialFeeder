@@ -38,7 +38,6 @@ namespace vJoySerialFeeder
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LuaEditorForm));
 			this.buttonSave = new System.Windows.Forms.Button();
 			this.buttonTestCompile = new System.Windows.Forms.Button();
 			this.cMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -85,50 +84,50 @@ namespace vJoySerialFeeder
 									this.toolStripMenuItem2,
 									this.mUndo});
 			this.cMenu.Name = "contextMenuStrip1";
-			this.cMenu.Size = new System.Drawing.Size(153, 142);
+			this.cMenu.Size = new System.Drawing.Size(123, 120);
 			this.cMenu.Opening += new System.ComponentModel.CancelEventHandler(this.CMenuOpening);
 			// 
 			// mCopy
 			// 
-			this.mCopy.Image = ((System.Drawing.Image)(resources.GetObject("mCopy.Image")));
+			this.mCopy.Image = global::vJoySerialFeeder.Resources.mCopy_Image;
 			this.mCopy.Name = "mCopy";
-			this.mCopy.Size = new System.Drawing.Size(152, 22);
+			this.mCopy.Size = new System.Drawing.Size(122, 22);
 			this.mCopy.Text = "Copy";
 			this.mCopy.Click += new System.EventHandler(this.MCopyClick);
 			// 
 			// mCut
 			// 
-			this.mCut.Image = ((System.Drawing.Image)(resources.GetObject("mCut.Image")));
+			this.mCut.Image = global::vJoySerialFeeder.Resources.mCut_Image;
 			this.mCut.Name = "mCut";
-			this.mCut.Size = new System.Drawing.Size(152, 22);
+			this.mCut.Size = new System.Drawing.Size(122, 22);
 			this.mCut.Text = "Cut";
 			this.mCut.Click += new System.EventHandler(this.MCutClick);
 			// 
 			// mPaste
 			// 
-			this.mPaste.Image = ((System.Drawing.Image)(resources.GetObject("mPaste.Image")));
+			this.mPaste.Image = global::vJoySerialFeeder.Resources.mPaste_Image;
 			this.mPaste.Name = "mPaste";
-			this.mPaste.Size = new System.Drawing.Size(152, 22);
+			this.mPaste.Size = new System.Drawing.Size(122, 22);
 			this.mPaste.Text = "Paste";
 			this.mPaste.Click += new System.EventHandler(this.MPasteClick);
 			// 
 			// mSelectAll
 			// 
 			this.mSelectAll.Name = "mSelectAll";
-			this.mSelectAll.Size = new System.Drawing.Size(152, 22);
+			this.mSelectAll.Size = new System.Drawing.Size(122, 22);
 			this.mSelectAll.Text = "Select All";
 			this.mSelectAll.Click += new System.EventHandler(this.MSelectAllClick);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(119, 6);
 			// 
 			// mUndo
 			// 
-			this.mUndo.Image = ((System.Drawing.Image)(resources.GetObject("mUndo.Image")));
+			this.mUndo.Image = global::vJoySerialFeeder.Resources.mUndo_Image;
 			this.mUndo.Name = "mUndo";
-			this.mUndo.Size = new System.Drawing.Size(152, 22);
+			this.mUndo.Size = new System.Drawing.Size(122, 22);
 			this.mUndo.Text = "Undo";
 			this.mUndo.Click += new System.EventHandler(this.MUndoClick);
 			// 
@@ -172,7 +171,7 @@ namespace vJoySerialFeeder
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonTestCompile);
 			this.Controls.Add(this.buttonSave);
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.Icon = global::vJoySerialFeeder.Resources.editor_icon;
 			this.Name = "LuaEditorForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Lua Editor";

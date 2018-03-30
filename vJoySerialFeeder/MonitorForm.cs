@@ -31,8 +31,6 @@ namespace vJoySerialFeeder
 			//
 			InitializeComponent();
 
-			MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
-			Closed += (sender, e) => { MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate; };
 			panel.MouseEnter += (s, e) => panel.Focus(); // to allow wheel scroll
 			
 		}
@@ -82,6 +80,20 @@ namespace vJoySerialFeeder
 				r = 70*r;
 				e.Graphics.FillEllipse(Brushes.Blue, org+CHAN_WIDTH/2 - 5, SLIDER_TOP+r-5, 9, 9);
 			}
+		}
+		
+		void MonitorFormVisibleChanged(object sender, EventArgs e)
+		{
+			if(Visible)
+				MainForm.Instance.ChannelDataUpdate += onChannelDataUpdate;
+			else
+				MainForm.Instance.ChannelDataUpdate -= onChannelDataUpdate;
+		}
+		
+		void MonitorFormFormClosing(object sender, FormClosingEventArgs e)
+		{
+			Hide();
+			e.Cancel = true;
 		}
 	}
 }

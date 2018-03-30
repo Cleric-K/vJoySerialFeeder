@@ -63,6 +63,16 @@ namespace vJoySerialFeeder {
 		/// <summary>
 		///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
 		/// </summary>
+		internal static System.Drawing.Icon editor_icon {
+			get {
+				object obj = ResourceManager.GetObject("editor-icon", resourceCulture);
+				return ((System.Drawing.Icon)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+		/// </summary>
 		internal static System.Drawing.Icon Joystick_icon {
 			get {
 				object obj = ResourceManager.GetObject("Joystick-icon", resourceCulture);
@@ -71,10 +81,70 @@ namespace vJoySerialFeeder {
 		}
 		
 		/// <summary>
-		///   Looks up a localized string similar to function init()
-		///end
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap mCopy_Image {
+			get {
+				object obj = ResourceManager.GetObject("mCopy.Image", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap mCut_Image {
+			get {
+				object obj = ResourceManager.GetObject("mCut.Image", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap mPaste_Image {
+			get {
+				object obj = ResourceManager.GetObject("mPaste.Image", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap mRedo_Image {
+			get {
+				object obj = ResourceManager.GetObject("mRedo.Image", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap mUndo_Image {
+			get {
+				object obj = ResourceManager.GetObject("mUndo.Image", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+		/// </summary>
+		internal static System.Drawing.Icon output_icon {
+			get {
+				object obj = ResourceManager.GetObject("output-icon", resourceCulture);
+				return ((System.Drawing.Icon)(obj));
+			}
+		}
+		
+		/// <summary>
+		///   Looks up a localized string similar to -- place initialization code here
 		///
 		///function update()
+		///    -- place code to be executed on every update here
 		///end.
 		/// </summary>
 		internal static string script_template {
