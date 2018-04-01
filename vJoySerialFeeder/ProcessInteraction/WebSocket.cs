@@ -61,6 +61,8 @@ namespace vJoySerialFeeder
 				return upd;
 			}
 		}
+		
+		public int Port { get; private set; }
 
 		static readonly char[] HEADER_SEP = new char[] {':'};
 		
@@ -77,6 +79,7 @@ namespace vJoySerialFeeder
 		bool started;
 		
 		public WebSocket(int port) {
+			Port = port;
 			listener = new TcpListener(IPAddress.Any, port);
 			listener.Start();
 			listener.BeginAcceptSocket(acceptConnection, null);

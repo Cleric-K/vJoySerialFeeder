@@ -117,7 +117,7 @@ namespace vJoySerialFeeder
 				comAutomation = ComAutomation.GetInstance();
 			
 			// initialize websocket if configured
-			StartStopWebSocket();
+			startStopWebSocket();
 		}
 		
 		/// <summary>
@@ -323,26 +323,43 @@ namespace vJoySerialFeeder
 				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
 		}
 		
-		void StartStopWebSocket() {
+		/// <summary>
+		/// start/stop/restart WebSocket based on the current configuration
+		/// </summary>
+		void startStopWebSocket() {
 			if(config.WebSocketEnabled && webSocket == null) {
-				try {
-					webSocket = new WebSocket(config.WebSocketPort);
-				}
-				catch(SocketException ex) {
-					if(ex.SocketErrorCode == SocketError.AddressAlreadyInUse) {
-						ErrorMessageBox("Port already in use!", "WebSocket Listener");
-					}
-					else
-						ErrorMessageBox(ex.Message, "WebSocket Listener");
-					webSocket = null;
-					config.WebSocketEnabled = false;
-					config.Save();
-				}
+				// start
+				startWebSocket();
+			}
+			else if(config.WebSocketEnabled && webSocket != null && config.WebSocketPort != webSocket.Port) {
+				// restart
+				stopWebSocket();
+				startWebSocket();
 			}
 			else if(!config.WebSocketEnabled && webSocket != null) {
-				webSocket.Stop();
-				webSocket = null;
+				// stop
+				stopWebSocket();
 			}
+		}
+		
+		void startWebSocket() {
+			try {
+				webSocket = new WebSocket(config.WebSocketPort);
+			}
+			catch(SocketException ex) {
+				if(ex.SocketErrorCode == SocketError.AddressAlreadyInUse) {
+					ErrorMessageBox("Port already in use!", "WebSocket Listener");
+				}
+				else
+					ErrorMessageBox(ex.Message, "WebSocket Listener");
+				webSocket = null;
+				config.WebSocketEnabled = false;
+			}
+		}
+		
+		void stopWebSocket() {
+			webSocket.Stop();
+			webSocket = null;
 		}
 		
 		
@@ -637,22 +654,11 @@ namespace vJoySerialFeeder
         {
         	using(var d = new OptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
         		d.ShowDialog();
-        		if(d.DialogResult == DialogResult.OK) {
-        			if(config.WebSocketEnabled && d.WebSocketEnabled
-        			   && config.WebSocketPort != d.WebSocketPort) {
-        				// changing port
-        				config.WebSocketEnabled = false;
-        				StartStopWebSocket(); // stop
-        				
-        				config.WebSocketEnabled = true;
-        				config.WebSocketPort = d.WebSocketPort;
-        				StartStopWebSocket(); // start
-        			}
-        			else {
-	        			config.WebSocketEnabled = d.WebSocketEnabled;
-	        			config.WebSocketPort = d.WebSocketPort;
-	        			StartStopWebSocket();
-        			}
+        		if(d.DialogResult == DialogResult.OK) {        			
+        			config.WebSocketEnabled = d.WebSocketEnabled;
+        			config.WebSocketPort = d.WebSocketPort;
+        			startStopWebSocket();
+
         			config.Save();
         		}
         	}
