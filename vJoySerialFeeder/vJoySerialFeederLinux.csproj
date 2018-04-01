@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="MainFormWorker.cs" />
     <Compile Include="Mappings\AxisMapping.cs" />
     <Compile Include="Mappings\AxisSetupForm.cs" />
     <Compile Include="Mappings\AxisSetupForm.Designer.cs">
