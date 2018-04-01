@@ -108,10 +108,21 @@ namespace vJoySerialFeeder
 
         public override void SetButton(int btn, bool value)
         {
-            if (value)
-                state.Buttons |= (uint)1 << (int)btn;
+        	if(btn >=0 && btn < 32)
+        		_setButton(ref state.Buttons, btn, value);
+        	else if(btn >= 32 && btn < 64)
+        		_setButton(ref state.ButtonsEx1, btn-32, value);
+        	else if(btn >= 64 && btn < 96)
+        		_setButton(ref state.ButtonsEx2, btn-64, value);
+        	else if(btn >= 96 && btn < 128)
+        		_setButton(ref state.ButtonsEx3, btn-96, value);
+        }
+        
+        private void _setButton(ref uint buttons, int btn, bool value) {
+        	if (value)
+                buttons |= (uint)1 << (int)btn;
             else
-                state.Buttons &= ~((uint)1 << (int)btn);
+                buttons &= ~((uint)1 << (int)btn);
         }
 
         public override void SetState()
