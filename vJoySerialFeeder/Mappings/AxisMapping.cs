@@ -181,8 +181,6 @@ namespace vJoySerialFeeder
 				Brushes.LightGreen, 0, 0, (progressBox.ClientSize.Width * Output),
 				progressBox.ClientSize.Height);
 			// Draw the text.
-			e.Graphics.TextRenderingHint =
-		        TextRenderingHint.AntiAliasGridFit;
 			using (StringFormat sf = new StringFormat()) {
 				sf.Alignment = StringAlignment.Center;
 				sf.LineAlignment = StringAlignment.Center;

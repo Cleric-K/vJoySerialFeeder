@@ -91,17 +91,17 @@ namespace vJoySerialFeeder
 						'\'',
 						'\''};
 			this.editorBox.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>.+)\r\n";
-			this.editorBox.AutoScrollMinSize = new System.Drawing.Size(27, 14);
+			this.editorBox.AutoScrollMinSize = new System.Drawing.Size(29, 18);
 			this.editorBox.BackBrush = null;
 			this.editorBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.editorBox.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
-			this.editorBox.CharHeight = 14;
-			this.editorBox.CharWidth = 8;
+			this.editorBox.CharHeight = 18;
+			this.editorBox.CharWidth = 9;
 			this.editorBox.CommentPrefix = "--";
 			this.editorBox.ContextMenuStrip = this.cMenu;
 			this.editorBox.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.editorBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-			this.editorBox.Font = new System.Drawing.Font("Courier New", 9.75F);
+			this.editorBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.editorBox.IsReplaceMode = false;
 			this.editorBox.Language = FastColoredTextBoxNS.Language.Lua;
 			this.editorBox.LeftBracket = '(';
