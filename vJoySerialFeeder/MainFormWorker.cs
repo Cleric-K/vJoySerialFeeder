@@ -43,6 +43,7 @@ namespace vJoySerialFeeder
 					}
 					catch(Exception ex) {
 						ActiveChannels = 0;
+						updateFailReason = ex.Message;
 						System.Diagnostics.Debug.WriteLine(ex.Message);
 					}
 					if(ActiveChannels > 0) {

@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Created by SharpDevelop.
  * User: Cleric
  * Date: 8.6.2017 г.
@@ -86,6 +86,7 @@ namespace vJoySerialFeeder
         	this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.label2 = new System.Windows.Forms.Label();
+        	this.buttonScript = new System.Windows.Forms.Button();
         	this.statusStrip1.SuspendLayout();
         	this.menuStrip1.SuspendLayout();
         	this.SuspendLayout();
@@ -414,11 +415,22 @@ namespace vJoySerialFeeder
         	this.label2.TabIndex = 23;
         	this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
         	// 
+        	// buttonScript
+        	// 
+        	this.buttonScript.Location = new System.Drawing.Point(306, 106);
+        	this.buttonScript.Name = "buttonScript";
+        	this.buttonScript.Size = new System.Drawing.Size(75, 23);
+        	this.buttonScript.TabIndex = 24;
+        	this.buttonScript.Text = "Edit Script";
+        	this.buttonScript.UseVisualStyleBackColor = true;
+        	this.buttonScript.Click += new System.EventHandler(this.ScriptEditMenuClick);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
         	this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         	this.ClientSize = new System.Drawing.Size(730, 549);
+        	this.Controls.Add(this.buttonScript);
         	this.Controls.Add(this.label2);
         	this.Controls.Add(this.buttonNewProfile);
         	this.Controls.Add(this.buttonProtocolSetup);
@@ -458,6 +470,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.Button buttonScript;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;

@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Created by SharpDevelop.
  * User: Cleric
  * Date: 8.6.2017 г.
@@ -46,6 +46,7 @@ namespace vJoySerialFeeder
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
+		private string updateFailReason;
 		
 		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader), typeof(DummyReader)};
 		
@@ -194,6 +195,8 @@ namespace vJoySerialFeeder
 			luaScript = p.LuaScript;
 			lua = new Lua(luaScript);
 			
+			setScriptButtonAndMenuText();
+			
 			currentProfile = p;
 		}
 		
@@ -320,7 +323,8 @@ namespace vJoySerialFeeder
 			}
 			toolStripStatusLabel.Text = "Connected, "+ActiveChannels
 				+" channels available, "+Math.Round(updateRate)+" Updates per second / "
-				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
+				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates"
+				+ (updateRate == 0 ? " (" + updateFailReason + ")" : "");
 		}
 		
 		/// <summary>
@@ -362,7 +366,13 @@ namespace vJoySerialFeeder
 			webSocket = null;
 		}
 		
-		
+		void setScriptButtonAndMenuText() {
+			var action = luaScript == null || luaScript.Trim() == "" ?
+					"Add" : "Edit";
+			
+			buttonScript.Text = action + " Script";
+			editToolStripMenuItem.Text = action;
+		}
 		
 		
 		
@@ -554,6 +564,7 @@ namespace vJoySerialFeeder
         		if(d.DialogResult == DialogResult.OK) {
         			luaScript = d.ScriptSource;
         			lua = new Lua(luaScript);
+        			setScriptButtonAndMenuText();
         		}
         	}
         }
