@@ -60,6 +60,15 @@ namespace vJoySerialFeeder
 			checkInvert.Checked = Parameters.Invert;
 			checkSymmetric.Checked = Parameters.Symmetric;
 			
+			if(Parameters.Failsafe == -1) {
+				numericFailsafe.Value = 50;
+				checkFailsafeLast.Checked = true;
+			}
+			else {
+				numericFailsafe.Value = Parameters.Failsafe;
+				checkFailsafeLast.Checked = false;
+			}
+			
 			initialized = true;
 			OnChange(null, null);
 			
@@ -102,6 +111,8 @@ namespace vJoySerialFeeder
 				numericDeadband.Enabled = false;
 			}
 			
+			numericFailsafe.Enabled = !checkFailsafeLast.Checked;
+			
 			Parameters = new AxisMapping.AxisParameters() {
 				Min = (int)numericMin.Value,
 				Max = (int)numericMax.Value,
@@ -109,7 +120,8 @@ namespace vJoySerialFeeder
 				Expo = (int)numericExpo.Value,
 				Invert = checkInvert.Checked,
 				Symmetric = checkSymmetric.Checked,
-				Deadband = (int)numericDeadband.Value
+				Deadband = (int)numericDeadband.Value,
+				Failsafe = checkFailsafeLast.Checked ? -1 : (int)numericFailsafe.Value
 			};
 			
 			pictureBox.Invalidate();

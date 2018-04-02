@@ -28,7 +28,7 @@ namespace vJoySerialFeeder
 		public struct AxisParameters
 		{
 			[DataMember]
-			public int Min, Max, Center, Expo, Deadband;
+			public int Min, Max, Center, Expo, Deadband, Failsafe;
 			[DataMember]
 			public bool Symmetric, Invert;
 			
@@ -108,7 +108,8 @@ namespace vJoySerialFeeder
 			Max = 2000,
 			Center = 1500,
 			Expo = 0,
-			Symmetric = true
+			Symmetric = true,
+			Failsafe = -1
 		};
 		
 		private FlowLayoutPanel panel;
@@ -154,6 +155,12 @@ namespace vJoySerialFeeder
 		public override void UpdateJoystick(VJoyBase vjoy)
 		{
 			vjoy.SetAxis(Axis, Output);
+		}
+		
+		public override void Failsafe()
+		{
+			if(Parameters.Failsafe >= 0)
+				Output = Parameters.Failsafe/100.0f;
 		}
 		
 		
@@ -275,6 +282,5 @@ namespace vJoySerialFeeder
 			
 			panel.ResumeLayout();
 		}
-
 	}
 }

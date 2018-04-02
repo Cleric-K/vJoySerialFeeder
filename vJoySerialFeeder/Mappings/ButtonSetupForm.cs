@@ -56,6 +56,7 @@ namespace vJoySerialFeeder
 			checkTwoThresholds.Checked = Parameters.notch;
 			numericThresh1.Value = Parameters.thresh1;
 			numericThresh2.Value = Parameters.thresh2;
+			comboFailsafe.SelectedIndex = Parameters.Failsafe;
 			
 			initialized = true;
 			
@@ -69,14 +70,14 @@ namespace vJoySerialFeeder
 				return;
 			
 			if(!checkTwoThresholds.Checked) {
-				numericThresh2.Visible = false;
-				labelThresh2.Visible = false;
-				buttonCalibrate.Visible = true;
+				numericThresh2.Enabled = false;
+				labelThresh2.Enabled = false;
+				buttonCalibrate.Enabled = true;
 			}
 			else {
-				numericThresh2.Visible = true;
-				labelThresh2.Visible = true;
-				buttonCalibrate.Visible = false;
+				numericThresh2.Enabled = true;
+				labelThresh2.Enabled = true;
+				buttonCalibrate.Enabled = false;
 				
 				if(numericThresh2.Value < numericThresh1.Value)
 					numericThresh2.Value = numericThresh1.Value;
@@ -86,7 +87,8 @@ namespace vJoySerialFeeder
 				notch = checkTwoThresholds.Checked,
 				invert = checkInvert.Checked,
 				thresh1 = (int)numericThresh1.Value,
-				thresh2 = (int)numericThresh2.Value
+				thresh2 = (int)numericThresh2.Value,
+				Failsafe = comboFailsafe.SelectedIndex
 			};
 			
 			pictureBox.Invalidate();

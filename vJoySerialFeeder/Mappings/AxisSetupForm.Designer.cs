@@ -69,12 +69,17 @@ namespace vJoySerialFeeder
 			this.label6 = new System.Windows.Forms.Label();
 			this.numericDeadband = new System.Windows.Forms.NumericUpDown();
 			this.label7 = new System.Windows.Forms.Label();
+			this.numericFailsafe = new System.Windows.Forms.NumericUpDown();
+			this.label8 = new System.Windows.Forms.Label();
+			this.checkFailsafeLast = new System.Windows.Forms.CheckBox();
+			this.label9 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericExpo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMax)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMin)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericDeadband)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericFailsafe)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBox
@@ -134,7 +139,7 @@ namespace vJoySerialFeeder
 			// 
 			// numericExpo
 			// 
-			this.numericExpo.Location = new System.Drawing.Point(83, 349);
+			this.numericExpo.Location = new System.Drawing.Point(99, 349);
 			this.numericExpo.Minimum = new decimal(new int[] {
 									100,
 									0,
@@ -142,24 +147,24 @@ namespace vJoySerialFeeder
 									-2147483648});
 			this.numericExpo.Name = "numericExpo";
 			this.numericExpo.Size = new System.Drawing.Size(53, 20);
-			this.numericExpo.TabIndex = 7;
+			this.numericExpo.TabIndex = 6;
 			this.numericExpo.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(142, 327);
+			this.label5.Location = new System.Drawing.Point(158, 327);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(67, 20);
-			this.label5.TabIndex = 10;
+			this.label5.TabIndex = 4;
 			this.label5.Text = "%";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(209, 387);
+			this.buttonOK.Location = new System.Drawing.Point(209, 410);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
-			this.buttonOK.TabIndex = 9;
+			this.buttonOK.TabIndex = 10;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -167,10 +172,10 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(128, 387);
+			this.buttonCancel.Location = new System.Drawing.Point(128, 410);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 8;
+			this.buttonCancel.TabIndex = 9;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -180,22 +185,22 @@ namespace vJoySerialFeeder
 			this.buttonCalibrate.Location = new System.Drawing.Point(180, 267);
 			this.buttonCalibrate.Name = "buttonCalibrate";
 			this.buttonCalibrate.Size = new System.Drawing.Size(75, 23);
-			this.buttonCalibrate.TabIndex = 2;
+			this.buttonCalibrate.TabIndex = 8;
 			this.buttonCalibrate.Text = "Calibrate";
 			this.buttonCalibrate.UseVisualStyleBackColor = true;
 			this.buttonCalibrate.Click += new System.EventHandler(this.ButtonCalibrateClick);
 			// 
 			// numericMax
 			// 
-			this.numericMax.Location = new System.Drawing.Point(83, 309);
+			this.numericMax.Location = new System.Drawing.Point(99, 309);
 			this.numericMax.Maximum = new decimal(new int[] {
-									16777216,
+									65535,
 									0,
 									0,
 									0});
 			this.numericMax.Name = "numericMax";
 			this.numericMax.Size = new System.Drawing.Size(53, 20);
-			this.numericMax.TabIndex = 5;
+			this.numericMax.TabIndex = 4;
 			this.numericMax.Value = new decimal(new int[] {
 									1000,
 									0,
@@ -205,15 +210,15 @@ namespace vJoySerialFeeder
 			// 
 			// numericCenter
 			// 
-			this.numericCenter.Location = new System.Drawing.Point(83, 289);
+			this.numericCenter.Location = new System.Drawing.Point(99, 289);
 			this.numericCenter.Maximum = new decimal(new int[] {
-									16777216,
+									65535,
 									0,
 									0,
 									0});
 			this.numericCenter.Name = "numericCenter";
 			this.numericCenter.Size = new System.Drawing.Size(53, 20);
-			this.numericCenter.TabIndex = 4;
+			this.numericCenter.TabIndex = 3;
 			this.numericCenter.Value = new decimal(new int[] {
 									500,
 									0,
@@ -223,15 +228,15 @@ namespace vJoySerialFeeder
 			// 
 			// numericMin
 			// 
-			this.numericMin.Location = new System.Drawing.Point(83, 269);
+			this.numericMin.Location = new System.Drawing.Point(99, 269);
 			this.numericMin.Maximum = new decimal(new int[] {
-									16777216,
+									65535,
 									0,
 									0,
 									0});
 			this.numericMin.Name = "numericMin";
 			this.numericMin.Size = new System.Drawing.Size(53, 20);
-			this.numericMin.TabIndex = 3;
+			this.numericMin.TabIndex = 2;
 			this.numericMin.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// checkInvert
@@ -253,7 +258,7 @@ namespace vJoySerialFeeder
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(142, 347);
+			this.label6.Location = new System.Drawing.Point(158, 347);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(67, 20);
 			this.label6.TabIndex = 21;
@@ -262,10 +267,10 @@ namespace vJoySerialFeeder
 			// 
 			// numericDeadband
 			// 
-			this.numericDeadband.Location = new System.Drawing.Point(83, 329);
+			this.numericDeadband.Location = new System.Drawing.Point(99, 329);
 			this.numericDeadband.Name = "numericDeadband";
 			this.numericDeadband.Size = new System.Drawing.Size(53, 20);
-			this.numericDeadband.TabIndex = 6;
+			this.numericDeadband.TabIndex = 5;
 			this.numericDeadband.ValueChanged += new System.EventHandler(this.OnChange);
 			// 
 			// label7
@@ -277,13 +282,53 @@ namespace vJoySerialFeeder
 			this.label7.Text = "Expo";
 			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
+			// numericFailsafe
+			// 
+			this.numericFailsafe.Location = new System.Drawing.Point(99, 369);
+			this.numericFailsafe.Name = "numericFailsafe";
+			this.numericFailsafe.Size = new System.Drawing.Size(53, 20);
+			this.numericFailsafe.TabIndex = 7;
+			this.numericFailsafe.ValueChanged += new System.EventHandler(this.OnChange);
+			// 
+			// label8
+			// 
+			this.label8.Location = new System.Drawing.Point(10, 369);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(82, 20);
+			this.label8.TabIndex = 23;
+			this.label8.Text = "Failsafe Output";
+			this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// checkFailsafeLast
+			// 
+			this.checkFailsafeLast.Location = new System.Drawing.Point(183, 369);
+			this.checkFailsafeLast.Name = "checkFailsafeLast";
+			this.checkFailsafeLast.Size = new System.Drawing.Size(51, 20);
+			this.checkFailsafeLast.TabIndex = 24;
+			this.checkFailsafeLast.Text = "Last";
+			this.checkFailsafeLast.UseVisualStyleBackColor = true;
+			this.checkFailsafeLast.CheckedChanged += new System.EventHandler(this.OnChange);
+			// 
+			// label9
+			// 
+			this.label9.Location = new System.Drawing.Point(158, 369);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(20, 20);
+			this.label9.TabIndex = 25;
+			this.label9.Text = "%";
+			this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
 			// AxisSetupForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(271, 422);
+			this.ClientSize = new System.Drawing.Size(271, 445);
+			this.Controls.Add(this.label9);
+			this.Controls.Add(this.checkFailsafeLast);
+			this.Controls.Add(this.label8);
+			this.Controls.Add(this.numericFailsafe);
 			this.Controls.Add(this.label6);
 			this.Controls.Add(this.numericDeadband);
 			this.Controls.Add(this.label7);
@@ -317,8 +362,13 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericCenter)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericMin)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericDeadband)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.numericFailsafe)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.CheckBox checkFailsafeLast;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.NumericUpDown numericFailsafe;
 		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.NumericUpDown numericDeadband;
 		private System.Windows.Forms.Label label6;

@@ -32,6 +32,8 @@ namespace vJoySerialFeeder
 			public int Button; // vJoy button id
 			[DataMember]
 			public bool Invert, Enabled;
+			[DataMember]
+			public int Failsafe; // 0 - Last; 1 - Depressed; 2 - Pressed
 		}
 
 		[DataMember]
@@ -110,6 +112,25 @@ namespace vJoySerialFeeder
 
 			return m;
 		}
+		
+		public override void Failsafe()
+		{
+			Input = Input; // recalculate Output
+			var val = (int)Output;
+			
+			for(var i=0; i<16; i++) {
+				var p = Parameters[i];
+				if(p.Enabled && p.Failsafe != 0) {
+					if(p.Failsafe == 1)
+						val &= ~(1<<i);
+					else
+						val |= 1<<i;
+				}
+					
+			}
+			
+			Output = val;
+		}
 
 		private void onChannelChange(object sender, EventArgs e)
 		{
@@ -118,11 +139,11 @@ namespace vJoySerialFeeder
 
 		private void onInputBitsPaint(object sender, PaintEventArgs e)
 		{
-			var v = Input;
+			var v = (int)Output;
 
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
-				var state = ((v&(1<<i))!=0)^(p.Enabled&p.Invert);
+				var state = (v&(1<<i))!=0;
 				var bitBrush = state ? BRUSH_PUSHED:BRUSH_NOT_PUSHED;
 				var textBrush = state ? Brushes.Black : Brushes.White;
 				var pen = state ? Pens.Black : Pens.White;

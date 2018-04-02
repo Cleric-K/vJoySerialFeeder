@@ -8,7 +8,7 @@
  */
 namespace vJoySerialFeeder
 {
-	partial class OptionsForm
+	partial class GlobalOptionsForm
 	{
 		/// <summary>
 		/// Designer variable used to keep track of non-visual components.

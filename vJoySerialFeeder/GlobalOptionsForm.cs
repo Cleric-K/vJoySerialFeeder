@@ -13,11 +13,11 @@ namespace vJoySerialFeeder
 	/// <summary>
 	/// Description of OptionsForm.
 	/// </summary>
-	public partial class OptionsForm : Form
+	public partial class GlobalOptionsForm : Form
 	{
 		public bool WebSocketEnabled { get; private set; }
 		public int WebSocketPort { get; private set; }
-		public OptionsForm(bool wsEn, int wsPort)
+		public GlobalOptionsForm(bool wsEn, int wsPort)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -25,7 +25,7 @@ namespace vJoySerialFeeder
 			InitializeComponent();
 			
 			checkWSEnable.Checked = wsEn;
-			numericWSPort.Value = wsPort == 0 ? WebSocket.DEFAULT_PORT : wsPort;
+			numericWSPort.Value = wsPort;
 		}
 		
 		void ButtonOKClick(object sender, EventArgs e)

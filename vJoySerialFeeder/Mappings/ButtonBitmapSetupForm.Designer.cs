@@ -42,12 +42,14 @@ namespace vJoySerialFeeder
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.checkEnable = new System.Windows.Forms.CheckBox();
+			this.comboFailsafe = new System.Windows.Forms.ComboBox();
+			this.label2 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.numericButton)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
 			// 
-			this.label1.Location = new System.Drawing.Point(12, 40);
+			this.label1.Location = new System.Drawing.Point(33, 40);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(50, 20);
 			this.label1.TabIndex = 0;
@@ -55,7 +57,7 @@ namespace vJoySerialFeeder
 			// 
 			// numericButton
 			// 
-			this.numericButton.Location = new System.Drawing.Point(68, 38);
+			this.numericButton.Location = new System.Drawing.Point(111, 38);
 			this.numericButton.Maximum = new decimal(new int[] {
 									128,
 									0,
@@ -78,16 +80,16 @@ namespace vJoySerialFeeder
 			// checkInvert
 			// 
 			this.checkInvert.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkInvert.Location = new System.Drawing.Point(12, 64);
+			this.checkInvert.Location = new System.Drawing.Point(33, 64);
 			this.checkInvert.Name = "checkInvert";
-			this.checkInvert.Size = new System.Drawing.Size(104, 22);
+			this.checkInvert.Size = new System.Drawing.Size(126, 22);
 			this.checkInvert.TabIndex = 2;
 			this.checkInvert.Text = "Invert";
 			this.checkInvert.UseVisualStyleBackColor = true;
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(99, 115);
+			this.buttonOK.Location = new System.Drawing.Point(99, 138);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonOK.TabIndex = 4;
@@ -98,7 +100,7 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(18, 115);
+			this.buttonCancel.Location = new System.Drawing.Point(18, 138);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 3;
@@ -109,13 +111,34 @@ namespace vJoySerialFeeder
 			// checkEnable
 			// 
 			this.checkEnable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.checkEnable.Location = new System.Drawing.Point(12, 12);
+			this.checkEnable.Location = new System.Drawing.Point(33, 12);
 			this.checkEnable.Name = "checkEnable";
-			this.checkEnable.Size = new System.Drawing.Size(104, 24);
+			this.checkEnable.Size = new System.Drawing.Size(126, 24);
 			this.checkEnable.TabIndex = 0;
 			this.checkEnable.Text = "Enabled";
 			this.checkEnable.UseVisualStyleBackColor = true;
 			this.checkEnable.CheckedChanged += new System.EventHandler(this.onEnableCheck);
+			// 
+			// comboFailsafe
+			// 
+			this.comboFailsafe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFailsafe.FormattingEnabled = true;
+			this.comboFailsafe.Items.AddRange(new object[] {
+									"Last",
+									"Depressed",
+									"Pressed"});
+			this.comboFailsafe.Location = new System.Drawing.Point(96, 93);
+			this.comboFailsafe.Name = "comboFailsafe";
+			this.comboFailsafe.Size = new System.Drawing.Size(62, 21);
+			this.comboFailsafe.TabIndex = 5;
+			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(33, 96);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(50, 20);
+			this.label2.TabIndex = 6;
+			this.label2.Text = "Failsafe";
 			// 
 			// ButtonBitmapSetupForm
 			// 
@@ -123,7 +146,9 @@ namespace vJoySerialFeeder
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(186, 150);
+			this.ClientSize = new System.Drawing.Size(186, 173);
+			this.Controls.Add(this.label2);
+			this.Controls.Add(this.comboFailsafe);
 			this.Controls.Add(this.checkEnable);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
@@ -140,6 +165,8 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericButton)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.ComboBox comboFailsafe;
 		private System.Windows.Forms.CheckBox checkEnable;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;

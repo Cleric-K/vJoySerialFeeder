@@ -16,6 +16,15 @@ namespace vJoySerialFeeder
 	public abstract class SerialReader
 	{
 		/// <summary>
+		/// Is the serial protocol supports its own Failsafe signalling it may
+		/// throw this exception to let the caller know that it is not some
+		/// other serial read problem.
+		/// </summary>
+		public class FailsafeException : Exception {
+			FailsafeException(string msg) : base(msg) {}
+		}
+		
+		/// <summary>
 		/// Helper class which allows access to the serial port as indexed object (Buffer[index])
 		/// Data is read from the serial port automatically when needed.
 		/// </summary>

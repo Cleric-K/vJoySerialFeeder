@@ -59,13 +59,13 @@ namespace vJoySerialFeeder
 				byte checksum, len;
 				double now, timeDiff;
 				
-				now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+				now = MainForm.Now;
 				timeDiff = now - lastSuccessfulRead; // time elapsed since last read
 				
 				if(timeDiff < updateRate) {
 					// not yet time for update 
 					Thread.Sleep((int)(updateRate - timeDiff));
-					now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+					now = MainForm.Now;
 				}
 				
 				if(Buffer.Empty)

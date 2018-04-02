@@ -27,6 +27,7 @@ namespace vJoySerialFeeder
 			checkEnable.Checked = Params.Enabled;
 			numericButton.Value = Params.Button+1;
 			checkInvert.Checked = Params.Invert;
+			comboFailsafe.SelectedIndex = Params.Failsafe;
 
 			onEnableCheck(null, null);
 		}
@@ -41,7 +42,8 @@ namespace vJoySerialFeeder
 			Parameters = new ButtonBitmapMapping.BitButtonParameters() {
 				Enabled = checkEnable.Checked,
 				Button = (int)numericButton.Value-1,
-				Invert = checkInvert.Checked 
+				Invert = checkInvert.Checked, 
+				Failsafe = comboFailsafe.SelectedIndex
 			};
 			
 			DialogResult = DialogResult.OK;
@@ -55,6 +57,7 @@ namespace vJoySerialFeeder
 			numericButton.Enabled = c;
 			label1.Enabled = c;
 			checkInvert.Enabled = c;
+			comboFailsafe.Enabled = c;
 		}
 	}
 }

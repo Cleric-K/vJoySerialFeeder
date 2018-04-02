@@ -11,6 +11,9 @@ using System.Windows.Forms;
 namespace vJoySerialFeeder
 {
 	/// <summary>
+	/// !!! NOTE !!! The description below says that the highest bit is sent first but this
+	/// does not seem to be the case - at least on FrSky. That's why the bit order if inverted
+	/// in the implementation in comparison to the description below
 	/// Taken from: https://os.mbed.com/users/Digixx/notebook/futaba-s-bus-controlled-by-mbed/
 	/// 
 	/// The protocol is 25 Byte long and is send every 14ms (analog mode) or 7ms (highspeed mode).

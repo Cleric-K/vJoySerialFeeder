@@ -46,12 +46,12 @@ namespace vJoySerialFeeder
 		
 		public override int ReadChannels()
 		{
-			var now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+			var now = MainForm.Now;
 			var timeDiff = now - time;
 			
 			if(timeDiff < updateRate) {
 				Thread.Sleep((int)(updateRate - timeDiff));
-				now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+				now = MainForm.Now;
 			}
 			
 			time = now;

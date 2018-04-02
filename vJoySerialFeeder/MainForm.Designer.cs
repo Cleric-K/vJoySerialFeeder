@@ -78,8 +78,9 @@ namespace vJoySerialFeeder
         	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         	this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.channelMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-        	this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.menuGlobalOptions = new System.Windows.Forms.ToolStripMenuItem();
         	this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.menuProfileOptions = new System.Windows.Forms.ToolStripMenuItem();
         	this.scriptingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -341,32 +342,40 @@ namespace vJoySerialFeeder
         	// 
         	this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
         	        	        	this.channelMonitorToolStripMenuItem,
-        	        	        	this.optionsToolStripMenuItem,
+        	        	        	this.menuProfileOptions,
+        	        	        	this.menuGlobalOptions,
         	        	        	this.exitToolStripMenuItem});
         	this.programToolStripMenuItem.Name = "programToolStripMenuItem";
         	this.programToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
-        	this.programToolStripMenuItem.Text = "Program";
+        	this.programToolStripMenuItem.Text = "&Program";
         	// 
         	// channelMonitorToolStripMenuItem
         	// 
         	this.channelMonitorToolStripMenuItem.Name = "channelMonitorToolStripMenuItem";
         	this.channelMonitorToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-        	this.channelMonitorToolStripMenuItem.Text = "Channel Monitor";
+        	this.channelMonitorToolStripMenuItem.Text = "Channel &Monitor";
         	this.channelMonitorToolStripMenuItem.Click += new System.EventHandler(this.ChannelMonitorMenuClick);
         	// 
-        	// optionsToolStripMenuItem
+        	// menuGlobalOptions
         	// 
-        	this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-        	this.optionsToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-        	this.optionsToolStripMenuItem.Text = "Options";
-        	this.optionsToolStripMenuItem.Click += new System.EventHandler(this.OptionsMenuClick);
+        	this.menuGlobalOptions.Name = "menuGlobalOptions";
+        	this.menuGlobalOptions.Size = new System.Drawing.Size(164, 22);
+        	this.menuGlobalOptions.Text = "&Global Options";
+        	this.menuGlobalOptions.Click += new System.EventHandler(this.OptionsMenuClick);
         	// 
         	// exitToolStripMenuItem
         	// 
         	this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
         	this.exitToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
-        	this.exitToolStripMenuItem.Text = "Exit";
+        	this.exitToolStripMenuItem.Text = "E&xit";
         	this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuClick);
+        	// 
+        	// menuProfileOptions
+        	// 
+        	this.menuProfileOptions.Name = "menuProfileOptions";
+        	this.menuProfileOptions.Size = new System.Drawing.Size(164, 22);
+        	this.menuProfileOptions.Text = "&Profile Options";
+        	this.menuProfileOptions.Click += new System.EventHandler(this.MenuProfileOptionsClick);
         	// 
         	// scriptingToolStripMenuItem
         	// 
@@ -375,20 +384,20 @@ namespace vJoySerialFeeder
         	        	        	this.outputToolStripMenuItem});
         	this.scriptingToolStripMenuItem.Name = "scriptingToolStripMenuItem";
         	this.scriptingToolStripMenuItem.Size = new System.Drawing.Size(49, 20);
-        	this.scriptingToolStripMenuItem.Text = "Script";
+        	this.scriptingToolStripMenuItem.Text = "&Script";
         	// 
         	// editToolStripMenuItem
         	// 
         	this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-        	this.editToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
-        	this.editToolStripMenuItem.Text = "Edit";
+        	this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.editToolStripMenuItem.Text = "&Edit";
         	this.editToolStripMenuItem.Click += new System.EventHandler(this.ScriptEditMenuClick);
         	// 
         	// outputToolStripMenuItem
         	// 
         	this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-        	this.outputToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
-        	this.outputToolStripMenuItem.Text = "Output";
+        	this.outputToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.outputToolStripMenuItem.Text = "&Output";
         	this.outputToolStripMenuItem.Click += new System.EventHandler(this.ScriptOutputMenuClick);
         	// 
         	// helpToolStripMenuItem
@@ -397,13 +406,13 @@ namespace vJoySerialFeeder
         	        	        	this.manualToolStripMenuItem});
         	this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
         	this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-        	this.helpToolStripMenuItem.Text = "Help";
+        	this.helpToolStripMenuItem.Text = "&Help";
         	// 
         	// manualToolStripMenuItem
         	// 
         	this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-        	this.manualToolStripMenuItem.Text = "Manual";
+        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.manualToolStripMenuItem.Text = "&Manual";
         	this.manualToolStripMenuItem.Click += new System.EventHandler(this.ManualMenuClick);
         	// 
         	// label2
@@ -470,6 +479,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem menuProfileOptions;
         private System.Windows.Forms.Button buttonScript;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolStripMenuItem manualToolStripMenuItem;
@@ -478,7 +488,7 @@ namespace vJoySerialFeeder
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem scriptingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuGlobalOptions;
         private System.Windows.Forms.ToolStripMenuItem channelMonitorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem programToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;

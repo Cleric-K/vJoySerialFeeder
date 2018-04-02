@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
@@ -42,6 +43,10 @@ namespace vJoySerialFeeder
 			public string ProtocolConfiguration = "";
 			[DataMember]
 			public string LuaScript;
+			[DataMember]
+			public int FailsafeUpdateRate = 100;
+			[DataMember]
+			public int FailsafeTime = 500;
 		}
 		
 		/// <summary>
@@ -74,7 +79,7 @@ namespace vJoySerialFeeder
 		public bool WebSocketEnabled;
 		
 		[DataMember]
-		public int WebSocketPort;
+		public int WebSocketPort = 40000;
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
@@ -91,17 +96,38 @@ namespace vJoySerialFeeder
 		
 		
 		public static Configuration Load() {
-			// "empty" is the default setting value
-			if(Settings.Default.config.Equals("empty"))
+            var currentVersion = Assembly.GetEntryAssembly().GetName().Version;
+            var prevVersion = new Version(0,0,0,0);
+
+            try
+            {
+                var cfgVer = Settings.Default.version.Trim();
+                if (cfgVer == "")
+                    cfgVer = (string)Settings.Default.GetPreviousVersion("version");
+                prevVersion = new Version(cfgVer);
+            }
+            catch (Exception) {}
+
+            if(prevVersion < currentVersion) {
 				Settings.Default.Upgrade();
+                Settings.Default.version = currentVersion.ToString();
+                Settings.Default.Save();
+			}
         	
 			var json = Settings.Default.config;
 			
-			if(!json.Equals("empty")) {
+			if(!json.Trim().Equals("")) {
 				try {
 					var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
 					ms.Position = 0;
-					return (Configuration)ConfigSerializer.ReadObject(ms);
+					var c = (Configuration)ConfigSerializer.ReadObject(ms);
+					
+                    if(prevVersion < currentVersion) {
+                        c.Upgrade(prevVersion, currentVersion);
+						c.Save();
+					}
+					
+					return c;
 				}
 				catch(SerializationException ) {
 					MessageBox.Show("Could not load configuration");
@@ -148,6 +174,38 @@ namespace vJoySerialFeeder
 			ser.WriteObject(ms, obj);
 			ms.Position = 0;
 			return new StreamReader(ms).ReadToEnd();
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fromVersion"></param>
+		/// <param name="toVersion"></param>
+		void Upgrade(Version fromVersion, Version toVersion) {
+			
+			
+			if(fromVersion <= new Version("1.2.0.0")) {
+				var templateConfiguration = new Configuration();
+				var templateProfile = new Profile();
+				var templateAxisMapping  = new AxisMapping();
+				var templateButtonMapping  = new ButtonMapping();
+				
+				WebSocketPort = templateConfiguration.WebSocketPort;
+				
+				foreach(var p in Profiles.Values) {
+					p.FailsafeTime = templateProfile.FailsafeTime;
+					p.FailsafeUpdateRate = templateProfile.FailsafeUpdateRate;
+					foreach(var m in p.Mappings) {
+						if(m is AxisMapping)
+							((AxisMapping)m).Parameters.Failsafe = templateAxisMapping.Parameters.Failsafe;
+						else if(m is ButtonMapping)
+							((ButtonMapping)m).Parameters.Failsafe = templateButtonMapping.Parameters.Failsafe;
+					}
+				}
+			}
+			
+			
+			
 		}
 	}
 }

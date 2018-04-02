@@ -102,5 +102,11 @@ namespace vJoySerialFeeder
 		/// <returns>Should return a new object of the same derived type with the same value
 		/// for the persistable fields</returns>
 		abstract public Mapping Copy();
+		
+		/// <summary>
+		/// This is called in Failsafe mode. The Mapping should set its values
+		/// appropriately.
+		/// </summary>
+		abstract public void Failsafe();
 	}
 }

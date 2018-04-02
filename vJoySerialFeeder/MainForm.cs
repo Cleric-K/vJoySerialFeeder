@@ -46,7 +46,7 @@ namespace vJoySerialFeeder
 		private Configuration.SerialParameters serialParameters;
 		
 		private double updateRate;
-		private string updateFailReason;
+		private string failsafeReason;
 		
 		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader), typeof(DummyReader)};
 		
@@ -58,6 +58,9 @@ namespace vJoySerialFeeder
 		
 		private LuaOutputForm luaOutputDialog = new LuaOutputForm();
 		private MonitorForm monitorForm = new MonitorForm();
+		
+		private int failsafeUpdateRate;
+		private int failsafeTime;
 		
 		public MainForm(string[] args)
 		{
@@ -192,6 +195,9 @@ namespace vJoySerialFeeder
 				addMapping(m.Copy());
 			}
 			
+			failsafeUpdateRate = p.FailsafeUpdateRate;
+			failsafeTime = p.FailsafeTime;
+			
 			luaScript = p.LuaScript;
 			lua = new Lua(luaScript);
 			
@@ -210,6 +216,8 @@ namespace vJoySerialFeeder
 			p.ProtocolConfiguration = protocolConfig;
 			p.VJoyInstance = comboJoysticks.Text;
 			p.LuaScript = luaScript;
+			p.FailsafeUpdateRate = failsafeUpdateRate;
+			p.FailsafeTime = failsafeTime;
 
 			p.Mappings = new List<Mapping>();
 			
@@ -321,10 +329,14 @@ namespace vJoySerialFeeder
 			foreach(var mapping in mappings) {
 				mapping.Paint();
 			}
-			toolStripStatusLabel.Text = "Connected, "+ActiveChannels
-				+" channels available, "+Math.Round(updateRate)+" Updates per second / "
-				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates"
-				+ (updateRate == 0 ? " (" + updateFailReason + ")" : "");
+			toolStripStatusLabel.Text = "Connected, "
+				+ (ActiveChannels > 0 ? 
+					ActiveChannels + " channels available, "
+					:
+					"Failsafe (" + failsafeReason + "), ")
+				+ Math.Round(updateRate) + " Updates per second / "
+				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
+				
 		}
 		
 		/// <summary>
@@ -371,7 +383,7 @@ namespace vJoySerialFeeder
 					"Add" : "Edit";
 			
 			buttonScript.Text = action + " Script";
-			editToolStripMenuItem.Text = action;
+			editToolStripMenuItem.Text = "&"+action;
 		}
 		
 		
@@ -539,7 +551,7 @@ namespace vJoySerialFeeder
         
         void OptionsMenuClick(object sender, EventArgs e)
         {
-        	using(var d = new OptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
+        	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
         		d.ShowDialog();
         		if(d.DialogResult == DialogResult.OK) {        			
         			config.WebSocketEnabled = d.WebSocketEnabled;
@@ -583,6 +595,17 @@ namespace vJoySerialFeeder
         {
         	outputToolStripMenuItem.Checked = luaOutputDialog.Visible;
         	channelMonitorToolStripMenuItem.Checked = monitorForm.Visible;
+        }  
+        
+        void MenuProfileOptionsClick(object sender, EventArgs e)
+        {
+        	using(var d = new ProfileOptions(failsafeTime, failsafeUpdateRate)) {
+        		d.ShowDialog();
+        		if(d.DialogResult == DialogResult.OK) {
+        			failsafeTime = d.FailsafeTime;
+        			failsafeUpdateRate = d.FailsafeUpdateRate;
+        		}
+        	}
         }
         
         #endregion

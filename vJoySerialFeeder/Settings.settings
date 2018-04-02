@@ -5,7 +5,10 @@
   </Profiles>
   <Settings>
     <Setting Name="config" Type="System.String" Scope="User" Roaming="false">
-      <Value Profile="(Default)">empty</Value>
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="version" Type="System.String" Scope="User" Roaming="false">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>

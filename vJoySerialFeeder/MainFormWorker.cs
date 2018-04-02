@@ -5,6 +5,7 @@
  * Time: 13:02
  */
 using System;
+using System.Threading.Tasks;
 using MoonSharp.Interpreter;
 
 namespace vJoySerialFeeder
@@ -14,6 +15,8 @@ namespace vJoySerialFeeder
 	/// </summary>
 	partial class MainForm
 	{		
+		public static double Now { get { return (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; } }
+		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
 			try {
@@ -22,65 +25,142 @@ namespace vJoySerialFeeder
 				
 				double nextUIUpdateTime = 0, nextRateUpdateTime = 0, prevTime = 0;
 				double updateSum = 0;
+				double now;
 				int updateCount = 0;
+				int timeToWait;
+				bool failsafe = false;
+				double failsafeAt = Now + failsafeTime;
+				double nextFailsafeUpdate = 0;
 				
+				Task<int> readChannelsTask = null;
+				
+				/**
+				 * The main loop is a little complicated because it supports two modes of action:
+				 * 1. Normal mode. In this case the update rate is dictated by the the serial
+				 *    reader
+				 * 
+				 * 2. If we do not receive serial data for certain amount of time (failsafeTime)
+				 *    we enter failsafe mode. In this mode we generate our own update rate,
+				 *    while continuing to try to read the serial port. 
+				 */
 				while(true) {
 					if(backgroundWorker.CancellationPending) {
 						e.Cancel = true;
-						serialReader.Stop();
 						return;
 					}
 					
+					// need a serial reading task
+					if(readChannelsTask == null) {
+						readChannelsTask = Task<int>.Factory.StartNew(serialReader.ReadChannels);
+					}
+					
+					// If not in failsafe mode, we can afford to wait at most up to the time
+					// when failsafe shall be activated.
+					// If already in failsafe - wait until it is time for a failsafe update
+					timeToWait = failsafe ? 
+						(int)(nextFailsafeUpdate - Now)
+						:
+						(int)(failsafeAt - Now);
+					
+					if(timeToWait < 0)
+						timeToWait = 0;
+					
+					bool readDone = false;
 					try {
-						ActiveChannels = serialReader.ReadChannels();
+						if(readChannelsTask.Wait(timeToWait)) {
+							// serial read completed
+							ActiveChannels = readChannelsTask.Result;
+							readDone = true;
+						}
+						// else Wait timedout
 					}
-					catch(InvalidOperationException ex) {
-						System.Diagnostics.Debug.WriteLine(ex.Message);
-						this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
-						                                            "Disconnect")));
-						backgroundWorker.CancelAsync();
-						continue;
-					}
-					catch(Exception ex) {
+					catch(AggregateException aex) {
+						// the SerialReader threw exception
+						var ex = aex.InnerException;
+						readDone = true;
 						ActiveChannels = 0;
-						updateFailReason = ex.Message;
-						System.Diagnostics.Debug.WriteLine(ex.Message);
+						
+						if(ex is InvalidOperationException) {
+							System.Diagnostics.Debug.WriteLine(ex.Message);
+							this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
+							                                            "Disconnect")));
+							backgroundWorker.CancelAsync();
+							continue;
+						}
+						else if(ex is TimeoutException) {
+							failsafeReason = "Serial Port Read Timeout";
+						}
+						else {
+							failsafeReason = ex.Message;
+						}
 					}
-					if(ActiveChannels > 0) {
-						foreach(Mapping m in mappings) {
-							if(m.Channel >= 0 && m.Channel < ActiveChannels)
+					
+					if(readDone)
+						readChannelsTask = null;
+					
+					now = Now;
+					
+					if(readDone && ActiveChannels > 0) {
+						// normal mode, we have serial data
+						failsafe = false;
+						failsafeReason = null;
+					}
+					else if(!failsafe && now >= failsafeAt) {
+						// failsafeTime elapses, time go get in failsafe
+						ActiveChannels = 0;
+						failsafe = true;
+						if(failsafeReason == null)
+							failsafeReason = "Waiting for Serial Data";
+						
+					}
+					else if(failsafe && now >= nextFailsafeUpdate) {
+						// time for failsafe update
+					}
+					else
+						continue;
+					
+					
+					
+					// Update
+
+					foreach(Mapping m in mappings) {
+						if(m.Channel >= 0 && m.Channel < Channels.Length) {
+							if(failsafe)
+								m.Failsafe();
+							else
 								m.Input = Channels[m.Channel];
 						}
-						
-						try {
-							lua.Update(VJoy, Channels);
-						}
-						catch(NullReferenceException) {}
-						catch(InterpreterException ex) {
-							this.Invoke((Action)( () =>
-							            ErrorMessageBox("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
-							                  "Lua Error")));
-						}
-						
-						foreach(Mapping m in mappings) {
-							m.UpdateJoystick(VJoy);
-						}
-						
-						VJoy.SetState();
-						
-						if(comAutomation != null)
-							comAutomation.Dispatch();
-						
-						if(webSocket != null)
-							webSocket.Dispatch();
 					}
 					
+					try {
+						lua.Update(VJoy, Channels, failsafe);
+					}
+					catch(NullReferenceException) {
+						 // could happen lua==null if we loadProfile while connected
+					}
+					catch(InterpreterException ex) {
+						this.Invoke((Action)( () =>
+						            ErrorMessageBox("Lua script execution failed. Scripting disabled:\n\n" + ex.DecoratedMessage,
+						                  "Lua Error")));
+					}
 					
-					double now = (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+					foreach(Mapping m in mappings) {
+						m.UpdateJoystick(VJoy);
+					}
+					
+					VJoy.SetState();
+					
+					if(comAutomation != null)
+						comAutomation.Dispatch();
+					
+					if(webSocket != null)
+						webSocket.Dispatch();
+					
+
 					
 					// since the time between frames may vary we sum the times here
 					// and later publish the average
-					if(now > prevTime && ActiveChannels > 0) {
+					if(now > prevTime) {
 						updateSum += 1000.0/(now - prevTime);
 						updateCount++;
 					}
@@ -93,9 +173,9 @@ namespace vJoySerialFeeder
 						if(now >= nextRateUpdateTime) {
 							nextRateUpdateTime = now + 500;
 							
-							if(ActiveChannels == 0)
-								updateRate = 0;
-							else if(updateCount > 0) {
+							//if(ActiveChannels == 0)
+							//	updateRate = 0;
+							if(updateCount > 0) {
 								updateRate = updateSum/updateCount;
 								updateSum = updateCount = 0;
 							}
@@ -105,14 +185,22 @@ namespace vJoySerialFeeder
 						backgroundWorker.ReportProgress(0);
 					}
 					
-					if(ActiveChannels > 0)
-						prevTime = now;
+					prevTime = now;
+					
+					if(!failsafe)
+						failsafeAt = now + failsafeTime;
+					else
+						nextFailsafeUpdate = now + failsafeUpdateRate;
 				}
 			}
 			catch(Exception ex) {
 				this.Invoke((Action)( () =>
 				                     ErrorMessageBox(ex.ToString(), "Main Worker")));
 			}
+			finally {
+				serialReader.Stop();
+			}
+			
 		}
 		void BackgroundWorkerRunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
 		{

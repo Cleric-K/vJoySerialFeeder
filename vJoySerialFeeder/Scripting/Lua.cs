@@ -64,7 +64,8 @@ namespace vJoySerialFeeder
 		}
 		
 		public void Test() {
-			script.DoString(scriptSource, null, "Script");
+			//script.DoString(scriptSource, null, "Script");
+			script.LoadString(scriptSource, null, "Script");
 		}
 		
 		public void Init(VJoyBase vjoy, int[] channels) {
@@ -100,6 +101,8 @@ namespace vJoySerialFeeder
 				                                                 	return m;
 				                                                 });
 				
+				script.Globals["Failsafe"] = false;
+				
 				// execute code
 				script.DoString(scriptSource, null, "Script");
 				script.Options.DebugPrint = print;
@@ -114,13 +117,14 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		public void Update(VJoyBase vjoy, int[] channels) {
+		public void Update(VJoyBase vjoy, int[] channels, bool failsafe) {
 			if(!initted) {
 				Init(vjoy, channels);
 			}
 			
 			if(update != null) {
 				try {
+					script.Globals["Failsafe"] = failsafe;
 					update.Call();
 				}
 				catch(InterpreterException ex) {

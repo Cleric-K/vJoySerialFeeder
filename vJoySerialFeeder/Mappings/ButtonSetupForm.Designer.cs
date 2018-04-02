@@ -45,6 +45,8 @@ namespace vJoySerialFeeder
 			this.labelThresh2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.checkTwoThresholds = new System.Windows.Forms.CheckBox();
+			this.label2 = new System.Windows.Forms.Label();
+			this.comboFailsafe = new System.Windows.Forms.ComboBox();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh2)).BeginInit();
@@ -78,9 +80,9 @@ namespace vJoySerialFeeder
 			// 
 			// numericThresh1
 			// 
-			this.numericThresh1.Location = new System.Drawing.Point(84, 268);
+			this.numericThresh1.Location = new System.Drawing.Point(117, 268);
 			this.numericThresh1.Maximum = new decimal(new int[] {
-									16777216,
+									65535,
 									0,
 									0,
 									0});
@@ -96,9 +98,9 @@ namespace vJoySerialFeeder
 			// 
 			// numericThresh2
 			// 
-			this.numericThresh2.Location = new System.Drawing.Point(84, 288);
+			this.numericThresh2.Location = new System.Drawing.Point(117, 288);
 			this.numericThresh2.Maximum = new decimal(new int[] {
-									16777216,
+									65535,
 									0,
 									0,
 									0});
@@ -125,7 +127,7 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(129, 372);
+			this.buttonCancel.Location = new System.Drawing.Point(129, 345);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 5;
@@ -135,7 +137,7 @@ namespace vJoySerialFeeder
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(210, 372);
+			this.buttonOK.Location = new System.Drawing.Point(210, 345);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
 			this.buttonOK.TabIndex = 6;
@@ -171,13 +173,38 @@ namespace vJoySerialFeeder
 			this.checkTwoThresholds.UseVisualStyleBackColor = true;
 			this.checkTwoThresholds.CheckedChanged += new System.EventHandler(this.OnChange);
 			// 
+			// label2
+			// 
+			this.label2.Location = new System.Drawing.Point(12, 307);
+			this.label2.Name = "label2";
+			this.label2.Size = new System.Drawing.Size(79, 20);
+			this.label2.TabIndex = 35;
+			this.label2.Text = "Failsafe Output";
+			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboFailsafe
+			// 
+			this.comboFailsafe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboFailsafe.FormattingEnabled = true;
+			this.comboFailsafe.Items.AddRange(new object[] {
+									"Last",
+									"Depressed",
+									"Pressed"});
+			this.comboFailsafe.Location = new System.Drawing.Point(97, 308);
+			this.comboFailsafe.Name = "comboFailsafe";
+			this.comboFailsafe.Size = new System.Drawing.Size(73, 21);
+			this.comboFailsafe.TabIndex = 36;
+			this.comboFailsafe.SelectedIndexChanged += new System.EventHandler(this.OnChange);
+			// 
 			// ButtonSetupForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(271, 408);
+			this.ClientSize = new System.Drawing.Size(271, 380);
+			this.Controls.Add(this.comboFailsafe);
+			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelCalibrate);
 			this.Controls.Add(this.checkInvert);
 			this.Controls.Add(this.numericThresh1);
@@ -201,6 +228,8 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh2)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ComboBox comboFailsafe;
+		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox checkTwoThresholds;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label labelThresh2;

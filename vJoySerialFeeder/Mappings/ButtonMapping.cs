@@ -30,7 +30,7 @@ namespace vJoySerialFeeder
 		[DataContract]
 		public struct ButtonParameters {
 			[DataMember]
-			public int thresh1, thresh2;
+			public int thresh1, thresh2, Failsafe;
 			[DataMember]
 			public bool notch, invert;
 			
@@ -55,7 +55,8 @@ namespace vJoySerialFeeder
 		
 		[DataMember]
 		public ButtonParameters Parameters = new ButtonParameters {
-			thresh1 = 1500
+			thresh1 = 1500,
+			Failsafe = 0
 		};
 		
 
@@ -108,6 +109,15 @@ namespace vJoySerialFeeder
 				initializePanel();
 			return panel;
 		}
+		
+		public override void Failsafe()
+		{
+			if(Parameters.Failsafe > 0)
+				Output = Parameters.Failsafe == 1 ? 0 : 1;
+		}
+		
+		
+		
 		
 		private void onChannelChange(object sender, EventArgs e)
 		{

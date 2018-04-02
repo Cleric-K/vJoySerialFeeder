@@ -28,10 +28,7 @@ namespace vJoySerialFeeder
 	/// vJoySerialFeeder acts as server. It accepts simple commands - see onMessage() for details
 	/// Response is in JSON format: {"mapping": .., "input": .., "output": ..}
 	/// </summary>
-	class WebSocket {
-		
-		public const int DEFAULT_PORT = 40000; 
-		
+	class WebSocket {		
 		/// <summary>
 		/// Encapsulates a subscription for Mapping updates
 		/// </summary>
