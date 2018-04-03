@@ -18,6 +18,9 @@ namespace vJoySerialFeeder
 	public partial class LuaEditorForm : Form
 	{
 		public string ScriptSource {get; private set; }
+		
+		string originalScript;
+		
 		public LuaEditorForm(string script)
 		{
 			//
@@ -28,13 +31,15 @@ namespace vJoySerialFeeder
 			if(script == null || script.Trim().Length == 0) {
 				script = Resources.script_template;
 			}
+			
+			originalScript = script;
 			editorBox.Text = script;
 		}
 		
 		void ButtonSaveClick(object sender, EventArgs e)
 		{
 			if(testCompile()) {
-				ScriptSource = editorBox.Text;
+				originalScript = ScriptSource = editorBox.Text;
 				DialogResult = DialogResult.OK;
 			}
 		}
@@ -62,6 +67,19 @@ namespace vJoySerialFeeder
 			mCopy.Enabled = mCut.Enabled = !editorBox.Selection.IsEmpty;
 			mUndo.Enabled = editorBox.UndoEnabled;
 			mRedo.Enabled = editorBox.RedoEnabled;
+		}
+		
+		void LuaEditorFormFormClosing(object sender, FormClosingEventArgs e)
+		{
+			if(DialogResult != DialogResult.Abort && editorBox.Text != originalScript) {
+				if(MessageBox.Show("Discard changes?", "Script modified", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+					e.Cancel = true;
+			}
+		}
+		
+		void ButtonCancelClick(object sender, EventArgs e)
+		{
+			DialogResult = DialogResult.Abort;
 		}
 	}
 

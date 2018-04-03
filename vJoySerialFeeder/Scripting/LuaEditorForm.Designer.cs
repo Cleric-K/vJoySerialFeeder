@@ -101,7 +101,7 @@ namespace vJoySerialFeeder
 			this.editorBox.ContextMenuStrip = this.cMenu;
 			this.editorBox.Cursor = System.Windows.Forms.Cursors.IBeam;
 			this.editorBox.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-			this.editorBox.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.editorBox.Font = new System.Drawing.Font("Consolas", 12F);
 			this.editorBox.IsReplaceMode = false;
 			this.editorBox.Language = FastColoredTextBoxNS.Language.Lua;
 			this.editorBox.LeftBracket = '(';
@@ -193,12 +193,12 @@ namespace vJoySerialFeeder
 			this.buttonCancel.TabIndex = 4;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
+			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
 			// 
 			// LuaEditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.CancelButton = this.buttonCancel;
 			this.ClientSize = new System.Drawing.Size(730, 543);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.editorBox);
@@ -209,6 +209,7 @@ namespace vJoySerialFeeder
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Lua Editor";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LuaEditorFormFormClosing);
 			((System.ComponentModel.ISupportInitialize)(this.editorBox)).EndInit();
 			this.cMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
