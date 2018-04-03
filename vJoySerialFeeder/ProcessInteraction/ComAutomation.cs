@@ -40,8 +40,6 @@ namespace vJoySerialFeeder
 			int LockServer(bool fLock);
 		}
 		
-		
-		
 		/// <summary>
 		/// This is the main Com Object.
 		/// </summary>
@@ -50,15 +48,19 @@ namespace vJoySerialFeeder
 		[Guid(CLSID)]
 		[ClassInterface(ClassInterfaceType.AutoDispatch)]
 		public class Application : IClassFactory {
-			/// <summary>
-			/// The Mappings Array
-			/// </summary>
-			public Mappings Mappings {get; private set;}
-			
 			internal Application() {
 				Mappings = new Mappings();
 			}
 			
+			/// <summary>
+			/// The Mappings Array
+			/// </summary>
+			public Mappings Mappings { get ; private set; }
+			
+			/// <summary>
+			/// Failsafe
+			/// </summary>
+			public bool Failsafe { get { return MainForm.Instance.Failsafe;	} }
 			
 			/// <summary>
 			/// Detach handler `h`
@@ -84,11 +86,13 @@ namespace vJoySerialFeeder
 			
 			// IClassFactory implementation. The object is a singleton so CreateInstance always 
 			// return the same object
+			[ComVisible(false)]
 			public int CreateInstance(IntPtr pUnkOuter, ref Guid riid, out IntPtr ppvObject)
 			{
 				return Marshal.QueryInterface(Marshal.GetIUnknownForObject(this), ref riid, out ppvObject);
 			}
 			
+			[ComVisible(false)]
 			public int LockServer(bool fLock)
 			{
 				return 0;
@@ -122,9 +126,9 @@ namespace vJoySerialFeeder
 				this.m = m;
 			}
 			
-			void attachHandler(dynamic h, bool oo) {
+			void attachHandler(dynamic h, Handler.HandlerType type) {
 				lock(ComAutomation.instance.handlers)
-					ComAutomation.instance.handlers.Add(new Handler(m, h, oo));
+					ComAutomation.instance.handlers.Add(new Handler(m, h, type));
 			}
 			
 			public int Input {
@@ -141,12 +145,20 @@ namespace vJoySerialFeeder
 				return m.GetType().Name;
 			}
 			
-			public void AttachOutputHandler(dynamic h) {
-				attachHandler(h, true);
-			}
-			
-			public void AttachInputHandler(dynamic h) {
-				attachHandler(h, false);
+			public void AttachHandler(dynamic h, string type = "output") {
+				switch(type){
+					case "input":
+						attachHandler(h, Handler.HandlerType.Input);
+						break;
+					case "output":
+						attachHandler(h, Handler.HandlerType.Output);
+						break;
+					case "both":
+						attachHandler(h, Handler.HandlerType.Both);
+						break;
+					default:
+						throw new Exception("Bad handler type");
+				}
 			}
 			
 			public void DetachHandler(dynamic h) {
@@ -174,21 +186,23 @@ namespace vJoySerialFeeder
 		/// This class encapsulates a user provided handler to be called on events
 		/// </summary>
 		class Handler {
+			internal enum HandlerType { Input, Output, Both }
+			
 			internal int? Input;
 			internal float? Output;
 	
 			internal readonly Mapping Mapping;
-			internal readonly bool IgnoreInputChanges;
+			internal readonly HandlerType Type;
 			
 			internal dynamic handlerObject;
 
 			int numFails;
 			
 			
-			internal Handler(Mapping m, dynamic h, bool ignInput) {
+			internal Handler(Mapping m, dynamic h, HandlerType type) {
 				handlerObject = h;
 				Mapping = m;
-				IgnoreInputChanges = ignInput;
+				Type = type;
 			}
 			
 			/// <summary>
@@ -198,12 +212,12 @@ namespace vJoySerialFeeder
 			/// <param name="i"></param>
 			/// <param name="o"></param>
 			/// <returns></returns>
-			internal bool SetValues(int i, float o) {
-				var r = Output != o ||
-							(!IgnoreInputChanges && Input != i);
+			internal bool SetValues(int input, float output) {
+				var r = (Type == HandlerType.Input || Type == HandlerType.Both) && Input != input
+					|| (Type == HandlerType.Output || Type == HandlerType.Both) && Output != output;
 								
-				Input = i;
-				Output = o;
+				Input = input;
+				Output = output;
 				
 				return r;
 			}

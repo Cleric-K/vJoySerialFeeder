@@ -293,6 +293,7 @@ namespace vJoySerialFeeder
 			buttonProtocolSetup.Enabled = false;
 			buttonConnect.Text = "Disconnect";
 			comboJoysticks.Enabled = false;
+			toolStripStatusLabel.Text = "Connecting ...";
 			connected = true;
 			
 			lua = new Lua(luaScript);
@@ -302,7 +303,7 @@ namespace vJoySerialFeeder
 		
 		private void disconnect() {
 			// when the background worker finished disconnect2 is called
-			buttonConnect.Text = "Disconnecting";
+			buttonConnect.Text = "Disconnecting ...";
 			backgroundWorker.CancelAsync();
 		}
 		

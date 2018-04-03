@@ -28,20 +28,22 @@ namespace vJoySerialFeeder
 	/// vJoySerialFeeder acts as server. It accepts simple commands - see onMessage() for details
 	/// Response is in JSON format: {"mapping": .., "input": .., "output": ..}
 	/// </summary>
-	class WebSocket {		
+	class WebSocket {
+		
+		enum SubscriptionTypes { Input, Output, Both }
 		/// <summary>
 		/// Encapsulates a subscription for Mapping updates
 		/// </summary>
 		class Subscription {
 			internal readonly int mappingIndex;
-			internal bool IgnoreInputChanges;
+			internal SubscriptionTypes type;
 			
 			int? Input;
 			float? Output;
 			
-			internal Subscription(int i, bool ignInp) {
+			internal Subscription(int i, SubscriptionTypes type) {
 				mappingIndex = i;
-				IgnoreInputChanges = ignInp;
+				this.type = type;
 			}
 			
 			/// <summary>
@@ -51,10 +53,12 @@ namespace vJoySerialFeeder
 			/// <param name="Input"></param>
 			/// <param name="Output"></param>
 			/// <returns></returns>
-			internal bool Update(int Input, float Output) {
-				bool upd = this.Output != Output || (!IgnoreInputChanges && this.Input != Input);
-				this.Input = Input;
-				this.Output = Output;
+			internal bool Update(int input, float output) {
+				bool upd = (type == SubscriptionTypes.Input || type == SubscriptionTypes.Both) && this.Input != input
+					|| (type == SubscriptionTypes.Output || type == SubscriptionTypes.Both) && this.Output != output;
+
+				this.Input = input;
+				this.Output = output;
 				return upd;
 			}
 		}
@@ -283,96 +287,100 @@ namespace vJoySerialFeeder
 		
 		
 		/// <summary>
-		/// Parses and executes commands coming from clients. Commands are:
+		/// Parses and executes commands coming from clients.
 		/// 
-		/// get MAPPING_ID
-		/// 	returns json message with the values of mapping MAPPING_ID
+		/// See the switch() below
 		/// 
-		/// set_input MAPPING_ID VALUE
-		/// 	sets the Input of mapping MAPPING_ID to VALUE
-		///     The Output of the mapping will be set by the
-		///     mapping itself.
-		/// 
-		/// set_output MAPPING_ID VALUE
-		/// 	sets the Output of mapping MAPPING_ID to VALUE.
-		/// 
-		/// sub_input MAPPING_ID
-		/// 	subscribes to changes in the Input of mapping MAPPING_ID
-		/// 
-		/// sub_output MAPPING_ID
-		/// 	subscribes to changes in the Output of mapping MAPPING_ID
-		/// 
-		/// unsub MAPPING_ID
-		/// 	unsubscribes to any changes of mapping MAPPING_ID
-		/// 
-		///
-		/// All MAPPING_IDs start from 1
-		/// 
-		/// Subscriptions cause messages to be received upon changes, which 
-		/// have the same format as the ones received from the `get` command
 		/// </summary>
 		/// <param name="sock"></param>
 		/// <param name="msg"></param>
 		void onMessage(Socket sock, string msg) {
 			try {
 				var parts = msg.ToLower().Split(null);
-				if(parts.Length < 2)
+				
+				if(parts.Length < 1)
 					throw new Exception("Bad command");
 				
-				int idx = 0;
-				
-				var cmd = parts[0];
-				
-				if(!int.TryParse(parts[1], out idx))
-					throw new Exception("Bad mapping index");
-				
-				switch(cmd) {
+				switch(parts[0]) {
 					case "get":
+						// get MAPPING_ID
+						//
+						// requests json message with the values of mapping MAPPING_ID
+						// all MAPPING_IDs start from 1
+						
 						assertPartsNum(parts, 2);
-						var m = MainForm.Instance.MappingAt(idx - 1);
-						if(m == null)
-							throw new Exception("No such mapping");
+						var idx = parseInt(parts, 1);
+						var m = getMapping(idx);
 						
 						sendMappingData(sock, idx, m);
 						
 						break;
 						
-					case "set_input":
-					case "set_output":
+					case "set":
+						// set (input|output) MAPPING_ID VALUE
+						//
+						// sets the Input or Output of mapping MAPPING_ID to VALUE
+						// If you are setting the Input, the Output of the mapping will
+						// be updated automatically.
+						
+						assertPartsNum(parts, 4);
+						idx = parseInt(parts, 2);
+						m = getMapping(idx);
+						
+						switch(parts[1]) {
+							case "input":
+								m.Input = parseInt(parts, 3);
+								break;
+							case "output":
+								m.Output = parseFloat(parts, 3);
+								break;
+							default:
+								throw new Exception("Expected 'input' or 'output' after 'set' command");
+						}
+						
+						break;
+						
+					case "sub":
+						// sub (input|output|both) MAPPING_ID
+						//
+						// subscribes for changes in the Input, Output of both
+						// of mapping MAPPNIGS_ID
+						//
+						// Subscriptions cause messages to be received upon changes, which 
+						// have the same format as the ones received from the `get` command
+						
 						assertPartsNum(parts, 3);
-						m = MainForm.Instance.MappingAt(idx - 1);
-						if(m == null)
-							throw new Exception("No such mapping");
-							
-						float val;
-						if(!float.TryParse(parts[2], NumberStyles.Float, CultureInfo.InvariantCulture, out val))
-							throw new Exception("Bad value");
+						idx = parseInt(parts, 2);
+						m = getMapping(idx);
 						
-						if(cmd.Equals("set_input"))
-							m.Input = (int)val;
-						else
-							m.Output = val;
-							
-						break;
+						switch(parts[1]) {
+			            	case "input":
+								subscribe(sock, SubscriptionTypes.Input, idx);
+								break;
+							case "output":
+								subscribe(sock, SubscriptionTypes.Output, idx);
+								break;
+							case "both":
+								subscribe(sock, SubscriptionTypes.Both, idx);
+								break;
+						    default:
+								throw new Exception("Expected 'input', 'output' or 'both' after 'set' command");
+			           	}
 						
-					case "sub_input":
-						assertPartsNum(parts, 2);
-						subscribe(sock, true, idx-1);
-						break;
-						
-					case "sub_output":
-						assertPartsNum(parts, 2);
-						subscribe(sock, false, idx-1);
 						break;
 						
 					case "unsub":
+						// unsub MAPPING_ID
+						//
+						// unsubscribes to any changes of mapping MAPPING_ID
+						
 						assertPartsNum(parts, 2);
-						unsubscribe(sock, idx-1);
+						idx = parseInt(parts, 1);
+						unsubscribe(sock, idx);
 						break;
 						
 					default:
-						sendError(sock, "Unknown command");
-						break;
+						throw new Exception("Unknown command");
 						
 				}
 			}
@@ -385,6 +393,27 @@ namespace vJoySerialFeeder
 			if(parts.Length != n)
 				throw new Exception("Incorrect number of arguments");
 		}
+		
+		int parseInt(string[] parts, int idx) {
+			int i;
+			if(!int.TryParse(parts[idx], out i))
+				throw new Exception("Bad number supplied for argument " + (idx+2));
+			return i;
+		}
+		
+		float parseFloat(string[] parts, int idx) {
+			float f;
+			if(!float.TryParse(parts[idx], NumberStyles.Float, CultureInfo.InvariantCulture, out f))
+				throw new Exception("Bad number supplied for argument " + (idx+2));
+			return f;
+		}
+		
+		Mapping getMapping(int idx) {
+			var m = MainForm.Instance.MappingAt(idx - 1);
+			if(m == null)
+				throw new Exception("There is no mapping "+idx);
+			return m;
+		}
 
 		
 		void sendError(Socket sock, String msg) {
@@ -393,6 +422,7 @@ namespace vJoySerialFeeder
 		
 		void sendMappingData(Socket sock, int mi, Mapping m) {
 			sendMessage(sock, "{\"mapping\":"+mi+",\"input\":"+m.Input
+			            +(MainForm.Instance.Failsafe ? ",\"failsafe\":true" : "")
 			            +",\"output\":"+m.Output.ToString(CultureInfo.InvariantCulture)+"}");
 		}
 		
@@ -412,7 +442,9 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		void subscribe(Socket sock, bool subInput, int mIdx){
+		void subscribe(Socket sock, SubscriptionTypes type, int mIdx){
+			mIdx--; // to zero-based index
+			
 			lock(subscriptions) {
 				var m = MainForm.Instance.MappingAt(mIdx);
 				if(m == null)
@@ -425,18 +457,21 @@ namespace vJoySerialFeeder
 				foreach(var sub in l) {
 					if(sub.mappingIndex == mIdx) {
 						// already subscribed
-						if(subInput)
-							sub.IgnoreInputChanges = false;
+						if(sub.type != type)
+							// extend the subscription
+							sub.type = SubscriptionTypes.Both;
 						return;
 					}
 				}
 				
-				l.Add(new Subscription(mIdx, !subInput));
+				l.Add(new Subscription(mIdx, type));
 			}
 		               	
 		}
 		
 		void unsubscribe(Socket sock, int mIdx) {
+			mIdx--; // to zero-based index
+			
 			lock(subscriptions) {
 				if(subscriptions.ContainsKey(sock)) {
 					var l = subscriptions[sock];

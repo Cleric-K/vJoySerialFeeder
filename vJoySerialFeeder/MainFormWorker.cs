@@ -16,6 +16,7 @@ namespace vJoySerialFeeder
 	partial class MainForm
 	{		
 		public static double Now { get { return (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; } }
+		public bool Failsafe { get; private set; }
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
@@ -28,10 +29,10 @@ namespace vJoySerialFeeder
 				double now;
 				int updateCount = 0;
 				int timeToWait;
-				bool failsafe = false;
 				double failsafeAt = Now + failsafeTime;
 				double nextFailsafeUpdate = 0;
 				
+				Failsafe = false;
 				Task<int> readChannelsTask = null;
 				
 				/**
@@ -57,7 +58,7 @@ namespace vJoySerialFeeder
 					// If not in failsafe mode, we can afford to wait at most up to the time
 					// when failsafe shall be activated.
 					// If already in failsafe - wait until it is time for a failsafe update
-					timeToWait = failsafe ? 
+					timeToWait = Failsafe ? 
 						(int)(nextFailsafeUpdate - Now)
 						:
 						(int)(failsafeAt - Now);
@@ -102,18 +103,18 @@ namespace vJoySerialFeeder
 					
 					if(readDone && ActiveChannels > 0) {
 						// normal mode, we have serial data
-						failsafe = false;
+						Failsafe = false;
 						failsafeReason = null;
 					}
-					else if(!failsafe && now >= failsafeAt) {
+					else if(!Failsafe && now >= failsafeAt) {
 						// failsafeTime elapses, time go get in failsafe
 						ActiveChannels = 0;
-						failsafe = true;
+						Failsafe = true;
 						if(failsafeReason == null)
 							failsafeReason = "Waiting for Serial Data";
 						
 					}
-					else if(failsafe && now >= nextFailsafeUpdate) {
+					else if(Failsafe && now >= nextFailsafeUpdate) {
 						// time for failsafe update
 					}
 					else
@@ -125,7 +126,7 @@ namespace vJoySerialFeeder
 
 					foreach(Mapping m in mappings) {
 						if(m.Channel >= 0 && m.Channel < Channels.Length) {
-							if(failsafe)
+							if(Failsafe)
 								m.Failsafe();
 							else
 								m.Input = Channels[m.Channel];
@@ -133,7 +134,7 @@ namespace vJoySerialFeeder
 					}
 					
 					try {
-						lua.Update(VJoy, Channels, failsafe);
+						lua.Update(VJoy, Channels, Failsafe);
 					}
 					catch(NullReferenceException) {
 						 // could happen lua==null if we loadProfile while connected
@@ -187,7 +188,7 @@ namespace vJoySerialFeeder
 					
 					prevTime = now;
 					
-					if(!failsafe)
+					if(!Failsafe)
 						failsafeAt = now + failsafeTime;
 					else
 						nextFailsafeUpdate = now + failsafeUpdateRate;
