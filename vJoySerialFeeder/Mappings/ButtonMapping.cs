@@ -13,7 +13,7 @@ namespace vJoySerialFeeder
 {
 	/// <summary>
 	/// Maps channel data to a button
-	/// 
+	///
 	/// There are single and dual threshold mappings.
 	/// In single threshold, if channel value if below the threshold the output is 0 and 1 if above
 	/// The logic can be inverted.
@@ -30,9 +30,11 @@ namespace vJoySerialFeeder
 		[DataContract]
 		public struct ButtonParameters {
 			[DataMember]
-			public int thresh1, thresh2, Failsafe;
+			public int thresh1, thresh2, Failsafe, TriggerDuration;
 			[DataMember]
-			public bool notch, invert;
+			public TriggerState.Edge TriggerEdge;
+			[DataMember]
+			public bool notch, invert, Trigger;
 			
 			public bool Transform(int val) {
 				bool state;
@@ -43,7 +45,7 @@ namespace vJoySerialFeeder
 					state = val >= thresh1 && val <= thresh2;
 				}
 				
-				return invert ^ state;
+				return (!Trigger & invert) ^ state;
 			}
 		}
 		
@@ -55,8 +57,7 @@ namespace vJoySerialFeeder
 		
 		[DataMember]
 		public ButtonParameters Parameters = new ButtonParameters {
-			thresh1 = 1500,
-			Failsafe = 0
+			thresh1 = 1500
 		};
 		
 
@@ -68,6 +69,8 @@ namespace vJoySerialFeeder
 		
 		static private Brush BRUSH_PUSHED = Brushes.LightGreen;
 		static private Brush BRUSH_NOT_PUSHED = new SolidBrush(Color.FromArgb(0, 64, 0));
+		
+		TriggerState trigger = new TriggerState();
 		
 
 		public override Mapping Copy()
@@ -82,7 +85,13 @@ namespace vJoySerialFeeder
 		
 		protected override float Transform(int val)
 		{
-			return Parameters.Transform(Input) ? 1f : 0f;
+			var p = Parameters;
+			bool state = p.Transform(val);;
+			
+			if(p.Trigger)
+				state = trigger.Trigger(state, p.TriggerEdge, p.TriggerDuration) ^ p.invert;
+			
+			return state ? 1f : 0f;
 		}
 		
 		protected override float Clamp(float val)
@@ -130,11 +139,11 @@ namespace vJoySerialFeeder
 		}
 		
 		private void onButtonStatePaint(object sender, PaintEventArgs e)
-		{	
+		{
 			bool pushed = Output > 0;
 			e.Graphics.FillEllipse(pushed ? BRUSH_PUSHED : BRUSH_NOT_PUSHED,
 			                       30, 0, 18, 18);
-			e.Graphics.DrawEllipse(Pens.Black, 
+			e.Graphics.DrawEllipse(Pens.Black,
 			                       30, 0, 18, 18);
 		}
 		

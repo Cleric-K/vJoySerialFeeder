@@ -86,6 +86,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mappings\TriggerState.cs" />
     <Compile Include="MonitorForm.cs" />
     <Compile Include="MonitorForm.Designer.cs">
       <DependentUpon>MonitorForm.cs</DependentUpon>

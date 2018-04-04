@@ -31,9 +31,13 @@ namespace vJoySerialFeeder
 			[DataMember]
 			public int Button; // vJoy button id
 			[DataMember]
-			public bool Invert, Enabled;
+			public bool Invert, Enabled, Trigger;
 			[DataMember]
 			public int Failsafe; // 0 - Last; 1 - Depressed; 2 - Pressed
+			[DataMember]
+			public int TriggerDuration;
+			[DataMember]
+			public TriggerState.Edge TriggerEdge;
 		}
 
 		[DataMember]
@@ -50,6 +54,8 @@ namespace vJoySerialFeeder
 		private PictureBox bitsBox;
 
 		private const int BIT_RECT_SIZE = 16;
+		
+		private TriggerState[] triggers;
 
 		static ButtonBitmapMapping() {
 			bitFont = new Font("sans serif", 6.5f);
@@ -60,12 +66,28 @@ namespace vJoySerialFeeder
 			bitStyle.FormatFlags = StringFormatFlags.NoWrap | StringFormatFlags.NoClip;
 		}
 		
+		public ButtonBitmapMapping() {
+			triggers = new TriggerState[16];
+			for(var i=0; i<triggers.Length; i++)
+				triggers[i] = new TriggerState();
+		}
+		
 		protected override float Transform(int val)
 		{
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
-				if(p.Enabled && p.Invert)
-					val ^= 1<<i;
+				if(p.Enabled) {
+					bool state = (val & (1<<i)) != 0;
+					if(p.Trigger) {
+						state = triggers[i].Trigger(state, p.TriggerEdge, p.TriggerDuration);
+					}
+					state ^= p.Invert;
+					
+					if(state)
+						val |= 1<<i;
+					else
+						val &= ~(1<<i);
+				}
 			}
 			return val;
 		}

@@ -26,6 +26,8 @@ namespace vJoySerialFeeder
 		private int calibrationStep;
 		private int calibrationOff, calibrationOn;
 		
+		private TriggerState trigger = new TriggerState();
+		
 		static ButtonSetupForm() {
 			linePen = new Pen(Color.Blue, 2);
 			inputPen = new Pen(Color.Green);
@@ -57,6 +59,9 @@ namespace vJoySerialFeeder
 			numericThresh1.Value = Parameters.thresh1;
 			numericThresh2.Value = Parameters.thresh2;
 			comboFailsafe.SelectedIndex = Parameters.Failsafe;
+			checkTriggerEnable.Checked = Parameters.Trigger;
+			comboTrigerEdge.SelectedIndex = (int)Parameters.TriggerEdge;
+			numericTriggerDuration.Value = Parameters.TriggerDuration == 0 ? TriggerState.DEFAULT_DURATION : Parameters.TriggerDuration;
 			
 			initialized = true;
 			
@@ -83,12 +88,17 @@ namespace vJoySerialFeeder
 					numericThresh2.Value = numericThresh1.Value;
 			}
 			
+			numericTriggerDuration.Enabled = comboTrigerEdge.Enabled = checkTriggerEnable.Checked;
+			
 			Parameters = new ButtonMapping.ButtonParameters() {
 				notch = checkTwoThresholds.Checked,
 				invert = checkInvert.Checked,
 				thresh1 = (int)numericThresh1.Value,
 				thresh2 = (int)numericThresh2.Value,
-				Failsafe = comboFailsafe.SelectedIndex
+				Failsafe = comboFailsafe.SelectedIndex,
+				Trigger = checkTriggerEnable.Checked,
+				TriggerEdge = (TriggerState.Edge)comboTrigerEdge.SelectedIndex,
+				TriggerDuration = (int)numericTriggerDuration.Value
 			};
 			
 			pictureBox.Invalidate();
@@ -125,8 +135,8 @@ namespace vJoySerialFeeder
 			var h = pictureBox.Height - 2*padding;
 			int max;
 
-			int y1 = !par.invert ? padding + h : padding;
-			int y2 = par.invert ? padding + h : padding;
+			int y1 = !(par.invert & !par.Trigger) ? padding + h : padding;
+			int y2 = (par.invert & !par.Trigger) ? padding + h : padding;
 
 			GraphicsPath graphPath = new GraphicsPath();
 			List<Point> points = new List<Point>();
@@ -157,8 +167,13 @@ namespace vJoySerialFeeder
 
 			p = Math.Min(max, Math.Max(0, buttonMapping.Input)); // clamp
 			val = par.Transform(p);
+			if(par.Trigger)
+				val = par.invert ^ trigger.Trigger(val, par.TriggerEdge, par.TriggerDuration);
+			
 			x = padding + (int)(p/(double)max*w);
-			y = !par.Transform(p) ? padding + h: padding;
+			y = !val ? padding + h: padding;
+			
+			
 
 			e.Graphics.DrawLine(inputPen, x, h+padding, x, y);
 			e.Graphics.DrawLine(outputPen, padding, y, x, y);

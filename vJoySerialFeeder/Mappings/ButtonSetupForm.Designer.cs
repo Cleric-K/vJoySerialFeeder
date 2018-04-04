@@ -47,9 +47,17 @@ namespace vJoySerialFeeder
 			this.checkTwoThresholds = new System.Windows.Forms.CheckBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.comboFailsafe = new System.Windows.Forms.ComboBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.comboTrigerEdge = new System.Windows.Forms.ComboBox();
+			this.numericTriggerDuration = new System.Windows.Forms.NumericUpDown();
+			this.checkTriggerEnable = new System.Windows.Forms.CheckBox();
+			this.label4 = new System.Windows.Forms.Label();
+			this.label3 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh2)).BeginInit();
+			this.groupBox1.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.numericTriggerDuration)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// pictureBox
@@ -127,7 +135,7 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(129, 345);
+			this.buttonCancel.Location = new System.Drawing.Point(129, 445);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 5;
@@ -137,7 +145,7 @@ namespace vJoySerialFeeder
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(210, 345);
+			this.buttonOK.Location = new System.Drawing.Point(210, 445);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
 			this.buttonOK.TabIndex = 6;
@@ -196,13 +204,92 @@ namespace vJoySerialFeeder
 			this.comboFailsafe.TabIndex = 36;
 			this.comboFailsafe.SelectedIndexChanged += new System.EventHandler(this.OnChange);
 			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.comboTrigerEdge);
+			this.groupBox1.Controls.Add(this.numericTriggerDuration);
+			this.groupBox1.Controls.Add(this.checkTriggerEnable);
+			this.groupBox1.Controls.Add(this.label4);
+			this.groupBox1.Controls.Add(this.label3);
+			this.groupBox1.Location = new System.Drawing.Point(12, 335);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(168, 100);
+			this.groupBox1.TabIndex = 37;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Trigger";
+			// 
+			// comboTrigerEdge
+			// 
+			this.comboTrigerEdge.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboTrigerEdge.FormattingEnabled = true;
+			this.comboTrigerEdge.Items.AddRange(new object[] {
+									"Rising",
+									"Falling",
+									"Both"});
+			this.comboTrigerEdge.Location = new System.Drawing.Point(96, 42);
+			this.comboTrigerEdge.Name = "comboTrigerEdge";
+			this.comboTrigerEdge.Size = new System.Drawing.Size(62, 21);
+			this.comboTrigerEdge.TabIndex = 8;
+			this.comboTrigerEdge.SelectedIndexChanged += new System.EventHandler(this.OnChange);
+			// 
+			// numericTriggerDuration
+			// 
+			this.numericTriggerDuration.Location = new System.Drawing.Point(110, 69);
+			this.numericTriggerDuration.Maximum = new decimal(new int[] {
+									1000000,
+									0,
+									0,
+									0});
+			this.numericTriggerDuration.Minimum = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.numericTriggerDuration.Name = "numericTriggerDuration";
+			this.numericTriggerDuration.Size = new System.Drawing.Size(48, 20);
+			this.numericTriggerDuration.TabIndex = 11;
+			this.numericTriggerDuration.Value = new decimal(new int[] {
+									1,
+									0,
+									0,
+									0});
+			this.numericTriggerDuration.ValueChanged += new System.EventHandler(this.OnChange);
+			// 
+			// checkTriggerEnable
+			// 
+			this.checkTriggerEnable.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.checkTriggerEnable.Location = new System.Drawing.Point(7, 19);
+			this.checkTriggerEnable.Name = "checkTriggerEnable";
+			this.checkTriggerEnable.Size = new System.Drawing.Size(151, 22);
+			this.checkTriggerEnable.TabIndex = 7;
+			this.checkTriggerEnable.Text = "Enable";
+			this.checkTriggerEnable.UseVisualStyleBackColor = true;
+			this.checkTriggerEnable.CheckedChanged += new System.EventHandler(this.OnChange);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(7, 71);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(71, 20);
+			this.label4.TabIndex = 10;
+			this.label4.Text = "Duration [ms]";
+			// 
+			// label3
+			// 
+			this.label3.Location = new System.Drawing.Point(7, 45);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(50, 20);
+			this.label3.TabIndex = 9;
+			this.label3.Text = "Edge";
+			// 
 			// ButtonSetupForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(271, 380);
+			this.ClientSize = new System.Drawing.Size(277, 479);
+			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.comboFailsafe);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.labelCalibrate);
@@ -226,8 +313,16 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.numericThresh2)).EndInit();
+			this.groupBox1.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.numericTriggerDuration)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.CheckBox checkTriggerEnable;
+		private System.Windows.Forms.NumericUpDown numericTriggerDuration;
+		private System.Windows.Forms.ComboBox comboTrigerEdge;
+		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.ComboBox comboFailsafe;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.CheckBox checkTwoThresholds;

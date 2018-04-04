@@ -28,6 +28,9 @@ namespace vJoySerialFeeder
 			numericButton.Value = Params.Button+1;
 			checkInvert.Checked = Params.Invert;
 			comboFailsafe.SelectedIndex = Params.Failsafe;
+			checkTriggerEnable.Checked = Params.Trigger;
+			comboTrigerEdge.SelectedIndex = (int)Params.TriggerEdge;
+			numericTriggerDuration.Value = Params.TriggerDuration == 0 ? TriggerState.DEFAULT_DURATION : Params.TriggerDuration;
 
 			onEnableCheck(null, null);
 		}
@@ -42,8 +45,11 @@ namespace vJoySerialFeeder
 			Parameters = new ButtonBitmapMapping.BitButtonParameters() {
 				Enabled = checkEnable.Checked,
 				Button = (int)numericButton.Value-1,
-				Invert = checkInvert.Checked, 
-				Failsafe = comboFailsafe.SelectedIndex
+				Invert = checkInvert.Checked,
+				Failsafe = comboFailsafe.SelectedIndex,
+				Trigger = checkTriggerEnable.Checked,
+				TriggerEdge = (TriggerState.Edge)comboTrigerEdge.SelectedIndex,
+				TriggerDuration = (int)numericTriggerDuration.Value
 			};
 			
 			DialogResult = DialogResult.OK;
@@ -58,6 +64,11 @@ namespace vJoySerialFeeder
 			label1.Enabled = c;
 			checkInvert.Enabled = c;
 			comboFailsafe.Enabled = c;
+			checkTriggerEnable.Enabled = c;
+			
+			var tc = checkTriggerEnable.Checked & c;
+			comboTrigerEdge.Enabled = tc;
+			numericTriggerDuration.Enabled = tc;
 		}
 	}
 }

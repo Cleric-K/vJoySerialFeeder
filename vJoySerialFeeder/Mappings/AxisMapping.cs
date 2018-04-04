@@ -27,6 +27,8 @@ namespace vJoySerialFeeder
 		[DataContract]
 		public struct AxisParameters
 		{
+			public const int DEFAULT_FAILSAFE = -1;
+			
 			[DataMember]
 			public int Min, Max, Center, Expo, Deadband, Failsafe;
 			[DataMember]
@@ -109,7 +111,7 @@ namespace vJoySerialFeeder
 			Center = 1500,
 			Expo = 0,
 			Symmetric = true,
-			Failsafe = -1
+			Failsafe = AxisParameters.DEFAULT_FAILSAFE
 		};
 		
 		private FlowLayoutPanel panel;

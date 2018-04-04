@@ -24,11 +24,15 @@ namespace vJoySerialFeeder
 	[DataContract]
 	public class Configuration
 	{
+		public const int DEFAULT_WEBSOCKET_PORT = 40000;
 		/// <summary>
 		/// Stores a single profile
 		/// </summary>
 		[DataContract]
 		public class Profile {
+			public const int DEFAULT_FAILSAFE_TIME = 500;
+			public const int DEFAULT_FAILSAFE_UPDATE_RATE = 100;
+			
 			[DataMember]
 			public string COMPort, VJoyInstance;
 			[DataMember]
@@ -44,9 +48,9 @@ namespace vJoySerialFeeder
 			[DataMember]
 			public string LuaScript;
 			[DataMember]
-			public int FailsafeUpdateRate = 100;
+			public int FailsafeUpdateRate = DEFAULT_FAILSAFE_UPDATE_RATE;
 			[DataMember]
-			public int FailsafeTime = 500;
+			public int FailsafeTime = DEFAULT_FAILSAFE_TIME;
 		}
 		
 		/// <summary>
@@ -79,7 +83,7 @@ namespace vJoySerialFeeder
 		public bool WebSocketEnabled;
 		
 		[DataMember]
-		public int WebSocketPort = 40000;
+		public int WebSocketPort = DEFAULT_WEBSOCKET_PORT;
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
@@ -177,7 +181,7 @@ namespace vJoySerialFeeder
 		}
 		
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="fromVersion"></param>
 		/// <param name="toVersion"></param>
@@ -185,21 +189,15 @@ namespace vJoySerialFeeder
 			
 			
 			if(fromVersion <= new Version("1.2.0.0")) {
-				var templateConfiguration = new Configuration();
-				var templateProfile = new Profile();
-				var templateAxisMapping  = new AxisMapping();
-				var templateButtonMapping  = new ButtonMapping();
-				
-				WebSocketPort = templateConfiguration.WebSocketPort;
+				WebSocketPort = DEFAULT_WEBSOCKET_PORT;
 				
 				foreach(var p in Profiles.Values) {
-					p.FailsafeTime = templateProfile.FailsafeTime;
-					p.FailsafeUpdateRate = templateProfile.FailsafeUpdateRate;
+					p.FailsafeTime = Profile.DEFAULT_FAILSAFE_TIME;
+					p.FailsafeUpdateRate = Profile.DEFAULT_FAILSAFE_UPDATE_RATE;
+					
 					foreach(var m in p.Mappings) {
 						if(m is AxisMapping)
-							((AxisMapping)m).Parameters.Failsafe = templateAxisMapping.Parameters.Failsafe;
-						else if(m is ButtonMapping)
-							((ButtonMapping)m).Parameters.Failsafe = templateButtonMapping.Parameters.Failsafe;
+							((AxisMapping)m).Parameters.Failsafe = AxisMapping.AxisParameters.DEFAULT_FAILSAFE;
 					}
 				}
 			}
