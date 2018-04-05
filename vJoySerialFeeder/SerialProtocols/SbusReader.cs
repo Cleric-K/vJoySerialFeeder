@@ -5,6 +5,7 @@
  * Time: 12:57 ч.
  */
 using System;
+using System.Collections;
 using System.IO.Ports;
 using System.Windows.Forms;
 
@@ -49,8 +50,10 @@ namespace vJoySerialFeeder
 		private const int NUM_CHANNELS = 16;
 		private const int SBUS_CH_BITS = 11;
 		private const int SBUS_CH_MASK = (1<<SBUS_CH_BITS)-1;
+		private const int SBUS_FAILSAFE_MASK = 1<<3;
 		
 		private bool useRawInput;
+		private bool ignoreSbusFailsafeFlag;
 	
 		public override void Start()
 		{
@@ -72,6 +75,11 @@ namespace vJoySerialFeeder
 				System.Diagnostics.Debug.WriteLine("resyncing");
 				Buffer.Slide(1);
 				return 0;
+			}
+			
+			if(!ignoreSbusFailsafeFlag && (Buffer[23]&SBUS_FAILSAFE_MASK) != 0) {
+				Buffer.Slide(FRAME_LENGTH);
+				throw new FailsafeException("SBUS Failsafe active");
 			}
 			
 			int inputbits = 0;
@@ -121,10 +129,11 @@ namespace vJoySerialFeeder
 		{
 			parseConfig(config);
 			
-			using(var d = new SbusSetupForm(useRawInput)) {
+			using(var d = new SbusSetupForm(useRawInput, ignoreSbusFailsafeFlag)) {
 				d.ShowDialog();
 				if(d.DialogResult == DialogResult.OK) {
 					useRawInput = d.UseRawInput;
+					ignoreSbusFailsafeFlag = d.IgnoreSbusFailsafeFlag;
 					return buildConfig();
 				}
 					
@@ -143,11 +152,27 @@ namespace vJoySerialFeeder
 		}
 		
 		private void parseConfig(string config) {
-			useRawInput = "raw".Equals(config);
+			var tokens = config == null ?
+					new string[0]
+					:
+					config.Split(',');
+			
+			foreach(var s in tokens) {
+				if(s == "raw")
+					useRawInput = true;
+				else if(s == "failsafe")
+					ignoreSbusFailsafeFlag = true;
+			}
 		}
 		
 		private string buildConfig() {
-			return useRawInput ? "raw" : "";
+			var cfg = new ArrayList();
+			if(useRawInput)
+				cfg.Add("raw");
+			if(ignoreSbusFailsafeFlag)
+				cfg.Add("failsafe");
+			
+			return string.Join(",", cfg.ToArray());
 		}
 	}
 }

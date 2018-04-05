@@ -41,6 +41,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.checkFailsafe = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -70,10 +71,10 @@ namespace vJoySerialFeeder
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(94, 99);
+			this.buttonOK.Location = new System.Drawing.Point(94, 150);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonOK.TabIndex = 3;
+			this.buttonOK.TabIndex = 2;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -81,10 +82,10 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(13, 99);
+			this.buttonCancel.Location = new System.Drawing.Point(13, 150);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 2;
+			this.buttonCancel.TabIndex = 1;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -107,13 +108,26 @@ namespace vJoySerialFeeder
 			this.toolTip1.IsBalloon = true;
 			this.toolTip1.ReshowDelay = 100;
 			// 
+			// checkFailsafe
+			// 
+			this.checkFailsafe.Location = new System.Drawing.Point(21, 99);
+			this.checkFailsafe.Name = "checkFailsafe";
+			this.checkFailsafe.Size = new System.Drawing.Size(143, 26);
+			this.checkFailsafe.TabIndex = 3;
+			this.checkFailsafe.Text = "Use SBUS Failsafe";
+			this.toolTip1.SetToolTip(this.checkFailsafe, "By default, in Failsafe condition vJoySerialFeeder\'s\r\nFailsafe settings will be u" +
+						"sed.\r\nSelect this option if you want to use the Failsafe\r\nsettings that you conf" +
+						"igured through your transmitter.");
+			this.checkFailsafe.UseVisualStyleBackColor = true;
+			// 
 			// SbusSetupForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(182, 133);
+			this.ClientSize = new System.Drawing.Size(182, 185);
+			this.Controls.Add(this.checkFailsafe);
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
@@ -127,6 +141,7 @@ namespace vJoySerialFeeder
 			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox checkFailsafe;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.Button buttonCancel;

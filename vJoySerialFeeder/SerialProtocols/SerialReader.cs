@@ -21,7 +21,7 @@ namespace vJoySerialFeeder
 		/// other serial read problem.
 		/// </summary>
 		public class FailsafeException : Exception {
-			FailsafeException(string msg) : base(msg) {}
+			public FailsafeException(string msg) : base(msg) {}
 		}
 		
 		/// <summary>

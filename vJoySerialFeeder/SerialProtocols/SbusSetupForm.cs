@@ -16,8 +16,9 @@ namespace vJoySerialFeeder
 	public partial class SbusSetupForm : Form
 	{
 		public bool UseRawInput {get; private set; }
+		public bool IgnoreSbusFailsafeFlag {get; private set; }
 		
-		public SbusSetupForm(bool useRawInput)
+		public SbusSetupForm(bool useRawInput, bool useFailsafe)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -28,6 +29,8 @@ namespace vJoySerialFeeder
 				radioRaw.Checked = true;
 			else
 				radioPrescale.Checked = true;
+			
+			checkFailsafe.Checked = useFailsafe;
 		}
 		
 		void ButtonCancelClick(object sender, EventArgs e)
@@ -39,6 +42,7 @@ namespace vJoySerialFeeder
 		void ButtonOKClick(object sender, EventArgs e)
 		{
 			UseRawInput = radioRaw.Checked;
+			IgnoreSbusFailsafeFlag = checkFailsafe.Checked;
 			DialogResult = DialogResult.OK;
 			Close();
 		}
