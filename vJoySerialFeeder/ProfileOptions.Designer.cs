@@ -100,7 +100,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericFailsafeUpdateRate.Name = "numericFailsafeUpdateRate";
 			this.numericFailsafeUpdateRate.Size = new System.Drawing.Size(73, 20);
-			this.numericFailsafeUpdateRate.TabIndex = 3;
+			this.numericFailsafeUpdateRate.TabIndex = 1;
 			this.toolTip1.SetToolTip(this.numericFailsafeUpdateRate, "When Failsafe is active Scripts and Iteractions\r\nwill still be executed at this r" +
 						"ate.");
 			this.numericFailsafeUpdateRate.Value = new decimal(new int[] {
@@ -167,7 +167,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel.Location = new System.Drawing.Point(62, 104);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 2;
+			this.buttonCancel.TabIndex = 0;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);

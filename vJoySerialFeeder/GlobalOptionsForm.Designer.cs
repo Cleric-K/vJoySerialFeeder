@@ -76,7 +76,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericWSPort.Name = "numericWSPort";
 			this.numericWSPort.Size = new System.Drawing.Size(69, 20);
-			this.numericWSPort.TabIndex = 2;
+			this.numericWSPort.TabIndex = 1;
 			this.numericWSPort.Value = new decimal(new int[] {
 									40000,
 									0,
@@ -127,11 +127,11 @@ namespace vJoySerialFeeder
 			this.buttonCancel.Location = new System.Drawing.Point(31, 108);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 2;
+			this.buttonCancel.TabIndex = 0;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			// 
-			// OptionsForm
+			// GlobalOptionsForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -144,7 +144,7 @@ namespace vJoySerialFeeder
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
-			this.Name = "OptionsForm";
+			this.Name = "GlobalOptionsForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "OptionsForm";

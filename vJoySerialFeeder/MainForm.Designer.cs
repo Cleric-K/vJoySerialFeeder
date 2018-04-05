@@ -86,9 +86,9 @@ namespace vJoySerialFeeder
         	this.outputToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.manualToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
         	this.label2 = new System.Windows.Forms.Label();
         	this.buttonScript = new System.Windows.Forms.Button();
-        	this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
         	this.statusStrip1.SuspendLayout();
         	this.menuStrip1.SuspendLayout();
         	this.SuspendLayout();
@@ -100,7 +100,7 @@ namespace vJoySerialFeeder
         	this.panelMappings.Location = new System.Drawing.Point(12, 135);
         	this.panelMappings.Name = "panelMappings";
         	this.panelMappings.Size = new System.Drawing.Size(703, 378);
-        	this.panelMappings.TabIndex = 2;
+        	this.panelMappings.TabIndex = 100;
         	this.panelMappings.WrapContents = false;
         	this.panelMappings.MouseEnter += new System.EventHandler(this.FlowLayoutPanel1MouseEnter);
         	// 
@@ -413,9 +413,16 @@ namespace vJoySerialFeeder
         	// manualToolStripMenuItem
         	// 
         	this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
         	this.manualToolStripMenuItem.Text = "&Manual";
         	this.manualToolStripMenuItem.Click += new System.EventHandler(this.ManualMenuClick);
+        	// 
+        	// menuAbout
+        	// 
+        	this.menuAbout.Name = "menuAbout";
+        	this.menuAbout.Size = new System.Drawing.Size(114, 22);
+        	this.menuAbout.Text = "&About";
+        	this.menuAbout.Click += new System.EventHandler(this.MenuAboutClick);
         	// 
         	// label2
         	// 
@@ -431,17 +438,10 @@ namespace vJoySerialFeeder
         	this.buttonScript.Location = new System.Drawing.Point(306, 106);
         	this.buttonScript.Name = "buttonScript";
         	this.buttonScript.Size = new System.Drawing.Size(75, 23);
-        	this.buttonScript.TabIndex = 24;
+        	this.buttonScript.TabIndex = 15;
         	this.buttonScript.Text = "Edit Script";
         	this.buttonScript.UseVisualStyleBackColor = true;
         	this.buttonScript.Click += new System.EventHandler(this.ScriptEditMenuClick);
-        	// 
-        	// menuAbout
-        	// 
-        	this.menuAbout.Name = "menuAbout";
-        	this.menuAbout.Size = new System.Drawing.Size(152, 22);
-        	this.menuAbout.Text = "&About";
-        	this.menuAbout.Click += new System.EventHandler(this.MenuAboutClick);
         	// 
         	// MainForm
         	// 

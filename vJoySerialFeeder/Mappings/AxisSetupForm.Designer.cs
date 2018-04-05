@@ -164,7 +164,7 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(209, 410);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
-			this.buttonOK.TabIndex = 10;
+			this.buttonOK.TabIndex = 11;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -175,7 +175,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel.Location = new System.Drawing.Point(128, 410);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 9;
+			this.buttonCancel.TabIndex = 10;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -185,7 +185,7 @@ namespace vJoySerialFeeder
 			this.buttonCalibrate.Location = new System.Drawing.Point(180, 267);
 			this.buttonCalibrate.Name = "buttonCalibrate";
 			this.buttonCalibrate.Size = new System.Drawing.Size(75, 23);
-			this.buttonCalibrate.TabIndex = 8;
+			this.buttonCalibrate.TabIndex = 9;
 			this.buttonCalibrate.Text = "Calibrate";
 			this.buttonCalibrate.UseVisualStyleBackColor = true;
 			this.buttonCalibrate.Click += new System.EventHandler(this.ButtonCalibrateClick);
@@ -304,7 +304,7 @@ namespace vJoySerialFeeder
 			this.checkFailsafeLast.Location = new System.Drawing.Point(183, 369);
 			this.checkFailsafeLast.Name = "checkFailsafeLast";
 			this.checkFailsafeLast.Size = new System.Drawing.Size(51, 20);
-			this.checkFailsafeLast.TabIndex = 24;
+			this.checkFailsafeLast.TabIndex = 8;
 			this.checkFailsafeLast.Text = "Last";
 			this.checkFailsafeLast.UseVisualStyleBackColor = true;
 			this.checkFailsafeLast.CheckedChanged += new System.EventHandler(this.OnChange);

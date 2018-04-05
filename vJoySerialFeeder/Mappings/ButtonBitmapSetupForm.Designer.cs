@@ -100,7 +100,7 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(99, 244);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
-			this.buttonOK.TabIndex = 4;
+			this.buttonOK.TabIndex = 5;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -111,7 +111,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel.Location = new System.Drawing.Point(18, 244);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 3;
+			this.buttonCancel.TabIndex = 4;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -138,7 +138,7 @@ namespace vJoySerialFeeder
 			this.comboFailsafe.Location = new System.Drawing.Point(94, 93);
 			this.comboFailsafe.Name = "comboFailsafe";
 			this.comboFailsafe.Size = new System.Drawing.Size(62, 21);
-			this.comboFailsafe.TabIndex = 5;
+			this.comboFailsafe.TabIndex = 3;
 			// 
 			// label2
 			// 
@@ -154,7 +154,7 @@ namespace vJoySerialFeeder
 			this.checkTriggerEnable.Location = new System.Drawing.Point(6, 19);
 			this.checkTriggerEnable.Name = "checkTriggerEnable";
 			this.checkTriggerEnable.Size = new System.Drawing.Size(126, 22);
-			this.checkTriggerEnable.TabIndex = 7;
+			this.checkTriggerEnable.TabIndex = 0;
 			this.checkTriggerEnable.Text = "Enable";
 			this.checkTriggerEnable.UseVisualStyleBackColor = true;
 			this.checkTriggerEnable.CheckedChanged += new System.EventHandler(this.onEnableCheck);
@@ -178,7 +178,7 @@ namespace vJoySerialFeeder
 			this.comboTrigerEdge.Location = new System.Drawing.Point(70, 47);
 			this.comboTrigerEdge.Name = "comboTrigerEdge";
 			this.comboTrigerEdge.Size = new System.Drawing.Size(62, 21);
-			this.comboTrigerEdge.TabIndex = 8;
+			this.comboTrigerEdge.TabIndex = 1;
 			// 
 			// numericTriggerDuration
 			// 
@@ -195,7 +195,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericTriggerDuration.Name = "numericTriggerDuration";
 			this.numericTriggerDuration.Size = new System.Drawing.Size(48, 20);
-			this.numericTriggerDuration.TabIndex = 11;
+			this.numericTriggerDuration.TabIndex = 2;
 			this.numericTriggerDuration.Value = new decimal(new int[] {
 									1,
 									0,

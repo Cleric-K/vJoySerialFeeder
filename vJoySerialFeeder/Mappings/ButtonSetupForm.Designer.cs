@@ -96,7 +96,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericThresh1.Name = "numericThresh1";
 			this.numericThresh1.Size = new System.Drawing.Size(53, 20);
-			this.numericThresh1.TabIndex = 3;
+			this.numericThresh1.TabIndex = 2;
 			this.numericThresh1.Value = new decimal(new int[] {
 									1500,
 									0,
@@ -114,7 +114,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericThresh2.Name = "numericThresh2";
 			this.numericThresh2.Size = new System.Drawing.Size(53, 20);
-			this.numericThresh2.TabIndex = 4;
+			this.numericThresh2.TabIndex = 3;
 			this.numericThresh2.Value = new decimal(new int[] {
 									1750,
 									0,
@@ -127,7 +127,7 @@ namespace vJoySerialFeeder
 			this.buttonCalibrate.Location = new System.Drawing.Point(181, 266);
 			this.buttonCalibrate.Name = "buttonCalibrate";
 			this.buttonCalibrate.Size = new System.Drawing.Size(75, 23);
-			this.buttonCalibrate.TabIndex = 2;
+			this.buttonCalibrate.TabIndex = 5;
 			this.buttonCalibrate.Text = "Calibrate";
 			this.buttonCalibrate.UseVisualStyleBackColor = true;
 			this.buttonCalibrate.Click += new System.EventHandler(this.ButtonCalibrateClick);
@@ -138,7 +138,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel.Location = new System.Drawing.Point(129, 445);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-			this.buttonCancel.TabIndex = 5;
+			this.buttonCancel.TabIndex = 6;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
 			this.buttonCancel.Click += new System.EventHandler(this.ButtonCancelClick);
@@ -148,7 +148,7 @@ namespace vJoySerialFeeder
 			this.buttonOK.Location = new System.Drawing.Point(210, 445);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(46, 23);
-			this.buttonOK.TabIndex = 6;
+			this.buttonOK.TabIndex = 7;
 			this.buttonOK.Text = "OK";
 			this.buttonOK.UseVisualStyleBackColor = true;
 			this.buttonOK.Click += new System.EventHandler(this.ButtonOKClick);
@@ -201,7 +201,7 @@ namespace vJoySerialFeeder
 			this.comboFailsafe.Location = new System.Drawing.Point(97, 308);
 			this.comboFailsafe.Name = "comboFailsafe";
 			this.comboFailsafe.Size = new System.Drawing.Size(73, 21);
-			this.comboFailsafe.TabIndex = 36;
+			this.comboFailsafe.TabIndex = 4;
 			this.comboFailsafe.SelectedIndexChanged += new System.EventHandler(this.OnChange);
 			// 
 			// groupBox1
@@ -229,7 +229,7 @@ namespace vJoySerialFeeder
 			this.comboTrigerEdge.Location = new System.Drawing.Point(96, 42);
 			this.comboTrigerEdge.Name = "comboTrigerEdge";
 			this.comboTrigerEdge.Size = new System.Drawing.Size(62, 21);
-			this.comboTrigerEdge.TabIndex = 8;
+			this.comboTrigerEdge.TabIndex = 1;
 			this.comboTrigerEdge.SelectedIndexChanged += new System.EventHandler(this.OnChange);
 			// 
 			// numericTriggerDuration
@@ -247,7 +247,7 @@ namespace vJoySerialFeeder
 									0});
 			this.numericTriggerDuration.Name = "numericTriggerDuration";
 			this.numericTriggerDuration.Size = new System.Drawing.Size(48, 20);
-			this.numericTriggerDuration.TabIndex = 11;
+			this.numericTriggerDuration.TabIndex = 2;
 			this.numericTriggerDuration.Value = new decimal(new int[] {
 									1,
 									0,
@@ -261,7 +261,7 @@ namespace vJoySerialFeeder
 			this.checkTriggerEnable.Location = new System.Drawing.Point(7, 19);
 			this.checkTriggerEnable.Name = "checkTriggerEnable";
 			this.checkTriggerEnable.Size = new System.Drawing.Size(151, 22);
-			this.checkTriggerEnable.TabIndex = 7;
+			this.checkTriggerEnable.TabIndex = 0;
 			this.checkTriggerEnable.Text = "Enable";
 			this.checkTriggerEnable.UseVisualStyleBackColor = true;
 			this.checkTriggerEnable.CheckedChanged += new System.EventHandler(this.OnChange);
