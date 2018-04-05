@@ -48,14 +48,15 @@ namespace vJoySerialFeeder
 		[Guid(CLSID)]
 		[ClassInterface(ClassInterfaceType.AutoDispatch)]
 		public class Application : IClassFactory {
-			internal Application() {
-				Mappings = new Mappings();
-			}
-			
 			/// <summary>
-			/// The Mappings Array
+			/// Returns Mapping Wrapper
 			/// </summary>
-			public Mappings Mappings { get ; private set; }
+			public MappingWrapper Mapping(int index) {
+				var m = MainForm.Instance.MappingAt(index-1);
+				if(m == null)
+					return null;
+				return new MappingWrapper(m);
+			}
 			
 			/// <summary>
 			/// Failsafe
@@ -97,21 +98,6 @@ namespace vJoySerialFeeder
 			{
 				return 0;
 			}
-		}
-		
-		/// <summary>
-		/// This class implemets a Mapping Array with Item() and Count
-		/// </summary>
-		[ComVisible(true)]
-		public class Mappings {
-			public MappingWrapper Item(int index) {
-				var m = MainForm.Instance.MappingAt(index-1);
-				if(m == null)
-					return null;
-				return new MappingWrapper(m);
-			}
-			
-			public int Count { get { return MainForm.Instance.MappingCount; } }
 		}
 		
 		
