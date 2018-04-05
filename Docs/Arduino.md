@@ -10,7 +10,7 @@ Digital data is read from the digital pins and is send as channel values 0 for L
 Analog channels are most easily implemented with potentiometers and digital - with switches.
 
 ## Using old toy-grade RC controller for PC simulators ##
-If you have an old toy RC controller it is quite easy to read its pots with arduino. Here is an example how such a controller has been modified.
+If you have an old toy RC controller it is quite easy to read its pots with Arduino. Here is an example how such a controller has been modified.
 
 ![RC](images/ard1.jpg)
 
@@ -30,7 +30,7 @@ In this scenario the RC controller will supply the positive voltage to the pots 
 
 ![RC](images/ard0.png)
 
-(b) If you don't want to use the RC controllers's power supply you can connect a +5V pin of the Arduino to the +V pins of the pots.
+(b) If you don't want to use the RC controller's power supply you can connect a +5V pin of the Arduino to the +V pins of the pots.
 
 **WARNING!**\
 In this case the 5V you supply will most certainly propagate to the circuits of the RC controller and the controller may be powered up. If the 5 Volts are insufficient or are too high for the RC controller it might be damaged. If you are not sure what to do, the safest thing is to use (a).

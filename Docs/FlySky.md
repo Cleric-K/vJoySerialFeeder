@@ -1,7 +1,7 @@
 # VJoySerialFeeder using FlySky receiver #
 
 If you have a FlySky controller with a spare receiver it is very easy to use it with vJoySerialFeeder, since the IBUS pin of the receiver is in fact a UART TX pin working at 115200 bps.
- 
+
 > Note: If you use the links below to buy _anything_ from Banggood you will be helping [Drone Mesh](https://www.youtube.com/channel/UC3c9WhUvKv2eoqZNSqAGQXg)'s youtube channel (the price you pay is _not_ affected by this in any way). He is making great video tutorials for this project and deserves our support.
 
 

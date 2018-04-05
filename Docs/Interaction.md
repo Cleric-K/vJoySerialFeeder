@@ -7,7 +7,7 @@ from outside vJoySerialFeeder.
 The classic example would be to develop a dashboard software. Let's say you built a cockpit
 with some sticks, levers, switches and you use Arduino to feed the data to
 vJoySerialFeeder. Using the Interaction API you can create a dashboard (for example as
-a web page) which visualizes
+a web page opened on a tablet) which visualizes
 some of the data coming through the serial channels. Furthermore you can make
 "soft" switches, buttons, axes on your dashboard which can be fed back to
 vJoySerialFeeder and from there to the virtual joystick.
@@ -27,15 +27,12 @@ In general there are two ways to read data from a mapping:
 two types of events:
    * Input events - these occur when the `Input` value of the mapping has changed.
    * Output events - these occur when the `Output` value of the mapping has changed.
-   Input events are more encompassing than Output events.
-   This is because the `Output` cannot change unless the `Input` changes, while on
-   the other hand the `Input` can change without the `Output` changing - the simplest
-   example being a Button Mapping - the `Input` can change in wide ranges but the
-   `Output` changes only between 0.0 and 1.0 when the threshold is crossed. In most
-   cases the Output events are what we care for.
 
-> Note: If a mapping is intended just for Interaction purposes, you can stop the
-`Output` from being fed to the virtual joystcik. See [More about Mappings](Mappings.md) for details.
+   You can also subscribe to _both_ kind of events at the same time.\
+   In most cases we care for the "output" type. For example, in Button Mappings
+   we want to know when the button changes state (`Output` jumps to either 0.0 or 1.0)
+   and we don't care about the actual `Input` which may be varying slightly all the time.
+
 
 #### Writing
 You can set the `Input` and `Output` values of a Mapping yourself. If you modify the `Input`, `Output`

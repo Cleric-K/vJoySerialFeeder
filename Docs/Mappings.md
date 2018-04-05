@@ -1,6 +1,6 @@
 # More about Mappings
 
-To use the Advanced features, some more details about the inner workings of
+To use the advanced features of vJoySerialFeeder, some more details about the inner workings of
 a Mapping is needed. Every Mapping has the following two properties:
 * `Input` - This is a unsigned 16-bit integer value (0 - 65535). Normally `Input` is the last
 value read from the serial port, _for the selected channel_. The actual
@@ -13,9 +13,12 @@ intend to set the `Input` with Scripting or Interaction.
 value. The output values depend on the mapping type:
   * Axis Mapping - the output value is a floating point number in the range [0.0; 1.0].
   * Button Mapping - the output value is 0.0 for depressed button and 1.0 for pressed.
-  * Bitmapped Button Mapping - the value is the same as `Input`, except for bits
-  which have been set as inverted buttons - for such buttons, their bits in `Output`
-  are flipped compared to the same bits in the `Input`.
+  * Bitmapped Button Mapping - unmapped bits are the same as the corresponding
+    bits in the `Input` value. For mapped bits the bit in the `Output` represents
+	the state of the virtual button that the bit commands -
+	`1` if pressed and `0` is depressed. In many cases the `Output` bit will be
+	the same as the corresponding `Input` bit, but when `Invert` or `Trigger`
+	are used they may differ.
     > Note: When using in Scripting or Interaction the `Output` value of a
       Bitmapped Button Mapping might be read as floating point
       number. Simply cast it to integer before performing bitwise operations on it.

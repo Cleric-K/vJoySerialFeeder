@@ -3,9 +3,9 @@
 If the provided Mappings are not sufficient for your needs, you can create
 custom actions by using a script.
 
-Scripts are written in the Lua language. The script is excuted _once_ on Serial Connect or if
+Scripts are written in the [Lua](http://www.lua.org) language. The script is executed _once_ on Serial Connect or if
 you edit the script while you are connected.
-Your script can do any intialization it needs but the most important thing is to define the
+Your script can do any initialization it needs but the most important thing is to define the
 specially named function `update()`. This function will be called on every update.
 
 The Lua environment comes with the following modules preloaded:
@@ -22,7 +22,8 @@ With scripts you can:
 * Write directly to the Virtual Joystick
 
 ## Creating a script
-vJoySerialFeeder has built in Lua editor. You can open it from the `Script`>`Edit` menu
+vJoySerialFeeder has built in Lua editor. You can open it from the `Script`>`Add` menu or with the `Add Script`
+button on the main interface.
 
 ## Script text output
 When developing and debugging a script it is helpful to be able to use the Lua `print` function.
@@ -30,30 +31,67 @@ The output of it can be seen through the `Script`>`Output` menu.
 
 ## API
 
+### Globals
 To interact with vJoySerialFeeder the following global functions and objects are defined:
 
-Name | Type | Description
---- | --- | ---
-`Mapping(index)` | Function | Gets the `Mapping` object for the requested `index` (starting from 1)
-`VJoy` | Object | Interface for the Virtual Joystick
-`Channel(index)` | Function | Gets the raw serial integer value for channel `index` (starting from 1)
+#### function: Mapping(index)
+* `index` index of the mapping (starting from 1)
+* returns \<[Mapping](#object-mapping)>
 
-`Mapping` objects have the following fields:
+Gets the [Mapping](#object-mapping) object for the requested `index`
 
-Name | Type | Description
---- | --- | ---
-`Input`| Property | The Mapping's input. Readable and Writeable.
-`Output`| Property | The Mapping's output. Readable and Writeable.
-`Type`| Property | The Mapping's type as string. Read-only.
+#### object: VJoy \<[VJoy](#object-vjoy)>
 
-The `VJoy` object has the following fields:
+Interface for the Virtual Joystick
 
-Name | Type | Description
---- | --- | ---
-`SetAxis(axis, value)` | Function | Sets `axis` (1, 2, ...) to `value` (0.0 to 1.0)
-`SetButton(button, value)` | Function | Sets `button` (1, 2, ...) to `value` (true or false)
+#### function: Channel(index)
+* `index` channel index (starting from 1)
 
-For convenience the following variables are defined to be used with the `SetAxis()` function:
+Gets the raw serial integer value for channel `index`
+
+#### variable: Failsafe \<boolean>
+Tells if Failsafe mode is active. Writing to this variable has no effect.
+
+---
+
+### object: Mapping
+
+#### property: Input \<integer>
+
+On read, returns the `Input` value of the mapping.\
+The property is writable, but make sure you set the mapping's channel to zero,
+otherwise your changes will soon be overwritten by serial data.
+The `Output` of the Mapping is automatically updated on write.
+
+#### property: Output \<float>
+
+On read, returns the `Output` value of the mapping. The value depends on
+mapping type (see [More about Mappings](Mappings.md)).\
+The property is writable, but make sure you set the mapping's channel to zero,
+otherwise your changes will soon be overwritten by serial data.
+The `Input` of the Mapping is unaffected on write.
+
+#### property: Type \<string>
+
+The Mapping's type as string. Read-only.
+
+---
+
+### object: VJoy
+
+#### method: SetAxis(axis, value)
+* `axis` \<integer> axis number (starting from 1)
+* `value` \<float> axis value (0.0 to 1.0)
+
+
+#### method: SetButton(button, pressed)
+* `button` \<integer> button number (starting from 1)
+* `pressed` \<boolean> button pressed state (true or false)
+
+
+---
+
+For convenience the following global variables are defined to be used with the `SetAxis()` function:
 
 Name | Value
 --- | ---
@@ -70,7 +108,7 @@ Name | Value
 
 Here's a overall diagram of the vJoySerialFeeder's main loop.
 
-![]()
+![mainloop](images/main-loop.png)
 
 
 There two important things to note:
@@ -80,7 +118,8 @@ of the Mappings.
 
 2. Your script is executed _before_ the Mappings' `Output`s are sent to
 the virtual joystick. Thus any changes to the joystick that you made in your
-script _will be overwritten_ by Mappings that use the same axes/buttons.
+script through the [VJoy](#object-vjoy) object
+_will be overwritten_ by Mappings that use the same axes/buttons.
 
 ## Examples
 
@@ -114,14 +153,15 @@ end
 then based on our switch position only X/Y or Rx/Ry will be active, while the other pair will be centered.
 
 ### Function Generator
-Here is one probably not very useful example, but it provides some idea
-of what is possible with scripting.\
+Here is one probably not very useful example, but it provides a showcase of
+the API.\
 The script generates a harmonic signal sent to the X axis of the virtual joystick.
 Channel 1 controls the frequency, Channel 2 - the amplitude.\
-Here we read the Channels directly just to showcase the API, but in practice it will be
+Here we read the Channels directly, but in practice it will be
 easier to use an Axis Mapping for that and get the value from its `Output`. The
-same holds for writing to the joystick - it is preferred to add a mapping with
-channel set to 0 and the desired axis/button, and then write to its `Output` in script.
+same holds for writing to the joystick - it is preferred to add a mapping
+for the desired axis/button with
+channel set to 0 and then write to its `Output` in script.
 
 ```Lua
 local prev_time = os.time()

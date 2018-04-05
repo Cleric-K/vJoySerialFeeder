@@ -14,40 +14,77 @@ Set obj = GetObject("vJoySerialFeeder.1")
 ```
 
 ## Object reference
-The root vJSF object has the following members:
 
-| Name  | Type | Description |
---- | --- | ---
-| Mappings | Property | List of Mappings (see below) |
-| DetachHandler(handler) | Method | Use this to detach a handler (see below) |
 
-The `Mappings` property has members:
+### object: vJoySerialFeeder
+This is the root object that you get from `GetObject()`. It has the following
+members:
 
-| Name  | Type | Description |
---- | --- | ---
-| Count | Property | The number of Mappings currently in vJSF |
-| Item(index) | Method | Gets `Mapping` object at `index`. Indexes start from 1. |
+#### method: Mapping(index)
+* `index` <integer> the index of the mapping (starts from 1)
+* returns <[Mapping](#object-mapping)>
 
-The `Mapping` object has members:
+Gets a [Mapping](#object-mapping) object for the requested `index`
 
-| Name  | Type | Description |
---- | --- | ---
-| Input | Property | On read, returns the `Input` value of the mapping. The property is writeable. If you write to it, make sure you protect if from being overwritten by incoming serial data. See [More about Mappings](Mappings.md). |
-| Output | Property | On read, returns the `Output` value of the mapping. The property is writeable. See the remark above. |
-| Type | Property | The type of the mapping as string  |
-| AttachInputHandler(handler) | Method | Use this to attach a handler which is called on change of the `Input` value |
-| AttachOutputHandler(handler) | Method | Use this to attach a handler which is called on change of the `Output` value |
-| DetachHandler(handler) | Method | Use this to detach a handler. |
+#### method: DetachHandler(handler)
+* `handler` \<[Handler](#handler)>
 
-## Handlers
-Handlers are objects which _must_ have a method called `OnUpdate` which takes two arguments: `OnUpdate(Input, Output)`.
-When handlers are attached to a mapping, their `OnUpdate` method will be called whenever values change.
+Detach the provided `handler` from any mapping that it is attached to (see below).
 
-You can attach the same handler object to more than one Mapping.
-If you call the `DetachHandler(handler)` method _on a Mapping_ object,
-the handler object will be detached _for this Mapping_. If the same handler object is attached to _other_ mappings,
-they won't be detached.\
-If you call `DetachHandler(handler)` method _of the root object_, the handler will be removed from _any_ Mapping the handler object is attached to.
+#### property: Failsafe \<boolean>
+
+Tells if Failsafe mode is active
+
+---
+
+### object: Mapping
+
+#### property: Input \<integer>
+On read, returns the `Input` value of the mapping.\
+The property is writable, but make sure you set the mapping's channel to zero,
+otherwise your changes will soon be overwritten by serial data.
+The `Output` of the Mapping is automatically updated on write.
+
+#### property: Output \<float>
+On read, returns the `Output` value of the mapping. The value depends on
+mapping type (see [More about Mappings](Mappings.md)).\
+The property is writable, but make sure you set the mapping's channel to zero,
+otherwise your changes will soon be overwritten by serial data.
+The `Input` of the Mapping is unaffected on write.
+
+#### property: Type \<string>
+The type of the mapping.
+
+#### method: AttachHandler(handler, [type])
+* `handler` \<[Handler](#handler)> The handler to attach.
+* `type` \<string> Should be one of "input", "output" or "both".
+   If not provided, "output" is assumed.
+
+Use this method to attach a [Handler](#handler) object to this mapping.
+The `type` argument determines on what kind of events you want your
+handler to be called.
+   * "input" - the handler is called whenever the `Input` of the mapping changes value.
+   * "output" - the handler is called whenever the `Output` of the mapping changes value.
+   * "both"- the handler is called whenever either `Input` or `Output` of the mapping changes value
+
+#### method: DetachHandler(handler)
+* `handler` \<[Handler](#handler)> The handler to detach.
+
+The `handler` will be detached only from this mapping. If the same `handler`
+object is attached to other mappings they will continue to be active.
+
+---
+
+### object: Handler
+* method: OnUpdate(input, output) Called on value change
+
+This object must be implemented _by you_. The only requirement is the above
+method accepting two argument. After attaching the handler to a mapping
+the `OnUpdate()` method will be called depending on the attachment type
+(`input`, `output` or `both`). No matter what the type of the attachment is
+you, will always receive both the current `input` and `output` of the mapping
+as arguments.
+
 
 ## Examples
 
@@ -60,8 +97,8 @@ Here is an example in VBScript to clarify everything above. Run this script with
 Set obj = GetObject("vJoySerialFeeder.1")
 
 ' Get the Mapping objects
-Set Map_1 = obj.Mappings.Item(1)
-Set Map_2 = obj.Mappings.Item(2)
+Set Map_1 = obj.Mapping(1)
+Set Map_2 = obj.Mapping(2)
 
 ' logging helper
 Sub Print(Input, Output)
@@ -81,7 +118,7 @@ End Class
 Set h = New MyHandler
 
 WScript.Echo "-- Handler example --"
-Map_1.AttachOutputHandler(h)
+Map_1.AttachHandler h	` When the `type` is not specified, "output" is the default
 WScript.Echo "-- Handler attached to Mapping 1. Please generate some input --"
 
 ' Get 100 events
@@ -90,7 +127,7 @@ While eventCount < 100
 Wend
 
 Map_1.DetachHandler(h)
-WScript.Echo "-- Handler dettached --"
+WScript.Echo "-- Handler detached --"
 
 WScript.Echo
 WScript.Echo "-- Manual Reading Mapping 1--"
@@ -118,7 +155,7 @@ WScript.Echo "Mapping 1 type: " & Map_1.Type
 
 ### AutoHotKey
 
-AutoHotKey is very useful tool if you need to simulate keystrokes or perform some other kind of automations.
+AutoHotKey is very useful tool if you need to simulate keystrokes or perform some other kind of automation.
 
 Here is an example how you can command your mouse with vJSF and AHK. You need three mappings:
 1. AxisMapping - for X
@@ -154,7 +191,7 @@ Class MyHandler {
 
 
 h := new MyHandler
-obj.Mappings.Item(3).AttachOutputHandler(h)
+obj.Mapping(3).AttachHandler(h)
 
 
 ; For mouse movement we will get better results if we do not depend
@@ -164,8 +201,8 @@ obj.Mappings.Item(3).AttachOutputHandler(h)
 #Persistent
 
 MouseSpeed := 10
-MapX := obj.Mappings.Item(1)
-MapY := obj.Mappings.Item(2)
+MapX := obj.Mapping(1)
+MapY := obj.Mapping(2)
 
 SetTimer, MoveTheMouse, 10
 return
@@ -191,26 +228,26 @@ the vJSF ProgID in the registry ([.reg file](COM.reg)).
 					}
 	};
 	var attached = false;
-	
+
 	function attach() {
 		if(!attached) {
-			obj.Mappings.Item(1).AttachOutputHandler(handler);
+			obj.Mapping(1).AttachHandler(handler);
 			attached = true;
 		}
 	}
-	
+
 	function detach() {
 		if(attached) {
-			obj.Mappings.Item(1).DetachHandler(handler);
+			obj.Mapping(1).DetachHandler(handler);
 			attached = false;
 		}
 	}
-	
+
 	function set() {
-		obj.Mappings.Item(2).Output = Math.random();
+		obj.Mapping(2).Output = Math.random();
 	}
 
-	
+
 </script>
 
 <button onclick="attach()">Attach Handler to Mapping1.Output</button>

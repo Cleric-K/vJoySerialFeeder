@@ -27,16 +27,16 @@ can simply `sudo chmod a+rw /dev/uinput`, but permissions will be reset after re
 
   3. Create file `/etc/udev/rules.d/99-input.rules` (as root) with the following contents:\
     `SUBSYSTEM=="misc", KERNEL=="uinput", MODE="0660", GROUP="uinput"`
-  
+
   4. Reboot
-  
+
   Optional:
-  
+
   5. Check with `ls -l /dev/uinput` you should see something like\
      `crw-rw---- 1 root uinput 10, 223 Nov 11 15:35 /dev/uinput`
 
   6. Check if you are added to the `uinput` group with the `groups` command in the console
-  
+
 ### libevdev2
 Install with `sudo apt-get install libevdev2` or whatever your package manager is.
 

@@ -8,14 +8,14 @@ benefit that the client may be running on a different machine. (Technically COM
 can also run on a different machine with DCOM, but things get more complicated
 and I doubt anyone will ever need this).
 
-> Nore: To use WebSocket you have to enable it from the `Program`>`Options` menu.
+> Note: To use WebSocket you have to enable it from the `Program`>`Global Options` menu.
 
 The WebSocket protocol is very simple. You send commands to vJSF and you receive
 messages.
 
 ## Messages
 The messages are JSON strings which can be in one of two forms:
-1. Data Message
+#### 1. Data Message
 ```js
 {
   "mapping": 2, // index of the mapping. 1, 2... etc
@@ -24,7 +24,7 @@ The messages are JSON strings which can be in one of two forms:
 }
 ```
 
-2. Error Message
+#### 2. Error Message
 ```js
 {
 	"error": "error message string"
@@ -35,14 +35,36 @@ The messages are JSON strings which can be in one of two forms:
 
 Commands are sent as simple string. The following commands are supported:
 
-Command | Description
----    | ---
-`get M` | Requests a Data Message for Mapping with index `M`
-`set_input M V` | Sets the `Input` of mapping `M` to the integer value `V` (`Output` is calculated automatically)
-`set_output M V` | Sets the `Output` of mapping `M` to the float value `V`
-`sub_input M` | Subscribes to automatic Data Messages when the `Input` value of mapping `M` changes
-`sub_output M` | Subscribes to automatic Data Messages when the `Output` value of mapping `M` changes
-`unsub M` | Unsubscribes from any changes in mapping `M`
+#### `get MAPPING_ID`
+* `MAPPING_ID` mapping index (starting from 1)
+
+Request a [Data Message](#1-data-message) for mapping with index `MAPPING_ID`
+
+#### `set TYPE MAPPING_ID VALUE`
+* `TYPE` either `input` or `output`
+* `MAPPING_ID` mapping index
+* `VALUE` the value to set
+
+Sets the `Input` or `Output` (depending of `TYPE`) of mapping with index
+`MAPPING_ID` to the specified `VALUE`.
+`Output` values are specific to Mapping Type - see [More about Mappings](Mappings.md).\
+Make sure you set the mapping's channel to zero,
+otherwise your changes will soon be overwritten by serial data.
+If you set the `Input` of the mapping, the `Output`
+will be automatically updated.\
+If you are setting the `Output`, the `Input` is unaffected.
+
+#### `sub TYPE MAPPING_ID`
+* `TYPE` one of `input`, `output` or `both`
+* `MAPPING_ID` mapping index
+
+Subscribes to automatic [Data Messages](#1-data-message) when the `Input`, `Output` or any of the two
+(depending on `TYPE`) of mapping `MAPPING_ID` changes value
+
+#### `unsub MAPPING_ID`
+* `MAPPING_ID` mapping index
+
+Unsubscribes from any changes in mapping with index `MAPPING_ID`
 
 ## Example
 
@@ -91,7 +113,7 @@ Command | Description
 	}
 
 	function sub() {
-		ws.send('sub_output 1');
+		ws.send('sub output 1');
 	}
 
 	function unsub() {
@@ -107,8 +129,8 @@ Command | Description
 			mx = (e.clientX - r.left)/r.width,
 			my = (e.clientY - r.top)/r.height;
 
-		ws.send('set_output 3 ' + mx);
-		ws.send('set_output 4 ' + my);
+		ws.send('set output 3 ' + mx);
+		ws.send('set output 4 ' + my);
 	}
 </script>
 
