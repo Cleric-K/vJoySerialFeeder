@@ -24,7 +24,7 @@ members:
 * `index` <integer> the index of the mapping (starts from 1)
 * returns <[Mapping](#object-mapping)>
 
-Gets a [Mapping](#object-mapping) object for the requested `index`
+Gets a [Mapping](#object-mapping) object for the requested `index`.
 
 #### method: DetachHandler(handler)
 * `handler` \<[Handler](#handler)>
@@ -33,7 +33,7 @@ Detach the provided `handler` from any mapping that it is attached to (see below
 
 #### property: Failsafe \<boolean>
 
-Tells if Failsafe mode is active
+Tells if Failsafe mode is active. Read-only.
 
 ---
 
@@ -76,13 +76,17 @@ object is attached to other mappings they will continue to be active.
 ---
 
 ### object: Handler
-* method: OnUpdate(input, output) Called on value change
+* method: OnUpdate(input, output)
+   * `input` <integer> the current `Input` value of the mapping
+   * `output` <float> the current `Output` value of the mapping
+   
+Called on value change.
 
 This object must be implemented _by you_. The only requirement is the above
 method accepting two argument. After attaching the handler to a mapping
 the `OnUpdate()` method will be called depending on the attachment type
 (`input`, `output` or `both`). No matter what the type of the attachment is
-you, will always receive both the current `input` and `output` of the mapping
+you, will always receive _both_ the current `input` and `output` of the mapping
 as arguments.
 
 
@@ -118,7 +122,7 @@ End Class
 Set h = New MyHandler
 
 WScript.Echo "-- Handler example --"
-Map_1.AttachHandler h	` When the `type` is not specified, "output" is the default
+Map_1.AttachHandler h	' When the `type` is not specified, "output" is the default
 WScript.Echo "-- Handler attached to Mapping 1. Please generate some input --"
 
 ' Get 100 events

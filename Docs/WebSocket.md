@@ -68,6 +68,22 @@ Unsubscribes from any changes in mapping with index `MAPPING_ID`
 
 ## Example
 
+Paste the code below into a `.html` file and open it in any modern browser.
+Your WebSocket server is expected to run on port `40000`.\
+You need to prepare these Mappings:
+
+Index | Mapping Type | Channel | Virtual Axis/Button
+--- | ---- | --- | ---
+1 | Axis |1 | Any
+2 | Axis |2 | Any
+3 | Axis |0 | Any
+4 | Axis |0 | Any
+
+The demo allows you to:
+* Subscribe/unsubscribe from output events on Mapping 1
+* Poll Mapping 2
+* Convert mouse movement to output for Mappings 3 and 4
+
 ```html
 <!doctype html>
 <script>
@@ -139,7 +155,7 @@ Unsubscribes from any changes in mapping with index `MAPPING_ID`
 <button onclick="poll()">Poll Mapping 2</button>
 
 <div id="mousepad" style="display:table-cell;width:200px; height:200px; background:#cddc39; vertical-align:middle; text-align:center" onmousemove="onMousePadMove(event)">
-	Move your mouse here to generate input for Mappings 3 and 4 (don't forget to set the channels to 0)
+	Move your mouse here to generate output for Mappings 3 and 4 (don't forget to set the channels to 0)
 </div>
 
 <div>Mapping 1: Input=<input id="map1_input">, Output=<input id="map1_output"></div>

@@ -31,3 +31,7 @@ value. The output values depend on the mapping type:
   If the `Output` is intended to be used solely for Scripting and
   Interaction you can set the axis to `None` for Axis Mapping or the button to `0`
   for Button Mappings.
+  
+  > Note: Mappings are processed in the order of their index. For example, if by mistake you have
+  Axis Mapping 1 which outputs to axis X and then later Axis Mapping 5
+  which also outputs to axis X, that latter mapping will overwrite the output of Mapping 1.

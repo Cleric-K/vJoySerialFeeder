@@ -6,7 +6,7 @@ from outside vJoySerialFeeder.
 
 The classic example would be to develop a dashboard software. Let's say you built a cockpit
 with some sticks, levers, switches and you use Arduino to feed the data to
-vJoySerialFeeder. Using the Interaction API you can create a dashboard (for example as
+vJoySerialFeeder. With the Interaction API you can create a dashboard (for example as
 a web page opened on a tablet) which visualizes
 some of the data coming through the serial channels. Furthermore you can make
 "soft" switches, buttons, axes on your dashboard which can be fed back to
@@ -31,7 +31,7 @@ two types of events:
    You can also subscribe to _both_ kind of events at the same time.\
    In most cases we care for the "output" type. For example, in Button Mappings
    we want to know when the button changes state (`Output` jumps to either 0.0 or 1.0)
-   and we don't care about the actual `Input` which may be varying slightly all the time.
+   and we don't care about the actual `Input` which may be varying all the time.
 
 
 #### Writing

@@ -107,7 +107,7 @@ namespace vJoySerialFeeder
 						failsafeReason = null;
 					}
 					else if(!Failsafe && now >= failsafeAt) {
-						// failsafeTime elapses, time go get in failsafe
+						// failsafeTime elapsed, time to get in failsafe
 						ActiveChannels = 0;
 						Failsafe = true;
 						if(failsafeReason == null)
