@@ -609,6 +609,15 @@ namespace vJoySerialFeeder
         	}
         }
         
+        void MenuAboutClick(object sender, EventArgs e)
+        {
+        	using(var d = new AboutForm()) {
+        		d.ShowDialog();
+        	}
+        }
+        
         #endregion
+        
+        
 	}
 }
