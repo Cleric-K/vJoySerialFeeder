@@ -69,6 +69,10 @@ namespace vJoySerialFeeder
 			//
 			InitializeComponent();
 			
+			// lock width
+			MaximumSize = new Size(Size.Width, 10000);
+			MinimumSize = new Size(Size.Width, Size.Height);
+			
 			Instance = this;
 			 
 			Channels = new int[256];

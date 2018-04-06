@@ -52,13 +52,16 @@ namespace vJoySerialFeeder
 			// 
 			// linkLabel1
 			// 
-			this.linkLabel1.Location = new System.Drawing.Point(12, 100);
+			this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+									| System.Windows.Forms.AnchorStyles.Left) 
+									| System.Windows.Forms.AnchorStyles.Right)));
+			this.linkLabel1.Location = new System.Drawing.Point(12, 98);
 			this.linkLabel1.Name = "linkLabel1";
 			this.linkLabel1.Size = new System.Drawing.Size(260, 23);
 			this.linkLabel1.TabIndex = 1;
 			this.linkLabel1.TabStop = true;
 			this.linkLabel1.Text = "https://github.com/Cleric-K/vJoySerialFeeder/";
-			this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LinkLabel1LinkClicked);
 			// 
 			// labelVersion
