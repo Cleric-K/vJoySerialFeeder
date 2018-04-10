@@ -71,11 +71,6 @@ namespace vJoySerialFeeder
 									0,
 									0,
 									0});
-			this.numericButton.Minimum = new decimal(new int[] {
-									1,
-									0,
-									0,
-									0});
 			this.numericButton.Name = "numericButton";
 			this.numericButton.Size = new System.Drawing.Size(48, 20);
 			this.numericButton.TabIndex = 1;

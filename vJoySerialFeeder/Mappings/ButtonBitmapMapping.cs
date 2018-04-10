@@ -104,7 +104,7 @@ namespace vJoySerialFeeder
 			
 			for(var i=0; i<16; i++) {
 				var p = Parameters[i];
-				if(p.Enabled)
+				if(p.Enabled && p.Button >= 0)
 					vjoy.SetButton(p.Button, ((v&(1<<i))!=0));
 			}
 		}
