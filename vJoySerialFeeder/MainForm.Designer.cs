@@ -78,8 +78,13 @@ namespace vJoySerialFeeder
         	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         	this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.channelMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
         	this.menuProfileOptions = new System.Windows.Forms.ToolStripMenuItem();
         	this.menuGlobalOptions = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+        	this.menuImportCfg = new System.Windows.Forms.ToolStripMenuItem();
+        	this.menuExportCfg = new System.Windows.Forms.ToolStripMenuItem();
+        	this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
         	this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.scriptingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -89,8 +94,6 @@ namespace vJoySerialFeeder
         	this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
         	this.label2 = new System.Windows.Forms.Label();
         	this.buttonScript = new System.Windows.Forms.Button();
-        	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-        	this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
         	this.statusStrip1.SuspendLayout();
         	this.menuStrip1.SuspendLayout();
         	this.SuspendLayout();
@@ -352,6 +355,9 @@ namespace vJoySerialFeeder
         	        	        	this.menuProfileOptions,
         	        	        	this.menuGlobalOptions,
         	        	        	this.toolStripSeparator2,
+        	        	        	this.menuImportCfg,
+        	        	        	this.menuExportCfg,
+        	        	        	this.toolStripSeparator3,
         	        	        	this.exitToolStripMenuItem});
         	this.programToolStripMenuItem.Name = "programToolStripMenuItem";
         	this.programToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
@@ -360,28 +366,57 @@ namespace vJoySerialFeeder
         	// channelMonitorToolStripMenuItem
         	// 
         	this.channelMonitorToolStripMenuItem.Name = "channelMonitorToolStripMenuItem";
-        	this.channelMonitorToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+        	this.channelMonitorToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
         	this.channelMonitorToolStripMenuItem.Text = "Channel &Monitor";
         	this.channelMonitorToolStripMenuItem.Click += new System.EventHandler(this.ChannelMonitorMenuClick);
+        	// 
+        	// toolStripSeparator1
+        	// 
+        	this.toolStripSeparator1.Name = "toolStripSeparator1";
+        	this.toolStripSeparator1.Size = new System.Drawing.Size(184, 6);
         	// 
         	// menuProfileOptions
         	// 
         	this.menuProfileOptions.Name = "menuProfileOptions";
-        	this.menuProfileOptions.Size = new System.Drawing.Size(164, 22);
+        	this.menuProfileOptions.Size = new System.Drawing.Size(187, 22);
         	this.menuProfileOptions.Text = "&Profile Options";
         	this.menuProfileOptions.Click += new System.EventHandler(this.MenuProfileOptionsClick);
         	// 
         	// menuGlobalOptions
         	// 
         	this.menuGlobalOptions.Name = "menuGlobalOptions";
-        	this.menuGlobalOptions.Size = new System.Drawing.Size(164, 22);
+        	this.menuGlobalOptions.Size = new System.Drawing.Size(187, 22);
         	this.menuGlobalOptions.Text = "&Global Options";
         	this.menuGlobalOptions.Click += new System.EventHandler(this.OptionsMenuClick);
+        	// 
+        	// toolStripSeparator2
+        	// 
+        	this.toolStripSeparator2.Name = "toolStripSeparator2";
+        	this.toolStripSeparator2.Size = new System.Drawing.Size(184, 6);
+        	// 
+        	// menuImportCfg
+        	// 
+        	this.menuImportCfg.Name = "menuImportCfg";
+        	this.menuImportCfg.Size = new System.Drawing.Size(187, 22);
+        	this.menuImportCfg.Text = "&Import Configuration";
+        	this.menuImportCfg.Click += new System.EventHandler(this.MenuImportCfgClick);
+        	// 
+        	// menuExportCfg
+        	// 
+        	this.menuExportCfg.Name = "menuExportCfg";
+        	this.menuExportCfg.Size = new System.Drawing.Size(187, 22);
+        	this.menuExportCfg.Text = "&Export Configuration";
+        	this.menuExportCfg.Click += new System.EventHandler(this.MenuExportCfgClick);
+        	// 
+        	// toolStripSeparator3
+        	// 
+        	this.toolStripSeparator3.Name = "toolStripSeparator3";
+        	this.toolStripSeparator3.Size = new System.Drawing.Size(184, 6);
         	// 
         	// exitToolStripMenuItem
         	// 
         	this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-        	this.exitToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+        	this.exitToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
         	this.exitToolStripMenuItem.Text = "E&xit";
         	this.exitToolStripMenuItem.Click += new System.EventHandler(this.ExitMenuClick);
         	// 
@@ -397,14 +432,14 @@ namespace vJoySerialFeeder
         	// editToolStripMenuItem
         	// 
         	this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-        	this.editToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.editToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
         	this.editToolStripMenuItem.Text = "&Edit";
         	this.editToolStripMenuItem.Click += new System.EventHandler(this.ScriptEditMenuClick);
         	// 
         	// outputToolStripMenuItem
         	// 
         	this.outputToolStripMenuItem.Name = "outputToolStripMenuItem";
-        	this.outputToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.outputToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
         	this.outputToolStripMenuItem.Text = "&Output";
         	this.outputToolStripMenuItem.Click += new System.EventHandler(this.ScriptOutputMenuClick);
         	// 
@@ -420,14 +455,14 @@ namespace vJoySerialFeeder
         	// manualToolStripMenuItem
         	// 
         	this.manualToolStripMenuItem.Name = "manualToolStripMenuItem";
-        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+        	this.manualToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
         	this.manualToolStripMenuItem.Text = "&Manual";
         	this.manualToolStripMenuItem.Click += new System.EventHandler(this.ManualMenuClick);
         	// 
         	// menuAbout
         	// 
         	this.menuAbout.Name = "menuAbout";
-        	this.menuAbout.Size = new System.Drawing.Size(152, 22);
+        	this.menuAbout.Size = new System.Drawing.Size(114, 22);
         	this.menuAbout.Text = "&About";
         	this.menuAbout.Click += new System.EventHandler(this.MenuAboutClick);
         	// 
@@ -449,16 +484,6 @@ namespace vJoySerialFeeder
         	this.buttonScript.Text = "Edit Script";
         	this.buttonScript.UseVisualStyleBackColor = true;
         	this.buttonScript.Click += new System.EventHandler(this.ScriptEditMenuClick);
-        	// 
-        	// toolStripSeparator1
-        	// 
-        	this.toolStripSeparator1.Name = "toolStripSeparator1";
-        	this.toolStripSeparator1.Size = new System.Drawing.Size(161, 6);
-        	// 
-        	// toolStripSeparator2
-        	// 
-        	this.toolStripSeparator2.Name = "toolStripSeparator2";
-        	this.toolStripSeparator2.Size = new System.Drawing.Size(161, 6);
         	// 
         	// MainForm
         	// 
@@ -503,6 +528,9 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem menuExportCfg;
+        private System.Windows.Forms.ToolStripMenuItem menuImportCfg;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem menuAbout;

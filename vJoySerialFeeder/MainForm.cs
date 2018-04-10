@@ -7,12 +7,12 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
+using System.Text;
 using System.Windows.Forms;
-
-using MoonSharp.Interpreter;
 
 namespace vJoySerialFeeder
 {
@@ -21,6 +21,8 @@ namespace vJoySerialFeeder
 	/// </summary>
 	public partial class MainForm : Form
 	{
+		const string CONF_DIALOG_FILETYPES = "Configuration (*.json)|*.json|All files (*.*)|*.*";
+		
 		public static MainForm Instance {get; private set; }
 		
 		public int[] Channels { get; private set; }
@@ -124,8 +126,7 @@ namespace vJoySerialFeeder
 			if(System.Environment.OSVersion.Platform == PlatformID.Win32NT)
 				comAutomation = ComAutomation.GetInstance();
 			
-			// initialize websocket if configured
-			startStopWebSocket();
+			reloadGlobalOptions();
 		}
 		
 		/// <summary>
@@ -335,13 +336,18 @@ namespace vJoySerialFeeder
 				mapping.Paint();
 			}
 			toolStripStatusLabel.Text = "Connected, "
-				+ (ActiveChannels > 0 ? 
+				+ (ActiveChannels > 0 ?
 					ActiveChannels + " channels available, "
 					:
 					"Failsafe (" + failsafeReason + "), ")
 				+ Math.Round(updateRate) + " Updates per second / "
 				+ (updateRate < 0.001 ? "∞" : Math.Round(1000/updateRate).ToString()) + " ms between Updates";
 				
+		}
+		
+		
+		void reloadGlobalOptions() {
+			startStopWebSocket();
 		}
 		
 		/// <summary>
@@ -441,7 +447,7 @@ namespace vJoySerialFeeder
 			if(name.Length == 0) {
 				MessageBox.Show("Enter a profile name");
 				return;
-			}			
+			}
 			
 			var p = buildProfile();
 			
@@ -558,10 +564,11 @@ namespace vJoySerialFeeder
         {
         	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
         		d.ShowDialog();
-        		if(d.DialogResult == DialogResult.OK) {        			
+        		if(d.DialogResult == DialogResult.OK) {
         			config.WebSocketEnabled = d.WebSocketEnabled;
         			config.WebSocketPort = d.WebSocketPort;
-        			startStopWebSocket();
+        			
+        			reloadGlobalOptions();
 
         			config.Save();
         		}
@@ -600,7 +607,7 @@ namespace vJoySerialFeeder
         {
         	outputToolStripMenuItem.Checked = luaOutputDialog.Visible;
         	channelMonitorToolStripMenuItem.Checked = monitorForm.Visible;
-        }  
+        }
         
         void MenuProfileOptionsClick(object sender, EventArgs e)
         {
@@ -620,8 +627,60 @@ namespace vJoySerialFeeder
         	}
         }
         
+        void MenuExportCfgClick(object sender, EventArgs e)
+        {
+        	try {
+	        	var j = config.ToJSONString();
+	        	
+	        	using(var d = new SaveFileDialog()) {
+	        		d.Filter = CONF_DIALOG_FILETYPES;
+					d.RestoreDirectory = true ;
+					
+					if(d.ShowDialog() == DialogResult.OK) {
+						using(var str = d.OpenFile()) {
+							var bytes = Encoding.UTF8.GetBytes(j);
+							str.Write(bytes, 0, bytes.Length);
+						}
+					}
+	        	}
+        	}
+        	catch(Exception) {
+        		ErrorMessageBox("Exporting configuration failed", "Export error");
+        	}
+        }
+        
+        void MenuImportCfgClick(object sender, EventArgs e)
+        {
+        	try {
+	        	using(var d = new OpenFileDialog()) {
+	        		d.Filter = CONF_DIALOG_FILETYPES;
+					d.RestoreDirectory = true ;
+					
+					if(d.ShowDialog() == DialogResult.OK) {
+						using(var str = d.OpenFile()) {
+							var c = Configuration.LoadFromJSONString(new StreamReader(str).ReadToEnd());
+							
+							using(var id = new ImportConfigurationForm()) {
+								id.ShowDialog();
+								if(id.DialogResult == DialogResult.OK) {
+									config.Merge(c, id.ImportGlobalOptions, id.ImportProfiles);
+									config.Save();
+									
+									reloadProfiles();
+									reloadGlobalOptions();
+								}
+							}
+						}
+					}
+	        	}
+        	}
+        	catch(Exception) {
+        		ErrorMessageBox("Importing configuration failed", "Import error");
+        	}
+        	
+        }
+        
+        
         #endregion
-        
-        
 	}
 }

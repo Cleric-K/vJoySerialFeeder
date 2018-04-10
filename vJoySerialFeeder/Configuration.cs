@@ -84,6 +84,9 @@ namespace vJoySerialFeeder
 		
 		[DataMember]
 		public int WebSocketPort = DEFAULT_WEBSOCKET_PORT;
+		
+		[DataMember]
+		public string Version = RuntimeVersion.ToString();
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
@@ -97,40 +100,27 @@ namespace vJoySerialFeeder
 		
 		
 		
+		public static Version RuntimeVersion { get { return Assembly.GetEntryAssembly().GetName().Version; } }
 		
 		
 		public static Configuration Load() {
-            var currentVersion = Assembly.GetEntryAssembly().GetName().Version;
-            var prevVersion = new Version(0,0,0,0);
+            var json = Settings.Default.config;
 
-            try
-            {
-                var cfgVer = Settings.Default.version.Trim();
-                if (cfgVer == "")
-                    cfgVer = (string)Settings.Default.GetPreviousVersion("version");
-                prevVersion = new Version(cfgVer);
-            }
-            catch (Exception) {}
-
-            if(prevVersion < currentVersion) {
+            if(json.Trim().Equals("")) {
 				Settings.Default.Upgrade();
-                Settings.Default.version = currentVersion.ToString();
                 Settings.Default.Save();
+                
+                json = Settings.Default.config;
 			}
-        	
-			var json = Settings.Default.config;
 			
 			if(!json.Trim().Equals("")) {
 				try {
-					var ms = new MemoryStream(Encoding.UTF8.GetBytes(json));
-					ms.Position = 0;
-					var c = (Configuration)ConfigSerializer.ReadObject(ms);
-					
-                    if(prevVersion < currentVersion) {
-                        c.Upgrade(prevVersion, currentVersion);
-						c.Save();
-					}
-					
+            		var c = LoadFromJSONString(json);
+
+            		if(c.Upgrade()) {
+            			c.Save();
+            		}
+            		
 					return c;
 				}
 				catch(SerializationException ) {
@@ -140,9 +130,48 @@ namespace vJoySerialFeeder
 			
 			return new Configuration();
 		}
+
+		
+		/// <summary>
+		/// Loads configuration fron JSON string.
+		/// Might throw SerializationException
+		/// </summary>
+		/// <param name="cfg"></param>
+		/// <returns></returns>
+		public static Configuration LoadFromJSONString(string cfg) {
+			var ms = new MemoryStream(Encoding.UTF8.GetBytes(cfg));
+			ms.Position = 0;
+			return (Configuration)ConfigSerializer.ReadObject(ms);
+		}
+		
+		/// <summary>
+		/// Upgrade configuration to current version
+		/// </summary>
+		/// <returns>true if upgrade was performed</returns>
+		public bool Upgrade() {
+			var currentVersion = RuntimeVersion;
+			var prevVersion = new Version(0,0,0,0);
+			
+			try {
+				prevVersion = new Version(this.Version);
+			}
+			catch(Exception){}
+			
+            if(prevVersion < currentVersion) {
+                DoUpgrade(prevVersion, currentVersion);
+                Version = currentVersion.ToString();
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public string ToJSONString() {
+			return serialize(this, ConfigSerializer);
+		}
 		
 		public void Save() {
-			Settings.Default.config = serialize(this, ConfigSerializer);
+			Settings.Default.config = ToJSONString();
 			Settings.Default.Save();
 		}
 		
@@ -173,6 +202,33 @@ namespace vJoySerialFeeder
 			return serialize(p1, ProfileSerializer).Equals(serialize(p2, ProfileSerializer));
 		}
 		
+		/// <summary>
+		/// Merges the provided configuration to this.
+		/// </summary>
+		/// <param name="cfg">Configuration to merge</param>
+		/// <param name="importGlobalOptions"></param>
+		/// <param name="importProfiles">If Profiles are imported they will not overwrite
+		/// profiles with the same name in this configuration. Instead they will be renamed
+		/// with _N suffix.</param>
+		public void Merge(Configuration cfg, bool importGlobalOptions, bool importProfiles) {
+			if(importGlobalOptions) {
+				WebSocketEnabled = cfg.WebSocketEnabled;
+				WebSocketPort = cfg.WebSocketPort;
+			}
+			
+			if(importProfiles) {
+				foreach(var k in cfg.Profiles.Keys) {
+					var finalk = k;
+					var i = 1;
+					
+					while(Profiles.ContainsKey(finalk))
+						finalk = k + "_" + i++;
+					
+					Profiles[finalk] = cfg.Profiles[k];
+				}
+			}
+		}
+		
 		static string serialize(object obj, DataContractJsonSerializer ser) {
 			var ms = new MemoryStream();
 			ser.WriteObject(ms, obj);
@@ -181,11 +237,11 @@ namespace vJoySerialFeeder
 		}
 		
 		/// <summary>
-		///
+		/// Actual version specific upgrade code must be implemented here
 		/// </summary>
 		/// <param name="fromVersion"></param>
 		/// <param name="toVersion"></param>
-		void Upgrade(Version fromVersion, Version toVersion) {
+		void DoUpgrade(Version fromVersion, Version toVersion) {
 			
 			
 			if(fromVersion <= new Version("1.2.0.0")) {

@@ -65,6 +65,10 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Configuration.cs" />
+    <Compile Include="ImportConfigurationForm.cs" />
+    <Compile Include="ImportConfigurationForm.Designer.cs">
+      <DependentUpon>ImportConfigurationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainFormWorker.cs" />
     <Compile Include="Mappings\AxisMapping.cs" />
     <Compile Include="Mappings\AxisSetupForm.cs" />
@@ -150,6 +154,9 @@
   <ItemGroup>
     <EmbeddedResource Include="AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImportConfigurationForm.resx">
+      <DependentUpon>ImportConfigurationForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
