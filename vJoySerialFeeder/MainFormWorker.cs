@@ -5,7 +5,9 @@
  * Time: 13:02
  */
 using System;
+using System.Threading;
 using System.Threading.Tasks;
+
 using MoonSharp.Interpreter;
 
 namespace vJoySerialFeeder
@@ -14,9 +16,42 @@ namespace vJoySerialFeeder
 	/// The background worker in MainForm is the actual main loop of the program
 	/// </summary>
 	partial class MainForm
-	{		
+	{
 		public static double Now { get { return (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; } }
 		public bool Failsafe { get; private set; }
+		
+		
+		ManualResetEvent readerReadyToRead = new ManualResetEvent(true);
+		ManualResetEvent readerResultReady = new ManualResetEvent(false);
+		Exception readerException;
+		int readerResult;
+		
+		
+		
+		void SerialReaderRunner() {
+			while(true) {
+				try {
+					readerReadyToRead.WaitOne();
+					
+					readerResult = serialReader.ReadChannels();
+					
+					readerException = null;
+				}
+				catch(ThreadInterruptedException) {
+					break;
+				} catch(Exception ex) {
+					readerException = ex;
+				}
+				
+				readerReadyToRead.Reset();
+				readerResultReady.Set();
+			}
+			
+			System.Diagnostics.Debug.WriteLine("Reader thread done");
+		}
+		
+		
+		
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
@@ -33,32 +68,34 @@ namespace vJoySerialFeeder
 				double nextFailsafeUpdate = 0;
 				
 				Failsafe = false;
-				Task<int> readChannelsTask = null;
+				
+				readerReadyToRead.Set();
+				readerResultReady.Reset();
+				
+				Thread readerThread = new Thread(SerialReaderRunner);
+				readerThread.IsBackground = true;
+				readerThread.Start();
 				
 				/**
 				 * The main loop is a little complicated because it supports two modes of action:
 				 * 1. Normal mode. In this case the update rate is dictated by the the serial
 				 *    reader
-				 * 
+				 *
 				 * 2. If we do not receive serial data for certain amount of time (failsafeTime)
 				 *    we enter failsafe mode. In this mode we generate our own update rate,
-				 *    while continuing to try to read the serial port. 
+				 *    while continuing to try to read the serial port.
 				 */
 				while(true) {
 					if(backgroundWorker.CancellationPending) {
 						e.Cancel = true;
+						readerThread.Interrupt();
 						return;
-					}
-					
-					// need a serial reading task
-					if(readChannelsTask == null) {
-						readChannelsTask = Task<int>.Factory.StartNew(serialReader.ReadChannels);
 					}
 					
 					// If not in failsafe mode, we can afford to wait at most up to the time
 					// when failsafe shall be activated.
 					// If already in failsafe - wait until it is time for a failsafe update
-					timeToWait = Failsafe ? 
+					timeToWait = Failsafe ?
 						(int)(nextFailsafeUpdate - Now)
 						:
 						(int)(failsafeAt - Now);
@@ -66,38 +103,37 @@ namespace vJoySerialFeeder
 					if(timeToWait < 0)
 						timeToWait = 0;
 					
-					bool readDone = false;
-					try {
-						if(readChannelsTask.Wait(timeToWait)) {
-							// serial read completed
-							ActiveChannels = readChannelsTask.Result;
-							readDone = true;
-						}
-						// else Wait timedout
-					}
-					catch(AggregateException aex) {
-						// the SerialReader threw exception
-						var ex = aex.InnerException;
-						readDone = true;
-						ActiveChannels = 0;
+					bool readDone;
+			
+					if(readDone = readerResultReady.WaitOne(timeToWait)) {
+						// serial read completed
 						
-						if(ex is InvalidOperationException) {
-							System.Diagnostics.Debug.WriteLine(ex.Message);
-							this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
-							                                            "Disconnect")));
-							backgroundWorker.CancelAsync();
-							continue;
+						ActiveChannels = readerResult;
+						
+						if(readerException != null) {
+							// the SerialReader threw exception
+							ActiveChannels = 0;
+							if(readerException is InvalidOperationException) {
+								System.Diagnostics.Debug.WriteLine(readerException.Message);
+								this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
+								                                            "Disconnect")));
+								backgroundWorker.CancelAsync();
+								continue;
+							}
+							else if(readerException is TimeoutException) {
+								failsafeReason = "Serial Port Read Timeout";
+							}
+							else {
+								failsafeReason = readerException.Message;
+							}
 						}
-						else if(ex is TimeoutException) {
-							failsafeReason = "Serial Port Read Timeout";
-						}
-						else {
-							failsafeReason = ex.Message;
-						}
+						
+						readerResultReady.Reset();
+						readerReadyToRead.Set();
 					}
+					// else Wait timedout
 					
-					if(readDone)
-						readChannelsTask = null;
+					
 					
 					now = Now;
 					
