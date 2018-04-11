@@ -17,6 +17,8 @@ There are several options:
    GND | GND
    SBUS | D3
 
+   [Snille](https://github.com/Snille) has created a 3D printable box for the Arduino Nano and FrSky R-XSR Receiver. Check it out: [https://www.thingiverse.com/thing:2852557](https://www.thingiverse.com/thing:2852557)
+
 2. Most receivers have a dedicated inverter component on their boards. If we can tap at the signal _before_ inversion, we can send it to the UART converter. [OscarLiang.com](https://oscarliang.com/uninverted-sbus-smart-port-frsky-receivers/) has info about the location of the uninverted signal for different receivers. See [here](https://oscarliang.com/uninverted-sbus-smart-port-frsky-receivers/).\
 Once you have found the uninverted pad, you can refer to the [FlySky/IBUS How-to](FlySky.md) with the only difference being that you use the uninverted SBUS signal instead of IBUS and you have to select the `SBUS` protocol in vJoySerialFeeder.
 
