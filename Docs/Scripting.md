@@ -46,6 +46,7 @@ Interface for the Virtual Joystick
 
 #### function: Channel(index)
 * `index` channel index (starting from 1)
+* returns \<integer> 16-bit unsigned integer (0 - 65535)
 
 Gets the raw serial integer value for channel `index`
 
@@ -106,7 +107,7 @@ Name | Value
 
 ## Order of execution
 
-Here's a overall diagram of the vJoySerialFeeder's main loop.
+Here's an overall diagram of the vJoySerialFeeder's main loop.
 
 ![mainloop](images/main-loop.png)
 

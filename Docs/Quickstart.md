@@ -3,7 +3,7 @@
 
 * Channel.\
    A channel is a stream of integer values coming through the serial port. There can be one or more channels multiplexed over the same serial line.
-   > _Tech details:_ Serial data arrives in _frames_. Different protocols use different frame structures but in general a frame consists of a several numbers. The _stream_ consisting of the _first_ numbers from each frame can be thought of as _channel 1_. Every _second_ number in each frame represents _channel 2_ and so on.
+   > _Tech details:_ Serial data arrives in _frames_. Different protocols use different frame structures but in general a frame consists of several numbers. The _stream_ consisting of the _first_ numbers from each frame can be thought of as _channel 1_. Every _second_ number in each frame represents _channel 2_ and so on.
 
 * Mapping.\
 A mapping is a _rule_ which transforms the integer channel data in a value that can be fed to the virtual joystick. There are three types of mappings:
@@ -69,7 +69,7 @@ Here is a simplified diagram of the data flow:
 
       The Trigger section allows your button to be activated only for a specific duration
       when the threshold(s) are crossed. Through the remaining time the button is depressed.
-	  
+
       * `Enable` tells if the Button should work in trigger mode.
       * `Edge`. Consider a _uninverted_
 	    non-trigger button: `Rising` edge would be the transition
@@ -96,13 +96,13 @@ Here is a simplified diagram of the data flow:
       * `Enable` tells that you want to map this bit.
       * `Button` selects the Virtual Joystick button you want to command with this bit.
         Normally, a zero bit results in depressed button and one bit - in pressed. If you want the reverse - check `Invert`.
-	  * `Failsafe Output` determines what the button state will be in case of Failsafe.\
+	  * `Failsafe Output` determines what the button state will be in case of Failsafe.
 	  * For `Trigger` mode see the description for the Button Mapping.
 
       After a button has been mapped its virtual button id is shown in the box. If the button is inverted an overbar is shown above the number.
 
       > For unmapped bits (no number shown) the color of the box represents the _input_ bit. For mapped bits the color represents the virtual button state.
 
-9. Save your your configuration as a `Profile`. Enter a profile name in the text box and click `Save`. The last used profile is automatically loaded on next run.
+9. Save your configuration as a `Profile`. Enter a profile name in the text box and click `Save`. The last used profile is automatically loaded on next run.
 
 10. Enjoy!

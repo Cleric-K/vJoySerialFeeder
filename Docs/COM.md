@@ -56,11 +56,11 @@ The `Input` of the Mapping is unaffected on write.
 The type of the mapping.
 
 #### method: AttachHandler(handler, [type])
-* `handler` \<[Handler](#handler)> The handler to attach.
+* `handler` \<[Handler](#object-handler)> The handler to attach.
 * `type` \<string> Should be one of "input", "output" or "both".
    If not provided, "output" is assumed.
 
-Use this method to attach a [Handler](#handler) object to this mapping.
+Use this method to attach a [Handler](#object-handler) object to this mapping.
 The `type` argument determines on what kind of events you want your
 handler to be called.
    * "input" - the handler is called whenever the `Input` of the mapping changes value.
@@ -68,7 +68,7 @@ handler to be called.
    * "both"- the handler is called whenever either `Input` or `Output` of the mapping changes value
 
 #### method: DetachHandler(handler)
-* `handler` \<[Handler](#handler)> The handler to detach.
+* `handler` \<[Handler](#object-handler)> The handler to detach.
 
 The `handler` will be detached only from this mapping. If the same `handler`
 object is attached to other mappings they will continue to be active.
@@ -79,14 +79,14 @@ object is attached to other mappings they will continue to be active.
 * method: OnUpdate(input, output)
    * `input` <integer> the current `Input` value of the mapping
    * `output` <float> the current `Output` value of the mapping
-   
+
 Called on value change.
 
 This object must be implemented _by you_. The only requirement is the above
 method accepting two argument. After attaching the handler to a mapping
 the `OnUpdate()` method will be called depending on the attachment type
-(`input`, `output` or `both`). No matter what the type of the attachment is
-you, will always receive _both_ the current `input` and `output` of the mapping
+(`input`, `output` or `both`). No matter what the type of the attachment is,
+you will always receive _both_ the current `input` and `output` of the mapping
 as arguments.
 
 
@@ -166,7 +166,9 @@ Here is an example how you can command your mouse with vJSF and AHK. You need th
 2. AxisMapping - for Y
 3. ButtonMapping - for clicking
 
-Make sure your axes work as intended or you risk to lose control of your mouse once the AHK script is run. Here is the actual script:
+Make sure your axes work as intended or you risk to lose control of your mouse once the AHK script is run.
+If this does happen use `Control`+`Alt`+`X` to stop the script.
+Here is the actual code:
 
 ```ahk
 ; if you have registered the ProgID in the registry you can:
@@ -215,6 +217,10 @@ return
 MoveTheMouse:
 MouseMove, (MapX.Output-0.5)*MouseSpeed, (MapY.Output-0.5)*MouseSpeed, 0, R
 return
+
+^!x::
+; PANIC! Control+Alt+X to exit
+ExitApp
 ```
 
 ### Internet Explorer ActiveX

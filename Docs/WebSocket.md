@@ -88,16 +88,16 @@ The demo allows you to:
 <!doctype html>
 <script>
 	ws = new WebSocket('ws://localhost:40000');
-	var map1, map2;
+	var map1, map2, updater;
 
 	ws.onopen = function() {
 		console.log('WebSocket connection opened');
-
-		setInterval(updateUI, 100);
+		updater = setInterval(updateUI, 100);
 	}
 
 	ws.onclose = function() {
 		console.log('WebSocket connection closed')
+		clearInterval(updater);
 	}
 
 	ws.onmessage = function(msg) {
