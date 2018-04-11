@@ -5,7 +5,6 @@
  * Time: 10:47 ч.
  */
 using System;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace vJoySerialFeeder
 {
@@ -15,7 +14,7 @@ namespace vJoySerialFeeder
 	public class TriggerState
 	{
 		public enum Edge { Rising, Falling, Both }
-		public const int DEFAULT_DURATION = 300;
+		public const int DEFAULT_DURATION = 200;
 		
 		bool? prevLevel;
 		double releaseTriggerAt;
