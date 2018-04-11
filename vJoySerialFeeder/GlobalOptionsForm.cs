@@ -32,8 +32,6 @@ namespace vJoySerialFeeder
 		{
 			WebSocketEnabled = checkWSEnable.Checked;
 			WebSocketPort = (int)numericWSPort.Value;
-			
-			//DialogResult = DialogResult.OK;
 		}
 		
 		void CheckWSEnableCheckedChanged(object sender, EventArgs e)

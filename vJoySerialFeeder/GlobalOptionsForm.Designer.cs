@@ -147,7 +147,7 @@ namespace vJoySerialFeeder
 			this.Name = "GlobalOptionsForm";
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-			this.Text = "OptionsForm";
+			this.Text = "Global Options";
 			this.groupBox1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.numericWSPort)).EndInit();
 			this.ResumeLayout(false);
