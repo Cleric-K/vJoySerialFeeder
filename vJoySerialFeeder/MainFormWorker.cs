@@ -37,17 +37,16 @@ namespace vJoySerialFeeder
 					
 					readerException = null;
 				}
-				catch(ThreadInterruptedException) {
-					break;
-				} catch(Exception ex) {
+				catch(Exception ex) {
 					readerException = ex;
 				}
+				
+				if(backgroundWorker.CancellationPending) 
+					return;
 				
 				readerReadyToRead.Reset();
 				readerResultReady.Set();
 			}
-			
-			System.Diagnostics.Debug.WriteLine("Reader thread done");
 		}
 		
 		
@@ -87,8 +86,7 @@ namespace vJoySerialFeeder
 				 */
 				while(true) {
 					if(backgroundWorker.CancellationPending) {
-						e.Cancel = true;
-						readerThread.Interrupt();
+						readerThread.Join();
 						return;
 					}
 					
@@ -108,9 +106,11 @@ namespace vJoySerialFeeder
 					if(readDone = readerResultReady.WaitOne(timeToWait)) {
 						// serial read completed
 						
-						ActiveChannels = readerResult;
-						
-						if(readerException != null) {
+						if(readerException == null) {
+							// successful read
+							ActiveChannels = readerResult;
+						}
+						else {
 							// the SerialReader threw exception
 							ActiveChannels = 0;
 							if(readerException is InvalidOperationException) {
@@ -153,8 +153,10 @@ namespace vJoySerialFeeder
 					else if(Failsafe && now >= nextFailsafeUpdate) {
 						// time for failsafe update
 					}
-					else
+					else {
+						// no serial data and not yet time for failsafe or failsafe update 
 						continue;
+					}
 					
 					
 					
@@ -210,8 +212,6 @@ namespace vJoySerialFeeder
 						if(now >= nextRateUpdateTime) {
 							nextRateUpdateTime = now + 500;
 							
-							//if(ActiveChannels == 0)
-							//	updateRate = 0;
 							if(updateCount > 0) {
 								updateRate = updateSum/updateCount;
 								updateSum = updateCount = 0;
