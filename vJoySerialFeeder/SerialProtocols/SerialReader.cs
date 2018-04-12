@@ -91,6 +91,13 @@ namespace vJoySerialFeeder
 				else
 					length = 0;
 			}
+			
+			/// <summary>
+			/// Clears the buffer
+			/// </summary>
+			public void Clear() {
+				length = 0;
+			}
 		}
 		
 		protected SerialPort serialPort;

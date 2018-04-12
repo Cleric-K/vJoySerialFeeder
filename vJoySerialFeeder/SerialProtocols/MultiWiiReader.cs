@@ -97,7 +97,7 @@ namespace vJoySerialFeeder
 						while(data_start + 1 < 5 + len)
 							channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
 	
-						Buffer.FrameLength = idx + 1; // use for next get
+						Buffer.FrameLength = idx; // use for next get
 						
 						lastSuccessfulRead = now;
 					}
@@ -115,6 +115,7 @@ namespace vJoySerialFeeder
 			}
 			catch(TimeoutException ex) {
 				// if timeout occurs we better send another request asap
+				Buffer.Clear();
 				lastSuccessfulRead = 0;
 				throw ex;
 			}
