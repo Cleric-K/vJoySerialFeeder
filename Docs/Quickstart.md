@@ -25,6 +25,7 @@ Here is a simplified diagram of the data flow:
    * Read controller directly from any IBUS capable FlySky receiver. [How-to](FlySky.md).
    * Read controller directly from any SBUS capable receiver (FrSky, Futaba, etc.). [How-to](Sbus.md).
    * Use MultiWii compatible Flight Controller (MultiWii, CleanFlight, BetaFlight, etc.). [How-to](MultiWii.md).
+   * Use KISS Flight Controller. It is the same as MultiWii, only you have to select the `KISS` protocol.
 
 3. After your data provider is ready you should select the correct serial port. Click `Port Setup` and make sure the default port settings are correct for your case. If they are not click `Custom` and make the necessary adjustments.
 

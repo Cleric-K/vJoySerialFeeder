@@ -8,8 +8,9 @@ A program for feeding data from a serial port to a virtual joystick. Currently t
 
 The data coming through the serial port should be structured in a specific way in order for the feeder to recognize it. Currently several protocols are supported:
 * IBUS - used by FlySky radio controllers.
-* MultiWii Serial Protocol - used by RC Flight Controllers running MultiWii, CleanFlight, BetaFlight, iNav, etc.
 * SBUS - used by FrSky, Futaba radio controllers.
+* MultiWii Serial Protocol - used by RC Flight Controllers running MultiWii, CleanFlight, BetaFlight, iNav, etc.
+* KISS serial protocol - used by KISS RC Flight Controllers.
 
 After data is received it can be _mapped_ to any virtual joystick axis or button in very flexible and configurable way.
 
@@ -20,10 +21,11 @@ After data is received it can be _mapped_ to any virtual joystick axis or button
 2. Read RC controller (FlySky) directly from any IBUS capable receiver. [How-to](Docs/FlySky.md).
 3. Read RC controller (FrSky, Futaba, etc.) directly from any SBUS receiver. [How-to](Docs/Sbus.md).
 4. Use MultiWii compatible Flight Controller (MultiWii, CleanFlight, BetaFlight, etc.). You can use your actual RC model. [How-to](Docs/MultiWii.md).
-5. Use as _general_ virtual joystick feeder. Although the program has the word "Serial" in its name, it is not strictly necessary to feed the virtual joystick from the serial port.
+5. User KISS Flight Controller. You can use your actual RC model. It is pretty much the same as MultiWii, only you have to select `KISS` for protocol.
+6. Use as _general_ virtual joystick feeder. Although the program has the word "Serial" in its name, it is not strictly necessary to feed the virtual joystick from the serial port.
    You can _interact_ with vJoySerialFeeder in different ways and feed your own data to the virtual joystick _or_ you can get the serial data and use it for your own purposes other than
    controlling a virtual joystick. [How-to](Docs/Interaction.md).
-6. Feed over network. You can use pairs of virtual serial ports provided by [com0com](http://com0com.sourceforge.net/) and [com2tcp](https://sourceforge.net/projects/com0com/files/com2tcp) for the TCP/IP transport. Another option is [HW VSP3](https://www.hw-group.com/products/hw_vsp/index_en.html) which combines the virtual serial port and the TCP/IP transport but the free version allows only one COM port.
+7. Feed over network. You can use pairs of virtual serial ports provided by [com0com](http://com0com.sourceforge.net/) and [com2tcp](https://sourceforge.net/projects/com0com/files/com2tcp) for the TCP/IP transport. Another option is [HW VSP3](https://www.hw-group.com/products/hw_vsp/index_en.html) which combines the virtual serial port and the TCP/IP transport but the free version allows only one COM port.
 
 ## How to get it? ##
 You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](http://www.icsharpcode.net/opensource/sd/)

@@ -284,6 +284,7 @@ namespace vJoySerialFeeder
         	this.comboProtocol.FormattingEnabled = true;
         	this.comboProtocol.Items.AddRange(new object[] {
         	        	        	"IBUS",
+        	        	        	"KISS",
         	        	        	"MultiWii",
         	        	        	"SBUS",
         	        	        	"Dummy"});

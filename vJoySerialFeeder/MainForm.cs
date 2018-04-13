@@ -50,7 +50,12 @@ namespace vJoySerialFeeder
 		private double updateRate;
 		private string failsafeReason;
 		
-		private Type[] Protocols = {typeof(IbusReader), typeof(MultiWiiReader), typeof(SbusReader), typeof(DummyReader)};
+		private Type[] Protocols = {typeof(IbusReader),
+										typeof(KissReader),
+										typeof(MultiWiiReader),
+										typeof(SbusReader),
+										typeof(DummyReader)
+									};
 		
 		private ComAutomation comAutomation;
 		private WebSocket webSocket;

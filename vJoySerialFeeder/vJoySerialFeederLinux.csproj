@@ -23,6 +23,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <BaseIntermediateOutputPath>obj\linux\</BaseIntermediateOutputPath>
     <OutputPath>bin\linux\$(Configuration)</OutputPath>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -35,7 +36,6 @@
     <DebugSymbols>True</DebugSymbols>
     <DebugType>Full</DebugType>
     <Optimize>False</Optimize>
-    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <StartAction>Project</StartAction>
     <StartArguments>-wsport 40000</StartArguments>
@@ -44,7 +44,6 @@
     <DebugSymbols>False</DebugSymbols>
     <DebugType>None</DebugType>
     <Optimize>True</Optimize>
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
@@ -130,6 +129,11 @@
       <DependentUpon>DummySetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\IbusReader.cs" />
+    <Compile Include="SerialProtocols\KissReader.cs" />
+    <Compile Include="SerialProtocols\KissSetupForm.cs" />
+    <Compile Include="SerialProtocols\KissSetupForm.Designer.cs">
+      <DependentUpon>KissSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerialProtocols\MultiWiiReader.cs" />
     <Compile Include="SerialProtocols\MultiWiiSetupForm.cs" />
     <Compile Include="SerialProtocols\MultiWiiSetupForm.Designer.cs">
@@ -194,6 +198,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SerialProtocols\DummySetupForm.resx">
       <DependentUpon>DummySetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SerialProtocols\KissSetupForm.resx">
+      <DependentUpon>KissSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SerialProtocols\MultiWiiSetupForm.resx">
       <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
