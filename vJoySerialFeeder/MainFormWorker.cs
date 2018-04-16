@@ -30,19 +30,22 @@ namespace vJoySerialFeeder
 		
 		void SerialReaderRunner() {
 			while(true) {
+				if(backgroundWorker.CancellationPending) 
+					return;
+				
 				try {
-					readerReadyToRead.WaitOne();
+					if(!readerReadyToRead.WaitOne(1000))
+						// give a chance to check for cancellation 
+						continue;
 					
 					readerResult = serialReader.ReadChannels();
 					
 					readerException = null;
+					
 				}
 				catch(Exception ex) {
 					readerException = ex;
 				}
-				
-				if(backgroundWorker.CancellationPending) 
-					return;
 				
 				readerReadyToRead.Reset();
 				readerResultReady.Set();
@@ -54,6 +57,8 @@ namespace vJoySerialFeeder
 		
 		void BackgroundWorkerDoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
 		{
+			Thread readerThread = null;
+			
 			try {
 				serialReader.Init(Channels, protocolConfig);
 				serialReader.Start();
@@ -71,7 +76,7 @@ namespace vJoySerialFeeder
 				readerReadyToRead.Set();
 				readerResultReady.Reset();
 				
-				Thread readerThread = new Thread(SerialReaderRunner);
+				readerThread = new Thread(SerialReaderRunner);
 				readerThread.IsBackground = true;
 				readerThread.Start();
 				
@@ -86,7 +91,6 @@ namespace vJoySerialFeeder
 				 */
 				while(true) {
 					if(backgroundWorker.CancellationPending) {
-						readerThread.Join();
 						return;
 					}
 					
@@ -233,8 +237,12 @@ namespace vJoySerialFeeder
 			catch(Exception ex) {
 				this.Invoke((Action)( () =>
 				                     ErrorMessageBox(ex.ToString(), "Main Worker")));
+				
+				backgroundWorker.CancelAsync(); // needed to stop the reader thread
 			}
 			finally {
+				if(readerThread != null)
+					readerThread.Join();
 				serialReader.Stop();
 			}
 			
