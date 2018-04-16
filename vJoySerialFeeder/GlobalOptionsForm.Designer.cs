@@ -36,6 +36,7 @@ namespace vJoySerialFeeder
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.numericWSPort = new System.Windows.Forms.NumericUpDown();
 			this.label2 = new System.Windows.Forms.Label();
@@ -43,6 +44,8 @@ namespace vJoySerialFeeder
 			this.checkWSEnable = new System.Windows.Forms.CheckBox();
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
+			this.checkAutoconnect = new System.Windows.Forms.CheckBox();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericWSPort)).BeginInit();
 			this.SuspendLayout();
@@ -53,7 +56,7 @@ namespace vJoySerialFeeder
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.checkWSEnable);
-			this.groupBox1.Location = new System.Drawing.Point(13, 13);
+			this.groupBox1.Location = new System.Drawing.Point(13, 43);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(175, 88);
 			this.groupBox1.TabIndex = 0;
@@ -113,7 +116,7 @@ namespace vJoySerialFeeder
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(112, 108);
+			this.buttonOK.Location = new System.Drawing.Point(113, 137);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonOK.TabIndex = 1;
@@ -124,12 +127,22 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(31, 108);
+			this.buttonCancel.Location = new System.Drawing.Point(32, 137);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 0;
 			this.buttonCancel.Text = "Cancel";
 			this.buttonCancel.UseVisualStyleBackColor = true;
+			// 
+			// checkAutoconnect
+			// 
+			this.checkAutoconnect.Location = new System.Drawing.Point(20, 13);
+			this.checkAutoconnect.Name = "checkAutoconnect";
+			this.checkAutoconnect.Size = new System.Drawing.Size(168, 24);
+			this.checkAutoconnect.TabIndex = 2;
+			this.checkAutoconnect.Text = "Autoconnect";
+			this.toolTip1.SetToolTip(this.checkAutoconnect, "Automatically Connect the last used\r\nprofile on program startup");
+			this.checkAutoconnect.UseVisualStyleBackColor = true;
 			// 
 			// GlobalOptionsForm
 			// 
@@ -137,7 +150,8 @@ namespace vJoySerialFeeder
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(202, 141);
+			this.ClientSize = new System.Drawing.Size(202, 172);
+			this.Controls.Add(this.checkAutoconnect);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
 			this.Controls.Add(this.groupBox1);
@@ -152,6 +166,8 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericWSPort)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.ToolTip toolTip1;
+		private System.Windows.Forms.CheckBox checkAutoconnect;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;
 		private System.Windows.Forms.CheckBox checkWSEnable;

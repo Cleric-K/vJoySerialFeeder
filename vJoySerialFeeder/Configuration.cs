@@ -87,6 +87,9 @@ namespace vJoySerialFeeder
 		
 		[DataMember]
 		public string Version = RuntimeVersion.ToString();
+		
+		[DataMember]
+		public bool Autoconnect;
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),

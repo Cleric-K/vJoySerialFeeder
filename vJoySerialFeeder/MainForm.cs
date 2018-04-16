@@ -132,6 +132,10 @@ namespace vJoySerialFeeder
 				comAutomation = ComAutomation.GetInstance();
 			
 			reloadGlobalOptions();
+			
+			// autoconnect
+			if(config.Autoconnect)
+				connect();
 		}
 		
 		/// <summary>
@@ -567,11 +571,12 @@ namespace vJoySerialFeeder
         
         void OptionsMenuClick(object sender, EventArgs e)
         {
-        	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort)) {
+        	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort, config.Autoconnect)) {
         		d.ShowDialog();
         		if(d.DialogResult == DialogResult.OK) {
         			config.WebSocketEnabled = d.WebSocketEnabled;
         			config.WebSocketPort = d.WebSocketPort;
+        			config.Autoconnect = d.Autoconnect;
         			
         			reloadGlobalOptions();
 
