@@ -2,14 +2,16 @@
 
 ## Get it
 To run vJoySerialFeeder on Linux you can build it yourself with Mono-Develop or
-download it from the [releases](../../../releases). You have two options:
-* If you already have `mono` installed you can download the binaries ending with `..._requires_mono".
-* Otherwise download one of the bundles (32bit or 64bit). They are larger because they include all the
-mono libraries packed in them.
+download it from the [releases](../../../releases).
 
 ## Requirements
 
-### serial port permissions
+### Mono
+vJoySerialFeeder requires Mono version 5 or higher. Follow the installation
+instructions [here](https://www.mono-project.com/download/stable/).
+You need the `mono-complete` package.
+
+### Serial port permissions
 
 To be able to use the serial ports without `root` privileges you must be member
 of the `dialout` group (if you are not already).
@@ -49,9 +51,9 @@ can simply `sudo chmod a+rw /dev/uinput`, but permissions will be reset after re
 Install with `sudo apt-get install libevdev2` or whatever your package manager is.
 
 ## Running
-* If you are using the version that needs mono, go in a console to wherever you unpacked vJoySerialFeeder
-and execute `mono vJoySerialFeeder.exe`
-* If you are using the bundles you can execute them directly.
+
+Open a console, go to wherever you unpacked vJoySerialFeeder
+and execute `mono vJoySerialFeeder.exe`.
 
 ## Limitations
 
