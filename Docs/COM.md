@@ -177,7 +177,9 @@ Here is the actual code:
 ;obj := ComObjCreate("vJoySerialFeeder.1")
 
 ; otherwise:
-obj := ComObjActive("{abc3f69e-8a95-4f6c-975a-0a99338c2433}")
+obj := ComObjGet("vJoySerialFeeder.1")
+; or
+;obj := ComObjActive("{abc3f69e-8a95-4f6c-975a-0a99338c2433}")
 ; or
 ;obj := ComObjCreate("{abc3f69e-8a95-4f6c-975a-0a99338c2433}")
 
