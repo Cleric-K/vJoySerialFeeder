@@ -131,6 +131,10 @@ namespace vJoySerialFeeder
 			if(System.Environment.OSVersion.Platform == PlatformID.Win32NT)
 				comAutomation = ComAutomation.GetInstance();
 			
+			if(System.Environment.OSVersion.Platform != PlatformID.Win32NT)
+				// hide the Game Controllers shortcut on non-windows platforms
+				menuGameControllers.Visible = false;
+			
 			reloadGlobalOptions();
 			
 			// autoconnect
@@ -688,6 +692,11 @@ namespace vJoySerialFeeder
         		ErrorMessageBox("Importing configuration failed", "Import error");
         	}
         	
+        }
+        
+        void MenuGameControllersClick(object sender, EventArgs e)
+        {
+        	System.Diagnostics.Process.Start("rundll32.exe", "shell32.dll,Control_RunDLL joy.cpl");
         }
         
         

@@ -78,6 +78,7 @@ namespace vJoySerialFeeder
         	this.menuStrip1 = new System.Windows.Forms.MenuStrip();
         	this.programToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
         	this.channelMonitorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+        	this.menuGameControllers = new System.Windows.Forms.ToolStripMenuItem();
         	this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
         	this.menuProfileOptions = new System.Windows.Forms.ToolStripMenuItem();
         	this.menuGlobalOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -352,6 +353,7 @@ namespace vJoySerialFeeder
         	// 
         	this.programToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
         	        	        	this.channelMonitorToolStripMenuItem,
+        	        	        	this.menuGameControllers,
         	        	        	this.toolStripSeparator1,
         	        	        	this.menuProfileOptions,
         	        	        	this.menuGlobalOptions,
@@ -370,6 +372,13 @@ namespace vJoySerialFeeder
         	this.channelMonitorToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
         	this.channelMonitorToolStripMenuItem.Text = "Channel &Monitor";
         	this.channelMonitorToolStripMenuItem.Click += new System.EventHandler(this.ChannelMonitorMenuClick);
+        	// 
+        	// menuGameControllers
+        	// 
+        	this.menuGameControllers.Name = "menuGameControllers";
+        	this.menuGameControllers.Size = new System.Drawing.Size(187, 22);
+        	this.menuGameControllers.Text = "Game Controllers";
+        	this.menuGameControllers.Click += new System.EventHandler(this.MenuGameControllersClick);
         	// 
         	// toolStripSeparator1
         	// 
@@ -529,6 +538,7 @@ namespace vJoySerialFeeder
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem menuGameControllers;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem menuExportCfg;
         private System.Windows.Forms.ToolStripMenuItem menuImportCfg;
