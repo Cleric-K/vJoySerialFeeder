@@ -6,6 +6,7 @@
  */
 using System;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace vJoySerialFeeder
 {
@@ -43,14 +44,27 @@ namespace vJoySerialFeeder
 		const byte PROTOCOL_COMMAND40 = 0x40; // Command is always 0x40
 		const int PROTOCOL_MAX_LENGTH = 0xff;
 		const int MAX_CHECKSUM_RETRIES = 3;
+		const byte PROTOCOL_IA6_MAGIC = 0x55;
+		const int PROTOCOL_IA6_LENGTH = 31;
+		const int PROTOCOL_IA6_NUM_CHANNELS = 14;
   
 		
 		int numDiscards = 0;
+		bool ia6Ibus;
+		UInt16[] tempIa6Channels;
 		
 		public override void Start()
 		{
+			parseConfig(config);
+			
 			serialPort.ReadTimeout = 500;
-			Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
+			if(ia6Ibus) {
+				Buffer.FrameLength = PROTOCOL_IA6_LENGTH;
+				tempIa6Channels = new UInt16[PROTOCOL_IA6_NUM_CHANNELS];
+			}
+			else {
+				Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
+			}
 		}
 		
 		public override void Stop()
@@ -58,7 +72,14 @@ namespace vJoySerialFeeder
 			
 		}
 		
-		public override int ReadChannels()
+		public override int ReadChannels() {
+			if(ia6Ibus)
+				return ReadChannelsIa6();
+			else
+				return ReadChannelsStandard();
+		}
+		
+		public int ReadChannelsStandard()
 		{
 			int idx; // index in the buffer
 			int data_start; // index of the start of command byte and payload in the buffer 
@@ -130,6 +151,65 @@ namespace vJoySerialFeeder
 			return 0;
 		}
 		
+		
+		/// <summary>
+		/// The IA6 receiver has undocumented IBUS-like output.
+		/// See http://endoflifecycle.blogspot.com/2016/10/flysky-ia6-ibus-setup.html
+		/// for details.
+		/// 
+		/// The protocol is also different. See:
+		/// https://www.rcgroups.com/forums/showthread.php?2711184-Serial-output-from-FS-IA6-%28Semi-I-BUS%29
+		/// 
+		/// The frame size is fixed to 31 bytes. There are 14 channels.
+		/// 
+		/// | magic signature  |              data                |   checksum     |
+		/// |    <0x55>        |   <ch1l><ch1h> <ch2l><ch2h> ...  |  <chkl><chkh>  |
+		/// The checksum is simply the sum of the 16bit int values of the channels.
+		/// 
+		/// </summary>
+		/// <returns></returns>
+		public int ReadChannelsIa6()
+		{
+			int idx = 0; // index in the buffer
+			UInt16 chksum = 0;
+			int tempChIdx = 0;
+			UInt16 val;
+			
+			// check magic first byte
+			if(Buffer[idx++] != PROTOCOL_IA6_MAGIC) {
+				Buffer.Slide(1);
+				System.Diagnostics.Debug.WriteLine("bad start - resyncing");
+				return 0;
+			}
+
+			// consume all the data
+			while(true) {
+				val = (UInt16)(Buffer[idx++] | (Buffer[idx++] << 8));
+				
+				if(idx >= PROTOCOL_IA6_LENGTH)
+					break; // val will hold the checksum
+				
+				tempIa6Channels[tempChIdx++] = val;
+				chksum += val;
+			}
+			
+			// check checksum
+			if(chksum == val) {
+				// Valid packet
+				tempIa6Channels.CopyTo(channelData, 0);
+				Buffer.Slide(idx);
+					
+				return tempIa6Channels.Length;
+			}
+			else {
+				// incorrect checksum
+				Buffer.Slide(idx);
+				System.Diagnostics.Debug.WriteLine("bad checksum");
+			}
+			
+			return 0;
+		}
+		
 		public override Configuration.SerialParameters GetDefaultSerialParameters()
 		{
 			return new Configuration.SerialParameters() {
@@ -140,6 +220,37 @@ namespace vJoySerialFeeder
 			};
 		}
 		
+		public override bool Configurable { get { return true; } }
 		
+		/// <summary>
+		/// Show Ibus configuration
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		public override string Configure(string config)
+		{
+			parseConfig(config);
+			using(var d = new IbusSetupForm(ia6Ibus)) {
+				d.ShowDialog();
+				if(d.DialogResult == DialogResult.OK) {
+					ia6Ibus = d.Ia6Ibus;
+					return buildConfig();
+				}
+				return null;
+			}
+		}
+		
+		/// <summary>
+		/// Ibus configuration - "ia6" string if IA6 ibus should be used
+		/// </summary>
+		/// <param name="config"></param>
+		/// <returns></returns>
+		private void parseConfig(string config) {
+			ia6Ibus = config != null && config.Contains("ia6");
+		}
+		
+		private string buildConfig() {
+			return ia6Ibus ? "ia6b" : "";
+		}
 	}
 }

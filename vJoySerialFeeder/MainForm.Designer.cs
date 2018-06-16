@@ -377,7 +377,7 @@ namespace vJoySerialFeeder
         	// 
         	this.menuGameControllers.Name = "menuGameControllers";
         	this.menuGameControllers.Size = new System.Drawing.Size(187, 22);
-        	this.menuGameControllers.Text = "Game Controllers";
+        	this.menuGameControllers.Text = "Game &Controllers";
         	this.menuGameControllers.Click += new System.EventHandler(this.MenuGameControllersClick);
         	// 
         	// toolStripSeparator1

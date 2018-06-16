@@ -134,6 +134,10 @@
       <DependentUpon>DummySetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\IbusReader.cs" />
+    <Compile Include="SerialProtocols\IbusSetupForm.cs" />
+    <Compile Include="SerialProtocols\IbusSetupForm.Designer.cs">
+      <DependentUpon>IbusSetupForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="SerialProtocols\KissReader.cs" />
     <Compile Include="SerialProtocols\KissSetupForm.cs" />
     <Compile Include="SerialProtocols\KissSetupForm.Designer.cs">
@@ -204,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SerialProtocols\DummySetupForm.resx">
       <DependentUpon>DummySetupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SerialProtocols\IbusSetupForm.resx">
+      <DependentUpon>IbusSetupForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SerialProtocols\KissSetupForm.resx">
       <DependentUpon>KissSetupForm.cs</DependentUpon>
