@@ -27,3 +27,9 @@ After connecting the receiver to the PC through the cable/adapter, you should bi
 Then you should select the correct COM port, select `IBUS` protocol and hit `connect`.
 
 Map your channels and enjoy your wireless controller with your favorite sims.
+
+## IA6 receiver support
+
+IA6 receiver is also supported. It does not provide ready to use IBUS pin but still the signal can be found as explained [here](http://endoflifecycle.blogspot.com/2016/10/flysky-ia6-ibus-setup.html). The protocol is slightly different so once you select the `IBUS` protocol you'll have to click on the `Setup` button next to it and check `IA6 Compatible IBUS protocol`.
+
+
