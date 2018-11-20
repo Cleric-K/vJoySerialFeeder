@@ -123,6 +123,7 @@
     <Compile Include="Scripting\LuaOutputForm.Designer.cs">
       <DependentUpon>LuaOutputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialProtocols\DsmReader.cs" />
     <Compile Include="SerialProtocols\DummyReader.cs" />
     <Compile Include="SerialProtocols\DummySetupForm.cs" />
     <Compile Include="SerialProtocols\DummySetupForm.Designer.cs">

@@ -11,6 +11,7 @@ using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 
@@ -54,6 +55,7 @@ namespace vJoySerialFeeder
 										typeof(KissReader),
 										typeof(MultiWiiReader),
 										typeof(SbusReader),
+										typeof(DsmReader),
 										typeof(DummyReader)
 									};
 		

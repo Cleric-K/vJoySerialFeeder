@@ -69,6 +69,36 @@ namespace vJoySerialFeeder
 			}
 			
 			/// <summary>
+			/// Finds at least 1ms of silence. This should be
+			/// the the time between frames.
+			/// </summary>
+			/// <returns></returns>
+			public void FindInterFrame() {
+				var to = sp.ReadTimeout;
+				var tryUntil = MainForm.Now + to;
+				sp.ReadTimeout = 1;
+				
+				try {
+					while(MainForm.Now < tryUntil) {
+						try {
+							sp.ReadByte();
+						}
+						catch(TimeoutException) {
+							// success, we are in interframe
+							Clear();
+							return;
+						}
+					}
+					
+					throw new TimeoutException();
+				}
+				finally {
+					// restore original timeout
+					sp.ReadTimeout = to;
+				}
+			}
+			
+			/// <summary>
 			/// This property has a role of a hint when reading serial data.
 			/// When the FrameLength is set correctly, the correct number of bytes will
 			/// be requested when reading from the serial port, thus avoiding too many

@@ -288,6 +288,7 @@ namespace vJoySerialFeeder
         	        	        	"KISS",
         	        	        	"MultiWii",
         	        	        	"SBUS",
+        	        	        	"DSM",
         	        	        	"Dummy"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 64);
         	this.comboProtocol.Name = "comboProtocol";
