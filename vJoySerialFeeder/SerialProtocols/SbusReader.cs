@@ -70,15 +70,14 @@ namespace vJoySerialFeeder
 		
 		public override int ReadChannels()
 		{
-			if(Buffer[0] != FIRST_BYTE || Buffer[24] != LAST_BYTE) {
-				// first and last bytes incorrect, try resyncing
-				System.Diagnostics.Debug.WriteLine("resyncing");
-				Buffer.Slide(1);
+			Buffer.FindInterFrame();
+			
+			if(Buffer[0] != FIRST_BYTE) {
+				// first byte incorrect
 				return 0;
 			}
 			
 			if(!ignoreSbusFailsafeFlag && (Buffer[23]&SBUS_FAILSAFE_MASK) != 0) {
-				Buffer.Slide(FRAME_LENGTH);
 				throw new FailsafeException("SBUS Failsafe active");
 			}
 			
@@ -116,8 +115,7 @@ namespace vJoySerialFeeder
 			}	
 			
 			// do not check the flags byte, we don't really need anything from there	
-			
-			Buffer.Slide(FRAME_LENGTH);
+
 			return NUM_CHANNELS;
 		}
 		
