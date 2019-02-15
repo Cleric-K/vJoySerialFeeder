@@ -24,6 +24,7 @@ Here is a simplified diagram of the data flow:
    * Use Arduino to read data from any device and send it to your PC. [How-to](Arduino.md).
    * Read controller directly from any IBUS capable FlySky receiver. [How-to](FlySky.md).
    * Read controller directly from any SBUS capable receiver (FrSky, Futaba, etc.). [How-to](Sbus.md).
+   * Read controller directly from any DSM capable receiver (Spektrum). [How-to](Dsm.md).
    * Use MultiWii compatible Flight Controller (MultiWii, CleanFlight, BetaFlight, etc.). [How-to](MultiWii.md).
    * Use KISS Flight Controller. It is the same as MultiWii, only you have to select the `KISS` protocol.
 
