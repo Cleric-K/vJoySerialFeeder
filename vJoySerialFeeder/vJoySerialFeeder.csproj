@@ -231,7 +231,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="Lib\vJoyInterface.dll">
+    <ContentWithTargetPath Include="Lib\vJoy2.1.9\vJoyInterface.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>vJoyInterface.dll</TargetPath>
     </ContentWithTargetPath>
