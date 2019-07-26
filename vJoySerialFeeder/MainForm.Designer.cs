@@ -51,6 +51,7 @@ namespace vJoySerialFeeder
 		/// not be able to load this method if it was changed manually.
         /// </summary>
         private void InitializeComponent() {
+        	this.components = new System.ComponentModel.Container();
         	this.panelMappings = new System.Windows.Forms.FlowLayoutPanel();
         	this.buttonAddAxis = new System.Windows.Forms.Button();
         	this.buttonAddButton = new System.Windows.Forms.Button();
@@ -95,8 +96,12 @@ namespace vJoySerialFeeder
         	this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
         	this.label2 = new System.Windows.Forms.Label();
         	this.buttonScript = new System.Windows.Forms.Button();
+        	this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+        	this.contextSystray = new System.Windows.Forms.ContextMenuStrip(this.components);
+        	this.exitToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
         	this.statusStrip1.SuspendLayout();
         	this.menuStrip1.SuspendLayout();
+        	this.contextSystray.SuspendLayout();
         	this.SuspendLayout();
         	// 
         	// panelMappings
@@ -496,6 +501,27 @@ namespace vJoySerialFeeder
         	this.buttonScript.UseVisualStyleBackColor = true;
         	this.buttonScript.Click += new System.EventHandler(this.ScriptEditMenuClick);
         	// 
+        	// notifyIcon
+        	// 
+        	this.notifyIcon.ContextMenuStrip = this.contextSystray;
+        	this.notifyIcon.Icon = global::vJoySerialFeeder.Resources.Joystick_icon;
+        	this.notifyIcon.Text = "vJoySerialFeeder";
+        	this.notifyIcon.DoubleClick += new System.EventHandler(this.NotifyIconDoubleClick);
+        	// 
+        	// contextSystray
+        	// 
+        	this.contextSystray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+        	        	        	this.exitToolStripMenuItem1});
+        	this.contextSystray.Name = "contextSystray";
+        	this.contextSystray.Size = new System.Drawing.Size(93, 26);
+        	// 
+        	// exitToolStripMenuItem1
+        	// 
+        	this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
+        	this.exitToolStripMenuItem1.Size = new System.Drawing.Size(92, 22);
+        	this.exitToolStripMenuItem1.Text = "Exit";
+        	this.exitToolStripMenuItem1.Click += new System.EventHandler(this.ExitToolStripMenuItem1Click);
+        	// 
         	// MainForm
         	// 
         	this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -532,13 +558,18 @@ namespace vJoySerialFeeder
         	this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         	this.Text = "vJoySerialFeeder";
         	this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+        	this.Resize += new System.EventHandler(this.MainFormResize);
         	this.statusStrip1.ResumeLayout(false);
         	this.statusStrip1.PerformLayout();
         	this.menuStrip1.ResumeLayout(false);
         	this.menuStrip1.PerformLayout();
+        	this.contextSystray.ResumeLayout(false);
         	this.ResumeLayout(false);
         	this.PerformLayout();
         }
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem1;
+        private System.Windows.Forms.ContextMenuStrip contextSystray;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.ToolStripMenuItem menuGameControllers;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem menuExportCfg;

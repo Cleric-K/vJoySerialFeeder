@@ -46,6 +46,7 @@ namespace vJoySerialFeeder
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.checkAutoconnect = new System.Windows.Forms.CheckBox();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.checkMinimizeToTray = new System.Windows.Forms.CheckBox();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericWSPort)).BeginInit();
 			this.SuspendLayout();
@@ -56,7 +57,7 @@ namespace vJoySerialFeeder
 			this.groupBox1.Controls.Add(this.label2);
 			this.groupBox1.Controls.Add(this.label1);
 			this.groupBox1.Controls.Add(this.checkWSEnable);
-			this.groupBox1.Location = new System.Drawing.Point(13, 43);
+			this.groupBox1.Location = new System.Drawing.Point(13, 70);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(175, 88);
 			this.groupBox1.TabIndex = 0;
@@ -116,7 +117,7 @@ namespace vJoySerialFeeder
 			// buttonOK
 			// 
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-			this.buttonOK.Location = new System.Drawing.Point(113, 137);
+			this.buttonOK.Location = new System.Drawing.Point(113, 164);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonOK.TabIndex = 1;
@@ -127,7 +128,7 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(32, 137);
+			this.buttonCancel.Location = new System.Drawing.Point(32, 164);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 0;
@@ -144,13 +145,23 @@ namespace vJoySerialFeeder
 			this.toolTip1.SetToolTip(this.checkAutoconnect, "Automatically Connect the last used\r\nprofile on program startup");
 			this.checkAutoconnect.UseVisualStyleBackColor = true;
 			// 
+			// checkMinimizeToTray
+			// 
+			this.checkMinimizeToTray.Location = new System.Drawing.Point(20, 40);
+			this.checkMinimizeToTray.Name = "checkMinimizeToTray";
+			this.checkMinimizeToTray.Size = new System.Drawing.Size(168, 24);
+			this.checkMinimizeToTray.TabIndex = 3;
+			this.checkMinimizeToTray.Text = "Minimize to Tray";
+			this.checkMinimizeToTray.UseVisualStyleBackColor = true;
+			// 
 			// GlobalOptionsForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(202, 172);
+			this.ClientSize = new System.Drawing.Size(202, 199);
+			this.Controls.Add(this.checkMinimizeToTray);
 			this.Controls.Add(this.checkAutoconnect);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
@@ -166,6 +177,7 @@ namespace vJoySerialFeeder
 			((System.ComponentModel.ISupportInitialize)(this.numericWSPort)).EndInit();
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox checkMinimizeToTray;
 		private System.Windows.Forms.ToolTip toolTip1;
 		private System.Windows.Forms.CheckBox checkAutoconnect;
 		private System.Windows.Forms.Button buttonCancel;

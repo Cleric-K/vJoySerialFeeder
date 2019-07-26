@@ -73,6 +73,8 @@ namespace vJoySerialFeeder
 		
 		public MainForm(string[] args)
 		{
+			config = Configuration.Load();
+			
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
@@ -108,8 +110,6 @@ namespace vJoySerialFeeder
 			reloadComPorts();
 			reloadJoysticks();
 			ChannelDataUpdate += onChannelDataUpdate;
-
-			config = Configuration.Load();
 			
 			reloadProfiles();
 			
@@ -577,12 +577,13 @@ namespace vJoySerialFeeder
         
         void OptionsMenuClick(object sender, EventArgs e)
         {
-        	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort, config.Autoconnect)) {
+        	using(var d = new GlobalOptionsForm(config.WebSocketEnabled, config.WebSocketPort, config.Autoconnect, config.MinimizeToTray)) {
         		d.ShowDialog();
         		if(d.DialogResult == DialogResult.OK) {
         			config.WebSocketEnabled = d.WebSocketEnabled;
         			config.WebSocketPort = d.WebSocketPort;
         			config.Autoconnect = d.Autoconnect;
+        			config.MinimizeToTray = d.MinimizeToTray;
         			
         			reloadGlobalOptions();
 
@@ -703,5 +704,26 @@ namespace vJoySerialFeeder
         
         
         #endregion
+        
+        void MainFormResize(object sender, EventArgs e)
+        {
+        	 if (config.MinimizeToTray && WindowState == FormWindowState.Minimized)  
+		     {  
+		          Hide();  
+		          notifyIcon.Visible = true;                  
+		     }  
+        }
+        
+        void NotifyIconDoubleClick(object sender, EventArgs e)
+        {
+        	notifyIcon.Visible = false;
+        	Show();
+        	WindowState = FormWindowState.Normal;
+        }
+        
+        void ExitToolStripMenuItem1Click(object sender, EventArgs e)
+        {
+        	Close();
+        }
 	}
 }

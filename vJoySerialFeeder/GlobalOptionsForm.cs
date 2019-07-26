@@ -18,8 +18,9 @@ namespace vJoySerialFeeder
 		public bool WebSocketEnabled { get; private set; }
 		public int WebSocketPort { get; private set; }
 		public bool Autoconnect { get; private set; }
+		public bool MinimizeToTray { get; private set; }
 		
-		public GlobalOptionsForm(bool wsEn, int wsPort, bool autoconnect)
+		public GlobalOptionsForm(bool wsEn, int wsPort, bool autoconnect, bool minimizeToTray)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
@@ -29,6 +30,7 @@ namespace vJoySerialFeeder
 			checkWSEnable.Checked = wsEn;
 			numericWSPort.Value = wsPort;
 			checkAutoconnect.Checked = autoconnect;
+			checkMinimizeToTray.Checked = minimizeToTray;
 		}
 		
 		void ButtonOKClick(object sender, EventArgs e)
@@ -36,6 +38,7 @@ namespace vJoySerialFeeder
 			WebSocketEnabled = checkWSEnable.Checked;
 			WebSocketPort = (int)numericWSPort.Value;
 			Autoconnect = checkAutoconnect.Checked;
+			MinimizeToTray = checkMinimizeToTray.Checked;
 		}
 		
 		void CheckWSEnableCheckedChanged(object sender, EventArgs e)

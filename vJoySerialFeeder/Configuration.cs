@@ -90,6 +90,9 @@ namespace vJoySerialFeeder
 		
 		[DataMember]
 		public bool Autoconnect;
+		
+		[DataMember]
+		public bool MinimizeToTray;
 	
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
