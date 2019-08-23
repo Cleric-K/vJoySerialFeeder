@@ -100,9 +100,15 @@ namespace vJoySerialFeeder
 					data_end = data_start + data_len;
 					data_start++; // skip command byte
 					int ch = 0;
-              		while(data_start+1 < data_end)
-						channelData[ch++] = (Buffer[data_start++] | (Buffer[data_start++] << 8));
-					
+					int index = data_start;
+					while (index + 1 < data_end)
+						channelData[ch++] = (Buffer[index++] | ((Buffer[index++] & 0x0F) << 8));
+					//see https://github.com/betaflight/betaflight/pull/8749
+					index = data_start + 1;
+					while (index + 1 < data_end) {
+						channelData[ch++] = ((Buffer[index] & 0xF0) >> 4) | (Buffer[index + 2] & 0xF0) | ((Buffer[index + 4] & 0xF0) << 4);
+						index += 6;
+					}
 					Buffer.Slide(idx);
 					
 					return ch;
