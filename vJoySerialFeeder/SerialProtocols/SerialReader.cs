@@ -66,6 +66,10 @@ namespace vJoySerialFeeder
 					}
 					return buf[index];
 				}
+				
+				set {
+					buf[index] = value;
+				}
 			}
 			
 			/// <summary>

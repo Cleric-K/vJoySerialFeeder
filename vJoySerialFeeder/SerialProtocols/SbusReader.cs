@@ -81,38 +81,7 @@ namespace vJoySerialFeeder
 				throw new FailsafeException("SBUS Failsafe active");
 			}
 			
-			int inputbits = 0;
-			int inputbitsavailable = 0;
-			int bufIdx = 1;
-			
-			// channel parser based on
-			// https://github.com/opentx/opentx/blob/6bd38ce13a89ade70aa8e83914063464a8d9750a/radio/src/sbus.cpp#L50
-			
-			for (var i=0; i<NUM_CHANNELS; i++) {
-			    while (inputbitsavailable < SBUS_CH_BITS) {
-		      		inputbits |= Buffer[bufIdx++] << inputbitsavailable;
-		      		inputbitsavailable += 8;
-			    }
-			
-				var v = inputbits & SBUS_CH_MASK;
-				
-				if(useRawInput) {
-					channelData[i] = v;
-				}
-				else {
-					// OpenTX sends channel data with in its own values. We can prescale them to the standard 1000 - 2000 range.
-					// Thanks to @fape for providing the raw data:
-					// min   mid   max
-					// 172   992   1811
-	
-					// http://www.wolframalpha.com/input/?i=linear+fit+%7B172,+1000%7D,+%7B1811,+2000%7D,+%7B992,+1500%7D
-					// slightly adjusted to give better results in integer math
-					channelData[i] = (610127*v + 895364000)/1000000;
-				}
-
-			    inputbitsavailable -= SBUS_CH_BITS;
-			    inputbits >>= SBUS_CH_BITS;
-			}	
+			DecodeSbusChannels(1);
 			
 			// do not check the flags byte, we don't really need anything from there	
 
@@ -147,6 +116,40 @@ namespace vJoySerialFeeder
 				Parity = Parity.Even,
 				StopBits = StopBits.Two
 			};
+		}
+		
+		protected void DecodeSbusChannels(int bufIdx) {
+			int inputbits = 0;
+			int inputbitsavailable = 0;
+			
+			// channel parser based on
+			// https://github.com/opentx/opentx/blob/6bd38ce13a89ade70aa8e83914063464a8d9750a/radio/src/sbus.cpp#L50
+			
+			for (var i=0; i<NUM_CHANNELS; i++) {
+			    while (inputbitsavailable < SBUS_CH_BITS) {
+		      		inputbits |= Buffer[bufIdx++] << inputbitsavailable;
+		      		inputbitsavailable += 8;
+			    }
+			
+				var v = inputbits & SBUS_CH_MASK;
+				
+				if(useRawInput) {
+					channelData[i] = v;
+				}
+				else {
+					// OpenTX sends channel data with in its own values. We can prescale them to the standard 1000 - 2000 range.
+					// Thanks to @fape for providing the raw data:
+					// min   mid   max
+					// 172   992   1811
+	
+					// http://www.wolframalpha.com/input/?i=linear+fit+%7B172,+1000%7D,+%7B1811,+2000%7D,+%7B992,+1500%7D
+					// slightly adjusted to give better results in integer math
+					channelData[i] = (610127*v + 895364000)/1000000;
+				}
+
+			    inputbitsavailable -= SBUS_CH_BITS;
+			    inputbits >>= SBUS_CH_BITS;
+			}	
 		}
 		
 		private void parseConfig(string config) {

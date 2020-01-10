@@ -55,6 +55,7 @@ namespace vJoySerialFeeder
 										typeof(KissReader),
 										typeof(MultiWiiReader),
 										typeof(SbusReader),
+										typeof(FportReader),
 										typeof(DsmReader),
 										typeof(DummyReader)
 									};

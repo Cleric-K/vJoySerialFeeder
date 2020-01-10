@@ -134,6 +134,7 @@
     <Compile Include="SerialProtocols\DummySetupForm.Designer.cs">
       <DependentUpon>DummySetupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialProtocols\FportReader.cs" />
     <Compile Include="SerialProtocols\IbusReader.cs" />
     <Compile Include="SerialProtocols\IbusSetupForm.cs" />
     <Compile Include="SerialProtocols\IbusSetupForm.Designer.cs">

@@ -212,7 +212,7 @@ namespace vJoySerialFeeder
 					if(now >= nextUIUpdateTime) {
 						nextUIUpdateTime = now + 100;
 						
-						// update the Rate on evert 500ms
+						// update the Rate on every 500ms
 						if(now >= nextRateUpdateTime) {
 							nextRateUpdateTime = now + 500;
 							
