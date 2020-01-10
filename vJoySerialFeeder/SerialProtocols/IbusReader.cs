@@ -5,6 +5,7 @@
  * Time: 17:47 ч.
  */
 using System;
+using System.Collections;
 using System.IO.Ports;
 using System.Windows.Forms;
 
@@ -46,12 +47,11 @@ namespace vJoySerialFeeder
 		const int MAX_CHECKSUM_RETRIES = 3;
 		const byte PROTOCOL_IA6_MAGIC = 0x55;
 		const int PROTOCOL_IA6_LENGTH = 31;
-		const int PROTOCOL_IA6_NUM_CHANNELS = 14;
   
 		
 		int numDiscards = 0;
 		bool ia6Ibus;
-		UInt16[] tempIa6Channels;
+		bool use16bitChannels;
 		
 		public override void Start()
 		{
@@ -60,7 +60,6 @@ namespace vJoySerialFeeder
 			serialPort.ReadTimeout = 500;
 			if(ia6Ibus) {
 				Buffer.FrameLength = PROTOCOL_IA6_LENGTH;
-				tempIa6Channels = new UInt16[PROTOCOL_IA6_NUM_CHANNELS];
 			}
 			else {
 				Buffer.FrameLength = PROTOCOL_MAX_LENGTH;
@@ -122,13 +121,17 @@ namespace vJoySerialFeeder
 					data_start++; // skip command byte
 					int ch = 0;
 					int index = data_start;
+					ushort mask = (ushort)(use16bitChannels ? 0xFFFF : 0x0FFF);
 					while (index + 1 < data_end)
-						channelData[ch++] = (Buffer[index++] | ((Buffer[index++] & 0x0F) << 8));
-					//see https://github.com/betaflight/betaflight/pull/8749
-					index = data_start + 1;
-					while (index + 1 < data_end) {
-						channelData[ch++] = ((Buffer[index] & 0xF0) >> 4) | (Buffer[index + 2] & 0xF0) | ((Buffer[index + 4] & 0xF0) << 4);
-						index += 6;
+						channelData[ch++] = ReadU16(ref index) & mask;
+					
+					if(!use16bitChannels) {
+						//see https://github.com/betaflight/betaflight/pull/8749
+						index = data_start + 1;
+						while (index + 5 < data_end) {
+							channelData[ch++] = ((Buffer[index] & 0xF0) >> 4) | (Buffer[index + 2] & 0xF0) | ((Buffer[index + 4] & 0xF0) << 4);
+							index += 6;
+						}
 					}
 					Buffer.Slide(idx);
 					
@@ -178,8 +181,6 @@ namespace vJoySerialFeeder
 		{
 			int idx = 0; // index in the buffer
 			UInt16 chksum = 0;
-			int tempChIdx = 0;
-			UInt16 val;
 			
 			// check magic first byte
 			if(Buffer[idx++] != PROTOCOL_IA6_MAGIC) {
@@ -188,32 +189,36 @@ namespace vJoySerialFeeder
 				return 0;
 			}
 
-			// consume all the data
-			while(true) {
-				val = (UInt16)(Buffer[idx++] | (Buffer[idx++] << 8));
-				
-				if(idx >= PROTOCOL_IA6_LENGTH)
-					break; // val will hold the checksum
-				
-				tempIa6Channels[tempChIdx++] = val;
-				chksum += val;
+			while(idx < PROTOCOL_IA6_LENGTH - 2) {
+				chksum += ReadU16(ref idx);
 			}
-			
-			// check checksum
-			if(chksum == val) {
-				// Valid packet
-				tempIa6Channels.CopyTo(channelData, 0);
-				Buffer.Slide(idx);
-					
-				return tempIa6Channels.Length;
-			}
-			else {
+
+			// last u16 is the checksum
+			if(chksum != ReadU16(ref idx)) {
 				// incorrect checksum
 				Buffer.Slide(idx);
 				System.Diagnostics.Debug.WriteLine("bad checksum");
+				return 0;
 			}
+
+
+			int ch = 0;
+			int index = 1;
+			ushort mask = (ushort)(use16bitChannels ? 0xFFFF : 0x0FFF);
+			while (index + 1 < PROTOCOL_IA6_LENGTH - 2)
+				channelData[ch++] = ReadU16(ref index) & mask;
 			
-			return 0;
+			if(!use16bitChannels) {
+				//see https://github.com/betaflight/betaflight/pull/8749
+				index = 2;
+				while (index + 5 < PROTOCOL_IA6_LENGTH - 2) {
+					channelData[ch++] = ((Buffer[index] & 0xF0) >> 4) | (Buffer[index + 2] & 0xF0) | ((Buffer[index + 4] & 0xF0) << 4);
+					index += 6;
+				}
+			}
+
+			Buffer.Slide(idx);
+			return ch;
 		}
 		
 		public override Configuration.SerialParameters GetDefaultSerialParameters()
@@ -236,27 +241,49 @@ namespace vJoySerialFeeder
 		public override string Configure(string config)
 		{
 			parseConfig(config);
-			using(var d = new IbusSetupForm(ia6Ibus)) {
+			using(var d = new IbusSetupForm(ia6Ibus, use16bitChannels)) {
 				d.ShowDialog();
 				if(d.DialogResult == DialogResult.OK) {
 					ia6Ibus = d.Ia6Ibus;
+					use16bitChannels = d.Use16bitChannels;
 					return buildConfig();
 				}
 				return null;
 			}
 		}
 		
+		private ushort ReadU16(ref int index) {
+			return (ushort)(Buffer[index++] | (Buffer[index++] << 8));
+		}
+		
 		/// <summary>
 		/// Ibus configuration - "ia6" string if IA6 ibus should be used
+		/// "16bit" if 16bit channels are to be used
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
 		private void parseConfig(string config) {
-			ia6Ibus = config != null && config.Contains("ia6");
+			var tokens = config == null ?
+					new string[0]
+					:
+					config.Split(',');
+			
+			foreach(var s in tokens) {
+				if(s == "ia6")
+					ia6Ibus = true;
+				else if(s == "16bit")
+					use16bitChannels = true;
+			}
 		}
 		
 		private string buildConfig() {
-			return ia6Ibus ? "ia6b" : "";
+			var cfg = new ArrayList();
+			if(ia6Ibus)
+				cfg.Add("ia6");
+			if(use16bitChannels)
+				cfg.Add("16bit");
+			
+			return string.Join(",", cfg.ToArray());
 		}
 	}
 }

@@ -37,11 +37,12 @@ namespace vJoySerialFeeder
 			this.buttonOK = new System.Windows.Forms.Button();
 			this.buttonCancel = new System.Windows.Forms.Button();
 			this.checkIa6Ibus = new System.Windows.Forms.CheckBox();
+			this.checkUse16bitChannels = new System.Windows.Forms.CheckBox();
 			this.SuspendLayout();
 			// 
 			// buttonOK
 			// 
-			this.buttonOK.Location = new System.Drawing.Point(122, 42);
+			this.buttonOK.Location = new System.Drawing.Point(121, 63);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(75, 23);
 			this.buttonOK.TabIndex = 0;
@@ -52,7 +53,7 @@ namespace vJoySerialFeeder
 			// buttonCancel
 			// 
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(41, 42);
+			this.buttonCancel.Location = new System.Drawing.Point(40, 63);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonCancel.TabIndex = 1;
@@ -69,13 +70,23 @@ namespace vJoySerialFeeder
 			this.checkIa6Ibus.Text = "IA6 Compatible IBUS protocol";
 			this.checkIa6Ibus.UseVisualStyleBackColor = true;
 			// 
+			// checkUse16bitChannels
+			// 
+			this.checkUse16bitChannels.Location = new System.Drawing.Point(12, 37);
+			this.checkUse16bitChannels.Name = "checkUse16bitChannels";
+			this.checkUse16bitChannels.Size = new System.Drawing.Size(185, 24);
+			this.checkUse16bitChannels.TabIndex = 3;
+			this.checkUse16bitChannels.Text = "Use 16-bit channels (Arduino)";
+			this.checkUse16bitChannels.UseVisualStyleBackColor = true;
+			// 
 			// IbusSetupForm
 			// 
 			this.AcceptButton = this.buttonOK;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(208, 76);
+			this.ClientSize = new System.Drawing.Size(208, 98);
+			this.Controls.Add(this.checkUse16bitChannels);
 			this.Controls.Add(this.checkIa6Ibus);
 			this.Controls.Add(this.buttonCancel);
 			this.Controls.Add(this.buttonOK);
@@ -87,6 +98,7 @@ namespace vJoySerialFeeder
 			this.Text = "IBUS Setup";
 			this.ResumeLayout(false);
 		}
+		private System.Windows.Forms.CheckBox checkUse16bitChannels;
 		private System.Windows.Forms.CheckBox checkIa6Ibus;
 		private System.Windows.Forms.Button buttonCancel;
 		private System.Windows.Forms.Button buttonOK;

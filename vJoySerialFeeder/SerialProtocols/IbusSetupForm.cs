@@ -18,20 +18,23 @@ namespace vJoySerialFeeder
 	public partial class IbusSetupForm : Form
 	{
 		public bool Ia6Ibus { get; private set; }
+		public bool Use16bitChannels { get; private set; }
 		
-		public IbusSetupForm(bool ia6Ibus)
+		public IbusSetupForm(bool ia6Ibus, bool use16bitChannels)
 		{
 			//
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
 			
-			checkIa6Ibus.Checked = ia6Ibus; 
+			checkIa6Ibus.Checked = ia6Ibus;
+			checkUse16bitChannels.Checked = use16bitChannels;
 		}
 		
 		void ButtonOKClick(object sender, EventArgs e)
 		{
 			Ia6Ibus = checkIa6Ibus.Checked;
+			Use16bitChannels = checkUse16bitChannels.Checked;
 			DialogResult = DialogResult.OK;
 			Close();
 		}

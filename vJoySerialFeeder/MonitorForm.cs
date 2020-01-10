@@ -94,6 +94,7 @@ namespace vJoySerialFeeder
 		{
 			Hide();
 			e.Cancel = true;
+			min = max = -1;
 		}
 	}
 }
