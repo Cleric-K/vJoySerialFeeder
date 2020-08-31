@@ -24,7 +24,6 @@ byte analogPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13,
 // Specify below the digital pin numbers (as for digitalRead) you would like to use.
 // Every pin is sent as a single channel. LOW is encoded as 0, HIGH - as 1023
 // Arduino Mega has 54 digital only pins and the ability to read the analog pins as digital via pin numbers 55-68. If your device has fewer you'll need to modify the count and pin list below
-// To disable reading digital pins, set the count to 0 and remove all items from the pins list
 #define DIGITAL_INPUTS_COUNT 54
 byte digitalPins[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53}; // element count MUST be == DIGITAL_INPUTS_COUNT
 
@@ -37,7 +36,6 @@ byte digitalPins[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 
 // The first 16 pins will go in one channel (the first pin goes into the LSB of the channel).
 // The next 16 pins go in another channel and so on
 // LOW pins are encoded as 0 bit, HIGH - as 1.
-// To disable reading digital bitmapped pins, set the count to 0 and remove all items from the pins list
 #define DIGITAL_BITMAPPED_INPUTS_COUNT 0
 byte digitalBitmappedPins[] = {}; // element count MUST be == DIGITAL_BITMAPPED_INPUTS_COUNT
 
