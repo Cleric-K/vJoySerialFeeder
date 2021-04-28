@@ -128,6 +128,7 @@
     <Compile Include="Scripting\LuaOutputForm.Designer.cs">
       <DependentUpon>LuaOutputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialProtocols\CrsfReader.cs" />
     <Compile Include="SerialProtocols\DsmReader.cs" />
     <Compile Include="SerialProtocols\DummyReader.cs" />
     <Compile Include="SerialProtocols\DummySetupForm.cs" />
@@ -249,13 +250,6 @@
       <TargetPath>msvcr120.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mappings" />
-    <Folder Include="ProcessInteraction" />
-    <Folder Include="Scripting" />
-    <Folder Include="SerialProtocols" />
-    <Folder Include="VirtualJoysticks" />
-    <Folder Include="VirtualJoysticks" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
