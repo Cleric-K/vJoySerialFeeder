@@ -250,6 +250,13 @@
       <TargetPath>msvcr120.dll</TargetPath>
     </ContentWithTargetPath>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Mappings" />
+    <Folder Include="ProcessInteraction" />
+    <Folder Include="Scripting" />
+    <Folder Include="SerialProtocols" />
+    <Folder Include="VirtualJoysticks" />
+    <Folder Include="VirtualJoysticks" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
