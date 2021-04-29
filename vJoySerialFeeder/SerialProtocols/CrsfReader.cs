@@ -79,9 +79,9 @@ namespace vJoySerialFeeder
 			byte len = Buffer[1];
 			byte addr = Buffer[0];
 			//System.Diagnostics.Debug.WriteLine("CRSF[{0}] len={1}", addr, len);
-			if (len < 1 || len > CRSF_PAYLOAD_SIZE_MAX)
+			if (len < 2 || len > CRSF_PAYLOAD_SIZE_MAX)
 			{
-				Buffer.Slide(2);
+				Buffer.Slide(1);
 				return 0;
 			}
 
