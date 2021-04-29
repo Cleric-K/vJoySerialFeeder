@@ -66,7 +66,7 @@ namespace vJoySerialFeeder
 		public override void Start()
 		{
 			serialPort.ReadTimeout = 500;
-			Buffer.FrameLength = CRSF_PAYLOAD_SIZE_MAX + 2;
+			Buffer.FrameLength = 2;
 		}
 
 		public override void Stop()
@@ -84,7 +84,7 @@ namespace vJoySerialFeeder
 				Buffer.Slide(1);
 				return 0;
 			}
-
+			Buffer.FrameLength = len + 2;
 
 			// Read the whole frame up to the CRC byte
 			crcCalc.Out = 0;
@@ -126,6 +126,7 @@ namespace vJoySerialFeeder
 				} /* if packed channels */
 			} /* if valid checksum */
 
+			Buffer.FrameLength = 2;
 			Buffer.Slide(2 + len + 1);
 			return retVal;
 		}
