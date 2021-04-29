@@ -295,8 +295,8 @@ namespace vJoySerialFeeder
         	        	        	"SBUS",
         	        	        	"FPort",
         	        	        	"DSM",
-        	        	        	"Dummy",
-        	        	        	"CRSF"});
+        	        	        	"CRSF",
+        	        	        	"Dummy"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 64);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);

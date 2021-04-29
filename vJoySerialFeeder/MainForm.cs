@@ -57,8 +57,8 @@ namespace vJoySerialFeeder
 										typeof(SbusReader),
 										typeof(FportReader),
 										typeof(DsmReader),
-										typeof(DummyReader),
-										typeof(CrsfReader)
+										typeof(CrsfReader),
+										typeof(DummyReader)
 									};
 		
 		private ComAutomation comAutomation;
