@@ -296,6 +296,7 @@ namespace vJoySerialFeeder
         	        	        	"FPort",
         	        	        	"DSM",
         	        	        	"CRSF",
+                                    "DJI Controller",
         	        	        	"Dummy"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 64);
         	this.comboProtocol.Name = "comboProtocol";

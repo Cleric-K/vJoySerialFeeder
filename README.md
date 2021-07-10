@@ -2,7 +2,7 @@
 
 ## What is it? ##
 A program for feeding data from a serial port to a virtual joystick. Currently these virtual joysticks are supported:
-* [vJoy](http://vjoystick.sourceforge.net) (2.x and later, Windows)
+* [vJoy](https://github.com/njz3/vJoy/) (2.x and later, Windows)
 * [vXbox](https://github.com/shauleiz/ScpVBus/releases) (Windows). [How-to](Docs/vXbox.md).
 * [uinput](https://www.kernel.org/doc/html/v4.12/input/uinput.html) (Linux). [How-to](Docs/Linux.md).
 
@@ -13,6 +13,7 @@ The data coming through the serial port should be structured in a specific way i
 * MultiWii Serial Protocol - used by RC Flight Controllers running MultiWii, CleanFlight, BetaFlight, iNav, etc.
 * KISS serial protocol - used by KISS RC Flight Controllers.
 * PPM (converted to IBUS) - see [Use case 8](#use-cases).
+* DJI Controller - tested with DJI Phantom 3 Remote (GL300C) through Serial Port
 
 After data is received it can be _mapped_ to any virtual joystick axis or button in very flexible and configurable way.
 
@@ -30,6 +31,7 @@ After data is received it can be _mapped_ to any virtual joystick axis or button
    controlling a virtual joystick. [How-to](Docs/Interaction.md).
 8. Feed over network. You can use pairs of virtual serial ports provided by [com0com](http://com0com.sourceforge.net/) and [com2tcp](https://sourceforge.net/projects/com0com/files/com2tcp) for the TCP/IP transport. Another option is [HW VSP3](https://www.hw-group.com/products/hw_vsp/index_en.html) which combines the virtual serial port and the TCP/IP transport but the free version allows only one COM port.
 9. If you have older RC receiver that only supports PPM you can use Arduino and [this sketch](https://github.com/wdcossey/ppm-to-ibus-serial) to convert PPM -> IBUS. Thanks to [wdcossey](https://github.com/wdcossey/)!
+10. You crashed your old DJI Phantom 3 drone but still have a controller with you 
 
 ## How to get it? ##
 You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](http://www.icsharpcode.net/opensource/sd/)
@@ -37,6 +39,9 @@ You can download binaries from the [releases](../../releases) section or you can
 ## How to use it? ##
 Check out the [Manual](Docs/README.md).
 
-## Like it?
+## Like it? ##
 If this software brought a smile on your face, you may shine back if you feel like it: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L5789HZB5NAX4&lc=BG&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)\
 Thank you!!!
+
+## Notes
+This is a temporary fork from [Clerik-K](https://github.com/Cleric-K/vJoySerialFeeder) to use with DJI Phantom 3 controller, other controllers may work.
