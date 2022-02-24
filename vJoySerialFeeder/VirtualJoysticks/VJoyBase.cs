@@ -69,6 +69,20 @@ namespace vJoySerialFeeder
         /// <param name="btn">zero based button index</param>
         /// <param name="value">true/false - pressed/depressed</param>
         public abstract void SetButton(int btn, bool value);
+        
+        /// <summary>
+        /// Set discrete POV Hat. Value depends on driver
+        /// </summary>
+        /// <param name="pov"></param>
+        /// <param name="value"></param>
+        public abstract void SetDiscPov(int pov, int value);
+        
+        /// <summary>
+        /// Set continuous POV Hat. Value depends on driver
+        /// </summary>
+        /// <param name="pov"></param>
+        /// <param name="value"></param>
+        public abstract void SetContPov(int pov, double value);
 
         /// <summary>
         /// Should send the accumulated local state to the virtual

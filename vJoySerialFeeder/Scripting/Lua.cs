@@ -49,6 +49,14 @@ namespace vJoySerialFeeder
 			public void SetButton(int button, double value) {
 				vjoy.SetButton(button - 1, value > 0);
 			}
+			
+			public void SetDiscPov(int pov, double value) {
+				vjoy.SetDiscPov(pov - 1, (int)value);
+			}
+			
+			public void SetContPov(int pov, double value) {
+				vjoy.SetContPov(pov - 1, value);
+			}
 		}
 		
 		

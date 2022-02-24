@@ -166,6 +166,16 @@ namespace vJoySerialFeeder
 			state.Axes[axis] = val;
 		}
 		
+		public override void SetDiscPov(int pov, int value)
+		{
+        	// no impl
+        }
+        
+        public override void SetContPov(int pov, double value)
+        {
+        	// no impl
+        }
+		
 		public override void Release()
 		{
 			// set everything in zero state

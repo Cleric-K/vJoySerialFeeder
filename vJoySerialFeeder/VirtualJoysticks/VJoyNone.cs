@@ -29,7 +29,15 @@ namespace vJoySerialFeeder
 		public override void SetAxis(int axis, double value)
 		{
 		}
-		
+
+		public override void SetDiscPov(int pov, int value)
+		{
+		}
+
+		public override void SetContPov(int pov, double value)
+		{
+		}
+
 		public override void Release()
 		{
 		}

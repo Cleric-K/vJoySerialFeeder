@@ -125,6 +125,16 @@ namespace vJoySerialFeeder
         	if(btn >= 0 && btn < state.Buttons.Length)
         		state.Buttons[btn] = value;
         }
+        
+        public override void SetDiscPov(int pov, int value)
+		{
+        	// no impl
+        }
+        
+        public override void SetContPov(int pov, double value)
+        {
+        	// no impl
+        }
 
         public override void SetState() {
             _setState(false);

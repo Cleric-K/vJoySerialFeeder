@@ -124,6 +124,57 @@ namespace vJoySerialFeeder
             else
                 buttons &= ~((uint)1 << (int)btn);
         }
+        
+        /// <summary>
+        /// From: http://vjoystick.sourceforge.net/site/includes/SDK_ReadMe.pdf
+        /// When setting discrete POV bHats contains four nibble for four possible discrete hats
+        /// The lowest nibble is used for switch #1, the second nibble
+		/// for switch #2, the third nibble for switch #3 and the highest nibble for switch #4
+		/// 
+		/// Each nibble supports one of the following values:
+		/// 	0x0 North (forward)
+		/// 	0x1 East (right)
+		/// 	0x2 South (backwards)
+		/// 	0x3 West (Left)
+		/// 	0xF Neutral
+        /// </summary>
+        /// <param name="pov"></param>
+        /// <param name="value"></param>
+        public override void SetDiscPov(int pov, int value)
+        {
+        	uint hv = value < 0 ? 0xf : (uint)value & 0xf;
+        	var h = state.bHats;
+        	h &= (uint)~(0xf << (pov*4)); // zero out the nibble
+        	h |= (uint)((hv & 0xf) << (pov*4)); // set the nibble
+        	state.bHats = h;
+        }
+        
+        /// <summary>
+        /// From: http://vjoystick.sourceforge.net/site/includes/SDK_ReadMe.pdf
+        /// Valid value for POV Hat Switch member is either 0xFFFFFFFF (neutral) or in the range of 0 to 35999 .
+        /// </summary>
+        /// <param name="pov"></param>
+        /// <param name="value"></param>
+        public override void SetContPov(int pov, double value)
+        {
+        	uint hv = value < 0 ?  ~0U : ((uint)((value%360.0)*100));
+
+        	switch(pov)
+        	{
+        		case 0:
+        			state.bHats = hv;
+        			break;
+        		case 1:
+        			state.bHatsEx1 = hv;
+        			break;
+    			case 2:
+        			state.bHatsEx2 = hv;
+        			break;
+				case 3:
+    				state.bHatsEx3 = hv;
+        			break;
+        	}
+        }
 
         public override void SetState()
         {
@@ -148,6 +199,11 @@ namespace vJoySerialFeeder
         	// center all axes
         	foreach(var a in Enum.GetValues(typeof(Axes)))
         		SetAxis((int)a, 0.5);
+        	
+        	state.bHats = ~0U;
+        	state.bHatsEx1 = ~0U;
+        	state.bHatsEx2 = ~0U;
+        	state.bHatsEx3 = ~0U;
         	
         	SetState();
         }
