@@ -193,30 +193,33 @@ namespace vJoySerialFeeder
 
 
 
-        public virtual bool OpenPort(string port, Configuration.SerialParameters sp) {
-            try
-            {
-                serialPort = new SerialPort(port, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
-                serialPort.Open();
+		public virtual bool OpenPort(string port, Configuration.SerialParameters sp) {
+			try
+			{
+				if(System.Environment.OSVersion.Platform == PlatformID.Unix) {
+					return OpenLinuxPort(port, sp);
+				}
+				else {
+					serialPort = new SerialPort(port, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
+					serialPort.Open();
 
-                return true;
-            }
-            catch(Exception) {
-                if(System.Environment.OSVersion.Platform == PlatformID.Unix) {
-                    // mono on linux has trouble opening serial ports with non standard baud rates
-                    return OpenLinuxPortCustomBaudRate(port, sp);
-                }
-                return false;
-            }
-        }
+					return true;
+				}
+			}
+			catch(Exception) {
+				return false;
+			}
+		}
 
         public virtual void ClosePort() {
             serialPort.Close();
             serialPort = null;
         }
 
-        bool OpenLinuxPortCustomBaudRate(string port, Configuration.SerialParameters sp) {
+        bool OpenLinuxPort(string port, Configuration.SerialParameters sp) {
             try {
+				// mono on linux has trouble opening serial ports with non standard baud rates
+
                 // first try to open with safe baudrate
                 serialPort = new SerialPort(port, 9600, sp.Parity, sp.DataBits, sp.StopBits);
                 serialPort.Open();
