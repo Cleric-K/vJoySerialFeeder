@@ -53,7 +53,7 @@ namespace vJoySerialFeeder
 	{
 		const int CRSF_PAYLOAD_SIZE_MAX = 62;
 		const int CRSF_SUBSET_RC_CHANNELS_PACKED_RESOLUTION = 11; // 11 bits per channel
-		const uint CRSF_SUBSET_RC_CHANNELS_PACKED_MASK = 0b11111111111; // 11 bits, get it?!
+		const uint CRSF_SUBSET_RC_CHANNELS_PACKED_MASK = 0x7ff; // 0b11111111111; // 11 bits, get it?!
 
 		// AddressTypes
 		const byte CRSF_ADDRESS_FLIGHT_CONTROLLER = 0xC8; // 200

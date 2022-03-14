@@ -123,6 +123,7 @@
     <Compile Include="Scripting\LuaOutputForm.Designer.cs">
       <DependentUpon>LuaOutputForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialProtocols\CrsfReader.cs" />
     <Compile Include="SerialProtocols\DsmReader.cs" />
     <Compile Include="SerialProtocols\DummyReader.cs" />
     <Compile Include="SerialProtocols\DummySetupForm.cs" />
@@ -219,6 +220,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
