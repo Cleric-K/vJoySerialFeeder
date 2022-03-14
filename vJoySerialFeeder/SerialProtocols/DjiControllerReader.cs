@@ -33,7 +33,7 @@ namespace vJoySerialFeeder
 				serialPort.Write(PING_REQUEST, 0, PING_REQUEST.Length);
 				byteCount = serialPort.Read(readBuffer, 0, 38);
 				readSuccess = true;
-			} catch (TimeoutException e)
+			} catch (TimeoutException)
             {
 				// reading too fast, sleep
 				Thread.Sleep(1);
@@ -82,6 +82,8 @@ namespace vJoySerialFeeder
 		}
 
 		public override bool Configurable { get { return false; } }
+		
+		public override string ProtocolName { get { return "DJI Controller"; } }
 
 
 		// because default is the best
