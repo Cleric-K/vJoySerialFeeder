@@ -118,6 +118,8 @@ namespace vJoySerialFeeder
 			};
 		}
 		
+		public override string ProtocolName { get { return "SBUS"; } }
+		
 		protected void DecodeSbusChannels(int bufIdx) {
 			int inputbits = 0;
 			int inputbitsavailable = 0;

@@ -87,5 +87,7 @@ namespace vJoySerialFeeder
 				StopBits = StopBits.One
 			};
 		}
+		
+		public override string ProtocolName { get { return "DSM"; } }
 	}
 }

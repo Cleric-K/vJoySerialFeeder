@@ -252,6 +252,8 @@ namespace vJoySerialFeeder
 			}
 		}
 		
+		public override string ProtocolName { get { return "IBUS"; } }
+		
 		private ushort ReadU16(ref int index) {
 			return (ushort)(Buffer[index++] | (Buffer[index++] << 8));
 		}

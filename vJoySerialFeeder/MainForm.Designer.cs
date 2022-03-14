@@ -288,15 +288,6 @@ namespace vJoySerialFeeder
         	// 
         	this.comboProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
         	this.comboProtocol.FormattingEnabled = true;
-        	this.comboProtocol.Items.AddRange(new object[] {
-        	        	        	"IBUS",
-        	        	        	"KISS",
-        	        	        	"MultiWii",
-        	        	        	"SBUS",
-        	        	        	"FPort",
-        	        	        	"DSM",
-        	        	        	"CRSF",
-        	        	        	"Dummy"});
         	this.comboProtocol.Location = new System.Drawing.Point(360, 64);
         	this.comboProtocol.Name = "comboProtocol";
         	this.comboProtocol.Size = new System.Drawing.Size(72, 21);
@@ -515,12 +506,12 @@ namespace vJoySerialFeeder
         	this.contextSystray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
         	        	        	this.exitToolStripMenuItem1});
         	this.contextSystray.Name = "contextSystray";
-        	this.contextSystray.Size = new System.Drawing.Size(93, 26);
+        	this.contextSystray.Size = new System.Drawing.Size(94, 26);
         	// 
         	// exitToolStripMenuItem1
         	// 
         	this.exitToolStripMenuItem1.Name = "exitToolStripMenuItem1";
-        	this.exitToolStripMenuItem1.Size = new System.Drawing.Size(92, 22);
+        	this.exitToolStripMenuItem1.Size = new System.Drawing.Size(93, 22);
         	this.exitToolStripMenuItem1.Text = "Exit";
         	this.exitToolStripMenuItem1.Click += new System.EventHandler(this.ExitToolStripMenuItem1Click);
         	// 

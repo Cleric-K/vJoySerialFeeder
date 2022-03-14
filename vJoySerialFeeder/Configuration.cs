@@ -36,7 +36,7 @@ namespace vJoySerialFeeder
 			[DataMember]
 			public string COMPort, VJoyInstance;
 			[DataMember]
-			public int Protocol;
+			public string Protocol;
 			[DataMember]
 			public List<Mapping> Mappings = new List<Mapping>();
 			[DataMember]
@@ -264,7 +264,33 @@ namespace vJoySerialFeeder
 				}
 			}
 			
-			
+			if(fromVersion <= new Version("1.6.0.0")) {
+				// up until 1.6 the profile saves the index of the selected protocol in the combobox
+				// to allow for future rearrangement of the list, we begin to save the name of the protocol
+				// class
+				
+				// protocols class order as of 1.6.0.0
+				string[] protos = {
+					"IbusReader",
+					"KissReader",
+					"MultiWiiReader",
+					"SbusReader",
+					"FportReader",
+					"DsmReader",
+					"CrsfReader",
+					"DummyReader"
+				};
+				
+				foreach(var p in Profiles.Values) {
+					try {
+						int i = int.Parse(p.Protocol);
+						p.Protocol = protos[i];
+					}
+					catch(Exception) {
+						p.Protocol = "";
+					}
+				}
+			}
 			
 		}
 	}

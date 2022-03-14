@@ -198,6 +198,8 @@ namespace vJoySerialFeeder
 			}
 		}
 		
+		public override string ProtocolName { get { return "KISS"; } }
+		
 		/// <summary>
 		/// Kiss configuration - just a simple number for the update rate
 		/// </summary>

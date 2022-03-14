@@ -143,7 +143,7 @@ namespace vJoySerialFeeder
 		/// </summary>
 		protected int[] channelData;
 		
-			/// <summary>
+		/// <summary>
 		/// Override this to return true if protocol should display protocol 'Setup' butto
 		/// </summary>
 		/// <returns></returns>
@@ -178,6 +178,11 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <returns></returns>
 		public abstract Configuration.SerialParameters GetDefaultSerialParameters();
+		
+		/// <summary>
+		/// Should return the name to use in the protocol combobox
+		/// </summary>
+		public abstract string ProtocolName { get;  }
 		
 		/// <summary>
 		/// Override this to display a dialog or whatever.

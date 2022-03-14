@@ -155,6 +155,8 @@ namespace vJoySerialFeeder
 			};
 		}
 		
+		public override string ProtocolName { get { return "FPort"; } }
+		
 		private void parseConfig(string config) {
 			var tokens = config == null ?
 					new string[0]

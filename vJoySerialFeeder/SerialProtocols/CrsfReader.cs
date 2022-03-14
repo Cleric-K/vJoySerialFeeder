@@ -141,6 +141,8 @@ namespace vJoySerialFeeder
 		}
 
 		public override bool Configurable { get { return false; } }
+		
+		public override string ProtocolName { get { return "CRSF"; } }
 
 		static private uint map(uint val, uint in_min, uint in_max, uint out_min, uint out_max)
 		{

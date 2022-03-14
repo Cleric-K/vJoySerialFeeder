@@ -152,6 +152,8 @@ namespace vJoySerialFeeder
 			}
 		}
 		
+		public override string ProtocolName { get { return "MultiWii"; } }
+		
 		/// <summary>
 		/// MultiWii configuration - just a simple number for the update rate
 		/// </summary>

@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Drawing;
 using System.IO;
 using System.IO.Ports;
@@ -102,6 +103,8 @@ namespace vJoySerialFeeder
                     Application.Exit();
                     break;
             }
+			
+			populateProtocolCombobox();
 
             comboPorts.FormattingEnabled = true;
             comboPorts.Format += (o, e) =>
@@ -201,7 +204,13 @@ namespace vJoySerialFeeder
 			
 			if(!connected) {
 				// load this stuff only if not connected
-				comboProtocol.SelectedIndex = p.Protocol < comboProtocol.Items.Count ? p.Protocol : 0;
+				comboProtocol.SelectedIndex = 0;
+				for(var i = 0; i < comboProtocol.Items.Count; i++) {
+					if (Protocols[i].Name.Equals(p.Protocol)) {
+						comboProtocol.SelectedIndex = i;
+						break;
+					}
+				}
                 comboPorts.SelectedItem = p.COMPort;
                 if (comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
                     comboPorts.SelectedIndex = 0;
@@ -231,7 +240,7 @@ namespace vJoySerialFeeder
 		private Configuration.Profile buildProfile() {
 			var p = new Configuration.Profile();
 				
-			p.Protocol = comboProtocol.SelectedIndex;
+			p.Protocol = Protocols[comboProtocol.SelectedIndex].Name;
             p.COMPort = (string)comboPorts.SelectedItem;
 			p.UseCustomSerialParameters = useCustomSerialParameters;
 			p.SerialParameters = serialParameters;
@@ -280,7 +289,17 @@ namespace vJoySerialFeeder
 			if(comboJoysticks.SelectedItem == null && comboJoysticks.Items.Count > 0)
 				comboJoysticks.SelectedIndex = 0;
 		}
+
 		
+		private void populateProtocolCombobox() {
+			comboProtocol.BeginUpdate();
+			comboProtocol.Items.Clear();
+			foreach(Type t in Protocols) {
+				comboProtocol.Items.Add(((SerialReader)Activator.CreateInstance(t)).ProtocolName);
+			}
+			comboProtocol.EndUpdate();
+		}
+			
 		private SerialReader createSerialReader() {
 			return (SerialReader)Activator.CreateInstance(Protocols[comboProtocol.SelectedIndex]);
 		}

@@ -87,6 +87,8 @@ namespace vJoySerialFeeder
 			return null;
 		}
 		
+		public override string ProtocolName { get { return "Dummy"; } }
+		
 		/// <summary>
 		/// Dummy configuration - just a simple number for the update rate
 		/// </summary>
