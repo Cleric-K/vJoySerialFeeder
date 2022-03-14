@@ -59,6 +59,7 @@ namespace vJoySerialFeeder
 										typeof(FportReader),
 										typeof(DsmReader),
 										typeof(CrsfReader),
+										typeof(DjiControllerReader),
 										typeof(DummyReader)
 									};
 		
