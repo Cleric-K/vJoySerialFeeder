@@ -117,14 +117,7 @@ namespace vJoySerialFeeder
 						else {
 							// the SerialReader threw exception
 							ActiveChannels = 0;
-							if(readerException is InvalidOperationException) {
-								System.Diagnostics.Debug.WriteLine(readerException.Message);
-								this.Invoke((Action)( () => ErrorMessageBox("The Serial Port was Disconnected!",
-								                                            "Disconnect")));
-								backgroundWorker.CancelAsync();
-								continue;
-							}
-							else if(readerException is TimeoutException) {
+							if(readerException is TimeoutException) {
 								failsafeReason = "Serial Port Read Timeout";
 							}
 							else {

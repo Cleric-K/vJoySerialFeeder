@@ -7,6 +7,7 @@
 using System;
 using System.IO.Ports;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace vJoySerialFeeder
 {
@@ -28,17 +29,20 @@ namespace vJoySerialFeeder
 		/// Helper class which allows access to the serial port as indexed object (Buffer[index])
 		/// Data is read from the serial port automatically when needed.
 		/// </summary>
-		public class SerialBuffer {
+		internal class SerialBuffer {
 			int length;
 			byte[] buf = new byte[1024];
-			SerialPort sp;
+			SerialReader sr;
 			
-			public SerialBuffer(SerialPort sp) {
-				this.sp = sp;
+			
+			public SerialBuffer(SerialReader sr) {
+				this.sr = sr;
 			}
 			
 			public byte this[int index] {
 				get {
+					sr.EnsureOpenPort();
+
 					if(index >= buf.Length) {
 						// this shouldn't really ever happen, but just to be sure
 						index = length = 0;
@@ -58,10 +62,12 @@ namespace vJoySerialFeeder
 							bytesToGet = index - length + 1;
 							System.Diagnostics.Debug.WriteLine("Read beyond frame");
 						}
-							
-                        var read = sp.Read(buf, length, bytesToGet);
-                        if (read == 0)
+
+                        var read = sr.serialPort.Read(buf, length, bytesToGet);
+                        if (read == 0) {
+                            sr.serialPort.Close();
                             throw new InvalidOperationException("Serial read error");
+                        }
                         length += read;
 					}
 					return buf[index];
@@ -78,15 +84,20 @@ namespace vJoySerialFeeder
 			/// </summary>
 			/// <returns></returns>
 			public void FindInterFrame() {
-				var to = sp.ReadTimeout;
+				sr.EnsureOpenPort();
+
+				var to = sr.serialPort.ReadTimeout;
 				var tryUntil = MainForm.Now + to;
-				sp.ReadTimeout = 1;
+				sr.serialPort.ReadTimeout = 1;
 				
 				try {
 					while(MainForm.Now < tryUntil) {
 						try {
-							sp.ReadByte();
-						}
+							if(sr.serialPort.ReadByte() == -1) {
+								sr.serialPort.Close();
+								throw new InvalidOperationException("Serial read error");
+							}
+                        }
 						catch(TimeoutException) {
 							// success, we are in interframe
 							Clear();
@@ -98,7 +109,7 @@ namespace vJoySerialFeeder
 				}
 				finally {
 					// restore original timeout
-					sp.ReadTimeout = to;
+					sr.serialPort.ReadTimeout = to;
 				}
 			}
 			
@@ -110,7 +121,7 @@ namespace vJoySerialFeeder
 			/// </summary>
 			public int FrameLength { get; set; }
 			
-			public bool Empty { get { return length == 0 && sp.BytesToRead == 0; } }
+			public bool Empty { get { return length == 0 && sr.serialPort.BytesToRead == 0; } }
 									
 			/// <summary>
 			/// Moves the Buffer data so that 'newStart' will be at index 0.
@@ -135,8 +146,11 @@ namespace vJoySerialFeeder
 		}
 		
 		protected SerialPort serialPort;
-		protected SerialBuffer Buffer;
+		internal SerialBuffer Buffer;
 		protected string config;
+		
+		private int BaudRate;
+		private string PortName;
 		
 		/// <summary>
 		/// the ReadChannels method should put its data in this array.
@@ -151,7 +165,7 @@ namespace vJoySerialFeeder
 		
 		public void Init(int[] channelData, string config)
 		{
-			Buffer = new SerialBuffer(serialPort);
+			Buffer = new SerialBuffer(this);
 			this.channelData = channelData;
 			this.config = config;
 		}
@@ -201,15 +215,11 @@ namespace vJoySerialFeeder
 		public virtual bool OpenPort(string port, Configuration.SerialParameters sp) {
 			try
 			{
-				if(System.Environment.OSVersion.Platform == PlatformID.Unix) {
-					return OpenLinuxPort(port, sp);
-				}
-				else {
-					serialPort = new SerialPort(port, sp.BaudRate, sp.Parity, sp.DataBits, sp.StopBits);
-					serialPort.Open();
-
-					return true;
-				}
+				PortName = port;
+				BaudRate = sp.BaudRate;
+				// first create with safe baud rate
+				serialPort = new SerialPort(port, 9600, sp.Parity, sp.DataBits, sp.StopBits);
+				return RealOpenPort();
 			}
 			catch(Exception) {
 				return false;
@@ -220,16 +230,48 @@ namespace vJoySerialFeeder
             serialPort.Close();
             serialPort = null;
         }
+		
+		void EnsureOpenPort() {
+			if (!serialPort.IsOpen) {
+				if (!RealOpenPort()) {
+					Thread.Sleep(100); // sleep a while if port is closed
+				}
+			}
+		}
+		
+		bool RealOpenPort() {
+			if(System.Environment.OSVersion.Platform == PlatformID.Unix) {
+				// Linux
+				return OpenLinuxPort();
+			}
+			else {
+				// Windows
+				return OpenWindowsPort();
+			}
+		}
+		
+		bool OpenWindowsPort() {
+			try {
+				serialPort.Close();
+				serialPort.BaudRate = BaudRate;
+				serialPort.Open();
+				return true;
+			}
+			catch(Exception) {
+                return false;
+            }
+		}
 
-        bool OpenLinuxPort(string port, Configuration.SerialParameters sp) {
+        bool OpenLinuxPort() {
             try {
 				// mono on linux has trouble opening serial ports with non standard baud rates
 
                 // first try to open with safe baudrate
-                serialPort = new SerialPort(port, 9600, sp.Parity, sp.DataBits, sp.StopBits);
+                serialPort.Close();
+                serialPort.BaudRate = 9600;
                 serialPort.Open();
                 // it worked, no try to set the custom baud rate
-                if (!SetLinuxCustomBaudRate(port, sp.BaudRate))
+                if (!SetLinuxCustomBaudRate(PortName, BaudRate))
                 {
                     serialPort.Close();
                     return false;
@@ -240,6 +282,8 @@ namespace vJoySerialFeeder
                 return false;
             }
         }
+		
+		
 
 
         internal class Linux
