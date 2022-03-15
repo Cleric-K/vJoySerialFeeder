@@ -234,9 +234,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ContentWithTargetPath Include="Lib\vJoy2.1.9\vJoyInterface.dll">
+    <ContentWithTargetPath Include="Lib\vJoyInterface_2.1.9.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>vJoyInterface.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\vJoyInterface_2.1.8.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>vJoyInterface_2.1.8.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Lib\vXboxInterface.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
