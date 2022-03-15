@@ -205,13 +205,7 @@ namespace vJoySerialFeeder
 			
 			if(!connected) {
 				// load this stuff only if not connected
-				comboProtocol.SelectedIndex = 0;
-				for(var i = 0; i < comboProtocol.Items.Count; i++) {
-					if (Protocols[i].Name.Equals(p.Protocol)) {
-						comboProtocol.SelectedIndex = i;
-						break;
-					}
-				}
+				comboProtocol.SelectedIndex = Array.FindIndex(Protocols, (t) => t.Name.Equals(p.Protocol));
                 comboPorts.SelectedItem = p.COMPort;
                 if (comboPorts.SelectedItem == null && comboPorts.Items.Count > 0)
                     comboPorts.SelectedIndex = 0;
