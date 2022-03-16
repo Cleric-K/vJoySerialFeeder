@@ -32,8 +32,13 @@ namespace vJoySerialFeeder
             UInt32 DllVer = 0, DrvVer = 0;
 
             bool match = joystick.DriverMatch(ref DllVer, ref DrvVer);
-            if (!match)
-            	throw new VJoyException(String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})", DrvVer, DllVer));
+            if (!match) {
+            	var msg = String.Format("Version of Driver ({0:X}) does NOT match DLL Version ({1:X})", DrvVer, DllVer);
+            	if (DllVer == 0x219 && DrvVer == 0x218) {
+            		msg += ". Please close vJoySerialFeeder, delete vJoyInterface.dll and rename vJoyInterface_2.1.8.dll to vJoyInterface.dll";
+            	}
+            	throw new VJoyException(msg);
+            }
             
             
             if(!int.TryParse(id, out this.id))
