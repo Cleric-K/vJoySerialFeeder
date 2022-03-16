@@ -105,6 +105,8 @@ Here is a simplified diagram of the data flow:
 
       > For unmapped bits (no number shown) the color of the box represents the _input_ bit. For mapped bits the color represents the virtual button state.
 
+   * Hat switches are also supported but because of the non-trivial ways in which a channel can be mapped, this is supported only through [Scripting](Scripting.md)
+
 9. Save your configuration as a `Profile`. Enter a profile name in the text box and click `Save`. The last used profile is automatically loaded on next run.
 
 10. Enjoy!

@@ -2,7 +2,7 @@
 
 ## What is it? ##
 A program for feeding data from a serial port to a virtual joystick. Currently these virtual joysticks are supported:
-* [vJoy](http://vjoystick.sourceforge.net) (2.x and later, Windows)
+* [vJoy](https://sourceforge.net/projects/vjoystick/) (2.1.8 and 2.1.9, Windows)
 * [vXbox](https://github.com/shauleiz/ScpVBus/releases) (Windows). [How-to](Docs/vXbox.md).
 * [uinput](https://www.kernel.org/doc/html/v4.12/input/uinput.html) (Linux). [How-to](Docs/Linux.md).
 
@@ -13,6 +13,8 @@ The data coming through the serial port should be structured in a specific way i
 * MultiWii Serial Protocol - used by RC Flight Controllers running MultiWii, CleanFlight, BetaFlight, iNav, etc.
 * KISS serial protocol - used by KISS RC Flight Controllers.
 * PPM (converted to IBUS) - see [Use case 8](#use-cases).
+* CrossFire - thanks to @CapnBry #49
+* DJI Phantom 3 Controller - thanks to @cmyip #52
 
 After data is received it can be _mapped_ to any virtual joystick axis or button in very flexible and configurable way.
 
@@ -32,7 +34,7 @@ After data is received it can be _mapped_ to any virtual joystick axis or button
 9. If you have older RC receiver that only supports PPM you can use Arduino and [this sketch](https://github.com/wdcossey/ppm-to-ibus-serial) to convert PPM -> IBUS. Thanks to [wdcossey](https://github.com/wdcossey/)!
 
 ## How to get it? ##
-You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](http://www.icsharpcode.net/opensource/sd/)
+You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](https://sourceforge.net/projects/sharpdevelop/)
 
 ## How to use it? ##
 Check out the [Manual](Docs/README.md).

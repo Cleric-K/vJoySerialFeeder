@@ -50,4 +50,6 @@ The cable connecting the controller with the Arduino Nano:
 
 In VJoySerialFeeder select the correct COM port. Select `IBUS` protocol and hit `connect`.
 
+> You should click the `Setup` button next to `IBUS` and choose `Use 16-bit Channels`. Normally Flysky hardware uses 12-bit channels. This leaves 4 unused bits in every other byte. Thus three half-used bytes allow to pack one additional 12-bit (3x4bits) channel. When using Arduino it's not worth it to make this complicated bit packing so it's easier just to use the whole 16-bit, even though they are probably not really used.
+
 Map your channels and enjoy!

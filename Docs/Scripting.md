@@ -35,20 +35,52 @@ The output of it can be seen through the `Script`>`Output` menu.
 To interact with vJoySerialFeeder the following global functions and objects are defined:
 
 #### function: Mapping(index)
-* `index` index of the mapping (starting from 1)
+* `index` \<integer> index of the mapping (starting from 1)
 * returns \<[Mapping](#object-mapping)>
 
 Gets the [Mapping](#object-mapping) object for the requested `index`
 
-#### object: VJoy \<[VJoy](#object-vjoy)>
-
-Interface for the Virtual Joystick
 
 #### function: Channel(index)
-* `index` channel index (starting from 1)
+* `index` \<integer> channel index (starting from 1)
 * returns \<integer> 16-bit unsigned integer (0 - 65535)
 
 Gets the raw serial integer value for channel `index`
+
+
+#### function: SetDiscPov(pov, value)
+* `pov` \<integer> POV number - vJoy currently supports only one discrete POV so this should be `1`
+* `value` \<integer> - the direction of the POV.
+
+Sets the discrete POV direction. The possible values are:
+value | meaning
+---|---
+0 |North (forward)
+1 |East (right)
+2 |South (backwards)
+3 |West (Left)
+-1 |Neutral
+
+
+
+#### function: SetContPov(pov, value)
+* `pov` \<integer> POV number - vJoy currently supports 4 continuous POVs so this should be in the range 1-4
+* `value`\<float> the direction of the POV in degrees.
+
+Sets the direction of a continuous POV. The general directions have the following values:
+value | meaning
+---|---
+0.0 |North (forward)
+90.0 |East (right)
+180.0 |South (backwards)
+270.0 |West (Left)
+negative value |Neutral
+
+Of course you can have any floating point value in between these. Check out the [example](#hat-pov-switch)
+
+#### object: VJoy \<[VJoy](#object-vjoy)>
+
+Interface for the Virtual Joystick
 
 #### variable: Failsafe \<boolean>
 Tells if Failsafe mode is active. Writing to this variable has no effect.
@@ -84,14 +116,6 @@ The Mapping's type as string. Read-only.
 * `axis` \<integer> axis number (starting from 1)
 * `value` \<float> axis value (0.0 to 1.0)
 
-
-#### method: SetButton(button, pressed)
-* `button` \<integer> button number (starting from 1)
-* `pressed` \<boolean> button pressed state (true or false)
-
-
----
-
 For convenience the following global variables are defined to be used with the `SetAxis()` function:
 
 Name | Value
@@ -104,6 +128,12 @@ Name | Value
 `AXIS_RZ` | 6
 `AXIS_SL0` | 7
 `AXIS_SL1` | 8
+
+#### method: SetButton(button, pressed)
+* `button` \<integer> button number (starting from 1)
+* `pressed` \<boolean> button pressed state (true or false)
+
+
 
 ## Order of execution
 
@@ -152,6 +182,29 @@ function update()
 end
 ```
 then based on our switch position only X/Y or Rx/Ry will be active, while the other pair will be centered.
+
+### Hat POV switch
+
+This example converts two channels (X and Y) into a continuous POV.
+
+```lua
+    -- assuming channels vary between 0 and 1023
+    -- map [0; 1023] -> [-1; 1]
+    x = (Channel(1)/1023 - 0.5) * 2
+    y = (Channel(2)/1023 - 0.5) * 2
+    d = math.sqrt(x*x + y*y) -- distance to (0,0)
+    
+    if d < .1 then
+        -- below certain threshold - move to neutral
+        VJoy.SetContPov(1, -1)
+    else
+        sn = y/d -- calculate sine
+        cs = x/d -- calculate cosine
+        -- vjoy angle increases in CW direction and 0 is UP, while mathematical degrees increase in CCW direction and 0 is RIGHT
+        deg = (90 - 180*math.atan(sn, cs)/math.pi ) % 360
+        VJoy.SetContPov(3, deg)
+    end
+```
 
 ### Function Generator
 Here is one probably not very useful example, but it provides a showcase of
