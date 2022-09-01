@@ -32,6 +32,7 @@ After data is received it can be _mapped_ to any virtual joystick axis or button
    controlling a virtual joystick. [How-to](Docs/Interaction.md).
 8. Feed over network. You can use pairs of virtual serial ports provided by [com0com](http://com0com.sourceforge.net/) and [com2tcp](https://sourceforge.net/projects/com0com/files/com2tcp) for the TCP/IP transport. Another option is [HW VSP3](https://www.hw-group.com/products/hw_vsp/index_en.html) which combines the virtual serial port and the TCP/IP transport but the free version allows only one COM port.
 9. If you have older RC receiver that only supports PPM you can use Arduino and [this sketch](https://github.com/wdcossey/ppm-to-ibus-serial) to convert PPM -> IBUS. Thanks to [wdcossey](https://github.com/wdcossey/)!
+10. If you have older RC receiver that only supports PWM you can use Arduino and [this sketch](Arduino/Pwm_to_ibus) to convert PWM -> IBUS.
 
 ## How to get it? ##
 You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](https://sourceforge.net/projects/sharpdevelop/)
