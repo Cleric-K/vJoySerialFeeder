@@ -147,6 +147,7 @@
     <Compile Include="SerialProtocols\MultiWiiSetupForm.Designer.cs">
       <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SerialProtocols\NasaReader.cs" />
     <Compile Include="SerialProtocols\SbusReader.cs" />
     <Compile Include="SerialProtocols\SbusSetupForm.cs" />
     <Compile Include="SerialProtocols\SbusSetupForm.Designer.cs">
