@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
   <PropertyGroup>
     <ProjectGuid>{9C8FF460-8AAE-4BBB-B365-0D67C6016A0D}</ProjectGuid>
     <ProjectTypeGuids>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -24,6 +24,22 @@
     <BaseIntermediateOutputPath>obj\windows\</BaseIntermediateOutputPath>
     <OutputPath>bin\windows\$(Configuration)</OutputPath>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -45,6 +61,12 @@
     <Optimize>True</Optimize>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="FastColoredTextBox">
       <HintPath>Lib\FastColoredTextBox.dll</HintPath>
@@ -64,48 +86,68 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutForm.cs" />
+    <Compile Include="AboutForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="AboutForm.Designer.cs">
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Configuration.cs" />
-    <Compile Include="ImportConfigurationForm.cs" />
+    <Compile Include="ImportConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ImportConfigurationForm.Designer.cs">
       <DependentUpon>ImportConfigurationForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainFormWorker.cs" />
+    <Compile Include="MainFormWorker.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Mappings\AxisMapping.cs" />
-    <Compile Include="Mappings\AxisSetupForm.cs" />
+    <Compile Include="Mappings\AxisSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Mappings\AxisSetupForm.Designer.cs">
       <DependentUpon>AxisSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mappings\ButtonBitmapMapping.cs" />
-    <Compile Include="Mappings\ButtonBitmapSetupForm.cs" />
+    <Compile Include="Mappings\ButtonBitmapSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Mappings\ButtonBitmapSetupForm.Designer.cs">
       <DependentUpon>ButtonBitmapSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mappings\ButtonMapping.cs" />
-    <Compile Include="Mappings\ButtonSetupForm.cs" />
+    <Compile Include="Mappings\ButtonSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Mappings\ButtonSetupForm.Designer.cs">
       <DependentUpon>ButtonSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mappings\Mapping.cs" />
-    <Compile Include="GlobalOptionsForm.cs" />
+    <Compile Include="GlobalOptionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="GlobalOptionsForm.Designer.cs">
       <DependentUpon>GlobalOptionsForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainForm.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Mappings\TriggerState.cs" />
-    <Compile Include="MonitorForm.cs" />
+    <Compile Include="MonitorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MonitorForm.Designer.cs">
       <DependentUpon>MonitorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ProcessInteraction\ComAutomation.cs" />
     <Compile Include="ProcessInteraction\WebSocket.cs" />
-    <Compile Include="ProfileOptions.cs" />
+    <Compile Include="ProfileOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ProfileOptions.Designer.cs">
       <DependentUpon>ProfileOptions.cs</DependentUpon>
     </Compile>
@@ -114,17 +156,24 @@
     <Compile Include="Resources.Designer.cs">
       <DependentUpon>Resources.resx</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="PortSetupForm.cs" />
+    <Compile Include="PortSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="PortSetupForm.Designer.cs">
       <DependentUpon>PortSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Scripting\Lua.cs" />
-    <Compile Include="Scripting\LuaEditorForm.cs" />
+    <Compile Include="Scripting\LuaEditorForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Scripting\LuaEditorForm.Designer.cs">
       <DependentUpon>LuaEditorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scripting\LuaOutputForm.cs" />
+    <Compile Include="Scripting\LuaOutputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Scripting\LuaOutputForm.Designer.cs">
       <DependentUpon>LuaOutputForm.cs</DependentUpon>
     </Compile>
@@ -132,28 +181,38 @@
     <Compile Include="SerialProtocols\DjiControllerReader.cs" />
     <Compile Include="SerialProtocols\DsmReader.cs" />
     <Compile Include="SerialProtocols\DummyReader.cs" />
-    <Compile Include="SerialProtocols\DummySetupForm.cs" />
+    <Compile Include="SerialProtocols\DummySetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SerialProtocols\DummySetupForm.Designer.cs">
       <DependentUpon>DummySetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\FportReader.cs" />
     <Compile Include="SerialProtocols\IbusReader.cs" />
-    <Compile Include="SerialProtocols\IbusSetupForm.cs" />
+    <Compile Include="SerialProtocols\IbusSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SerialProtocols\IbusSetupForm.Designer.cs">
       <DependentUpon>IbusSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\KissReader.cs" />
-    <Compile Include="SerialProtocols\KissSetupForm.cs" />
+    <Compile Include="SerialProtocols\KissSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SerialProtocols\KissSetupForm.Designer.cs">
       <DependentUpon>KissSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\MultiWiiReader.cs" />
-    <Compile Include="SerialProtocols\MultiWiiSetupForm.cs" />
+    <Compile Include="SerialProtocols\MultiWiiSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SerialProtocols\MultiWiiSetupForm.Designer.cs">
       <DependentUpon>MultiWiiSetupForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SerialProtocols\SbusReader.cs" />
-    <Compile Include="SerialProtocols\SbusSetupForm.cs" />
+    <Compile Include="SerialProtocols\SbusSetupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="SerialProtocols\SbusSetupForm.Designer.cs">
       <DependentUpon>SbusSetupForm.cs</DependentUpon>
     </Compile>
@@ -161,6 +220,7 @@
     <Compile Include="Settings.Designer.cs">
       <DependentUpon>Settings.settings</DependentUpon>
       <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="VirtualJoysticks\VJoyBase.cs" />
     <Compile Include="VirtualJoysticks\VJoyCollectionBase.cs" />
@@ -234,13 +294,25 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+	  <ContentWithTargetPath Include="Lib\vJoyInterfaceWrap.dll">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		  <TargetPath>vJoyInterfaceWrap.dll</TargetPath>
+	  </ContentWithTargetPath>
     <ContentWithTargetPath Include="Lib\vJoyInterface_2.1.9.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>vJoyInterface.dll</TargetPath>
+      <TargetPath>vJoyInterface_2.1.9.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Lib\vJoyInterface_2.1.8.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>vJoyInterface_2.1.8.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\vJoyInterface_2.2.2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>vJoyInterface_2.2.2.dll</TargetPath>
+    </ContentWithTargetPath>
+    <ContentWithTargetPath Include="Lib\vJoyInterface_2.2.2.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>vJoyInterface.dll</TargetPath>
     </ContentWithTargetPath>
     <ContentWithTargetPath Include="Lib\vXboxInterface.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -256,12 +328,17 @@
     </ContentWithTargetPath>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mappings" />
-    <Folder Include="ProcessInteraction" />
-    <Folder Include="Scripting" />
-    <Folder Include="SerialProtocols" />
-    <Folder Include="VirtualJoysticks" />
-    <Folder Include="VirtualJoysticks" />
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
+
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
