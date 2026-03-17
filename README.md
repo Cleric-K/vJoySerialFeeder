@@ -1,24 +1,36 @@
 # VJoySerialFeeder #
 
 ## What is it? ##
-A program for feeding data from a serial port to a virtual joystick. Currently these virtual joysticks are supported:
-* [vJoy](https://sourceforge.net/projects/vjoystick/) (2.1.8 and 2.1.9, Windows)
+A program for feeding data from a serial port to a virtual joystick. It runs on **Windows** (.NET Framework 4.8) and **Linux** (Mono 5+).
+
+Currently these virtual joysticks are supported:
+* [vJoy](https://github.com/njz3/vJoy/) (2.1.8, 2.1.9, and 2.2.2, Windows)
 * [vXbox](https://github.com/shauleiz/ScpVBus/releases) (Windows). [How-to](Docs/vXbox.md).
 * [uinput](https://www.kernel.org/doc/html/v4.12/input/uinput.html) (Linux). [How-to](Docs/Linux.md).
 
 The data coming through the serial port should be structured in a specific way in order for the feeder to recognize it. Currently several protocols are supported:
 * IBUS - used by FlySky radio controllers.
 * SBUS - used by FrSky, Futaba radio controllers.
+* F.Port - used by FrSky receivers (extends SBUS with bidirectional capability).
 * DSM - used by Spektrum radio controllers.
 * MultiWii Serial Protocol - used by RC Flight Controllers running MultiWii, CleanFlight, BetaFlight, iNav, etc.
 * KISS serial protocol - used by KISS RC Flight Controllers.
-* PPM (converted to IBUS) - see [Use case 8](#use-cases).
-* CrossFire - thanks to @CapnBry #49
+* CrossFire (CRSF) - used by TBS CrossFire systems. Thanks to @CapnBry #49
 * DJI Phantom 3 Controller - thanks to @cmyip #52
+* PPM (converted to IBUS) - see [Use case 9](#use-cases).
+* Dummy - test protocol that generates a signal without any hardware. [More info](Docs/Dummy.md).
 
-After data is received it can be _mapped_ to any virtual joystick axis or button in very flexible and configurable way.
+After data is received it can be _mapped_ to virtual joystick axes, buttons, or bitmapped buttons in a very flexible and configurable way.
 
 ![Screenshot](Docs/images/screenshot.png)
+
+### Key features ###
+* **Flexible mapping** - map channels to axes (with calibration, expo curves, deadband, symmetric mode), buttons (single/dual threshold, trigger mode), or bitmapped buttons (16 bits per channel). [More info](Docs/Mappings.md).
+* **Failsafe** - configurable per-mapping failsafe values that activate on serial timeout. [More info](Docs/Failsafe.md).
+* **Lua scripting** - transform channel data, control POV hats, and implement custom logic with an embedded Lua engine. [More info](Docs/Scripting.md).
+* **Process interaction** - control vJoySerialFeeder from external programs via Microsoft COM Automation (Windows) or WebSocket (cross-platform). [More info](Docs/Interaction.md).
+* **Profiles** - save and load multiple named configurations.
+* **Channel monitor** - real-time display of raw channel values for debugging.
 
 ## Use cases ##
 1. Use Arduino to read data from _any_ device and send it to your PC - basic sketch in the [Arduino](Arduino/Joystick) directory. See [example](Docs/Arduino.md) on using old RC controller for simulators.
@@ -35,7 +47,17 @@ After data is received it can be _mapped_ to any virtual joystick axis or button
 10. If you have older RC receiver that only supports PWM you can use Arduino and [this sketch](Arduino/Pwm_to_ibus) to convert PWM -> IBUS.
 
 ## How to get it? ##
-You can download binaries from the [releases](../../releases) section or you can build it yourself. Development is done with [SharpDevelop 4.4](https://sourceforge.net/projects/sharpdevelop/)
+You can download binaries from the [releases](../../releases) section or you can build it yourself.
+
+### Building from source ###
+**Requirements:**
+* .NET Framework 4.8 SDK (Windows) or Mono 5+ (Linux)
+* NuGet packages are restored automatically (MoonSharp, FastColoredTextBox)
+* Target platform: x86 (32-bit)
+
+Build with Visual Studio or `msbuild` on the command line. Use `vJoySerialFeeder.csproj` for Windows or `vJoySerialFeederLinux.csproj` for Linux.
+
+**Linux additional requirement:** libevdev2
 
 ## How to use it? ##
 Check out the [Manual](Docs/README.md).
@@ -43,3 +65,6 @@ Check out the [Manual](Docs/README.md).
 ## Like it?
 If this software brought a smile on your face, you may shine back if you feel like it: [![Donate](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=L5789HZB5NAX4&lc=BG&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted)\
 Thank you!!!
+
+## License ##
+[GNU General Public License v3](LICENSE)
