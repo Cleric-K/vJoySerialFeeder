@@ -15,8 +15,11 @@ xbuild vJoySerialFeeder/vJoySerialFeederLinux.csproj /p:Configuration=Release
 ## Test
 
 ```bash
-dotnet test vJoySerialFeeder.Tests/
+# Windows only — tests reference the main WinForms project which requires .NET Framework 4.8
+dotnet test vJoySerialFeeder.Tests/ --configuration Release
 ```
+
+Tests run in CI (GitHub Actions on windows-latest). They cannot build on macOS/Linux due to WinForms dependencies.
 
 ## What is this project?
 

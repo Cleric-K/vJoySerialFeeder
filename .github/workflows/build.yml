@@ -7,10 +7,16 @@ on:
     branches: [master]
 
 jobs:
-  build-windows:
+  build-and-test:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x'
+          dotnet-quality: 'preview'
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
@@ -21,5 +27,8 @@ jobs:
       - name: Restore NuGet packages
         run: nuget restore vJoySerialFeeder/vJoySerialFeeder.sln
 
-      - name: Build
+      - name: Build main project
         run: msbuild vJoySerialFeeder/vJoySerialFeeder.sln /p:Configuration=Release /p:Platform="Any CPU"
+
+      - name: Run tests
+        run: dotnet test vJoySerialFeeder.Tests/ --configuration Release --verbosity normal

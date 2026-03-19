@@ -106,7 +106,7 @@ namespace vJoySerialFeeder
 		
 		
 		
-		public static Version RuntimeVersion { get { return Assembly.GetEntryAssembly().GetName().Version; } }
+		public static Version RuntimeVersion { get { return Assembly.GetEntryAssembly()?.GetName().Version ?? new Version(0, 0, 0, 0); } }
 		
 		
 		public static Configuration Load() {
