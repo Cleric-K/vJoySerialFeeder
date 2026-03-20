@@ -1,0 +1,7 @@
+.git/
+**/bin/
+**/obj/
+Docs/
+Arduino/
+*.user
+*.suo

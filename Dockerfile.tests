@@ -1,0 +1,24 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0-bookworm-slim
+
+# Install Mono from official repo (for msbuild and .NET Framework runtime)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates gnupg \
+    && gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg \
+        --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
+    && echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/debian stable-buster main" \
+        > /etc/apt/sources.list.d/mono-official-stable.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends mono-complete msbuild nuget \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+COPY . .
+
+# Build main project with Mono's msbuild (handles old-style csproj)
+RUN nuget restore vJoySerialFeeder/vJoySerialFeeder.csproj \
+    && msbuild vJoySerialFeeder/vJoySerialFeeder.csproj /p:Configuration=Release /p:Platform=AnyCPU
+
+# Build and run tests with dotnet (handles SDK-style csproj)
+# BuildProjectReferences=false skips rebuilding the main project (already built above)
+RUN dotnet test vJoySerialFeeder.Tests/ --configuration Release --verbosity normal \
+    /p:BuildProjectReferences=false
