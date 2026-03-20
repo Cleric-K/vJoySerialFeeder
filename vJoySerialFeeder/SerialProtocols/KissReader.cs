@@ -205,7 +205,7 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <param name="config"></param>
 		/// <returns></returns>
-		private void parseConfig(string config) {
+		internal void parseConfig(string config) {
 			try {
 				updateRate = int.Parse(config);
 			}
@@ -214,7 +214,7 @@ namespace vJoySerialFeeder
 			}
 		}
 		
-		private string buildConfig() {
+		internal string buildConfig() {
 			return updateRate.ToString();
 		}
 		

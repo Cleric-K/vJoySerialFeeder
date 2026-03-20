@@ -88,7 +88,7 @@ namespace vJoySerialFeeder
 
 		// because default is the best
 		// from min: 364, center 1024, max 1684 -> min 1000 center 1500, max 2000
-		private Int32 remap(Int32 rawByteValue)
+		internal Int32 remap(Int32 rawByteValue)
 		{
 			// return (rawByteValue - 364) * 1000 / 1000 + 1000;
 			return Convert.ToInt32( (rawByteValue - 364) / (RANGE_MAX - RANGE_MIN * 1.0) * (1000.0) + 1000);

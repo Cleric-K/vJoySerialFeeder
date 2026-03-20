@@ -50,7 +50,7 @@ They share the same source files with platform-specific swaps (e.g., `LuaEditorF
 ## Code style
 
 - **Indentation:** Tabs
-- **Braces:** K&R (opening brace on same line as declaration)
+- **Braces:** Allman (opening brace on its own line)
 - **Namespaces:** Block-scoped (`namespace Foo { }`, not file-scoped)
 - **Access modifiers:** Always explicit
 - **Line endings:** CRLF for .cs/.csproj/.sln (enforced by .gitattributes)

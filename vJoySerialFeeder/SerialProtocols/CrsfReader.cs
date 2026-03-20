@@ -144,7 +144,7 @@ namespace vJoySerialFeeder
 		
 		public override string ProtocolName { get { return "CRSF"; } }
 
-		static private uint map(uint val, uint in_min, uint in_max, uint out_min, uint out_max)
+		static internal uint map(uint val, uint in_min, uint in_max, uint out_min, uint out_max)
 		{
 			// constrain(retVal, out_min, out_max)
 			if (val < in_min)
