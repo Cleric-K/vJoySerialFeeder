@@ -94,6 +94,11 @@ namespace vJoySerialFeeder
 		[DataMember]
 		public bool MinimizeToTray;
 	
+		[OnDeserialized]
+		void OnDeserialized(StreamingContext context) {
+			if (Profiles == null) Profiles = new Dictionary<string, Profile>();
+		}
+
 		private static DataContractJsonSerializer ConfigSerializer = new DataContractJsonSerializer(
 				typeof(Configuration),
 				new Type[] {typeof(AxisMapping), typeof(ButtonMapping), typeof(ButtonBitmapMapping)}

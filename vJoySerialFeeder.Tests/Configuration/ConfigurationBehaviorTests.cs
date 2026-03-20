@@ -31,15 +31,44 @@ namespace vJoySerialFeeder.Tests.Configuration
 		}
 
 		[Test]
-		public void LoadFromJSONString_ValidJsonWrongShape_ReturnsObjectWithNullFields()
+		public void LoadFromJSONString_ValidJsonWrongShape_ProfilesDefaultsToEmptyDictionary()
 		{
 			// DataContractJsonSerializer silently accepts a JSON array and
-			// returns a Configuration, but field initializers are NOT run
-			// during deserialization — so Profiles dictionary is null.
-			// This means accessing Profiles.Count would throw NullReferenceException.
+			// returns a Configuration. Field initializers are NOT run during
+			// deserialization, but the [OnDeserialized] callback ensures
+			// Profiles is never null.
 			var config = vJoySerialFeeder.Configuration.LoadFromJSONString("[]");
 			Assert.That(config, Is.Not.Null);
-			Assert.That(config.Profiles, Is.Null);
+			Assert.That(config.Profiles, Is.Not.Null);
+			Assert.That(config.Profiles.Count, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void LoadFromJSONString_EmptyObject_ProfilesDefaultsToEmptyDictionary()
+		{
+			// A valid JSON object with no Profiles key should still get
+			// an empty dictionary via the [OnDeserialized] callback.
+			var config = vJoySerialFeeder.Configuration.LoadFromJSONString("{}");
+			Assert.That(config, Is.Not.Null);
+			Assert.That(config.Profiles, Is.Not.Null);
+			Assert.That(config.Profiles.Count, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void LoadFromJSONString_WithProfiles_ProfilesPreserved()
+		{
+			// When Profiles is present in JSON, deserialization should
+			// preserve the actual data (OnDeserialized should not overwrite it).
+			var config = new vJoySerialFeeder.Configuration();
+			config.PutProfile("test", new vJoySerialFeeder.Configuration.Profile {
+				COMPort = "COM3"
+			});
+			var json = config.ToJSONString();
+
+			var loaded = vJoySerialFeeder.Configuration.LoadFromJSONString(json);
+			Assert.That(loaded.Profiles, Is.Not.Null);
+			Assert.That(loaded.Profiles.Count, Is.EqualTo(1));
+			Assert.That(loaded.GetProfile("test").COMPort, Is.EqualTo("COM3"));
 		}
 
 		[Test]
