@@ -75,3 +75,5 @@ We're incrementally modernizing toward .NET 10 and cross-platform support. See t
 - Every PR must compile, run, and be independently mergeable
 - Separate UI from logic before moving to a Core library
 - Tests before refactoring
+
+See AGENTS.workstream.md (generated per-worktree by stackmux) for workstream-specific context.

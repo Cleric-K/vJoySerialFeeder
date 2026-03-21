@@ -87,3 +87,5 @@ Native DLLs in `Lib/` are committed to the repo — do not delete them.
 - Do not reformat entire files — only change what's needed for the task
 - Do not convert to file-scoped namespaces or other C# 10+ syntax (we're still on .NET Framework 4.8)
 - Do not delete or modify files in `Lib/` without explicit instruction
+
+See AGENTS.workstream.md (generated per-worktree by stackmux) for workstream-specific context.
