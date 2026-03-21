@@ -21,7 +21,7 @@ namespace vJoySerialFeeder
 	/// <summary>
 	/// Description of MainForm.
 	/// </summary>
-	public partial class MainForm : Form
+	public partial class MainForm : Form, ITimeProvider
 	{
 		const string CONF_DIALOG_FILETYPES = "Configuration (*.json)|*.json|All files (*.*)|*.*";
 		

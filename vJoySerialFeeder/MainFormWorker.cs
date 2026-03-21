@@ -18,6 +18,7 @@ namespace vJoySerialFeeder
 	partial class MainForm
 	{
 		public static double Now { get { return (double)DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond; } }
+		double ITimeProvider.Now { get { return Now; } }
 		public bool Failsafe { get; private set; }
 		
 		

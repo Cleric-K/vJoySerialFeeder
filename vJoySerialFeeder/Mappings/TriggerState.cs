@@ -15,9 +15,19 @@ namespace vJoySerialFeeder
 	{
 		public enum Edge { Rising, Falling, Both }
 		public const int DEFAULT_DURATION = 200;
-		
+
+		private readonly ITimeProvider timeProvider;
 		bool? prevLevel;
 		double releaseTriggerAt;
+
+		public TriggerState(ITimeProvider timeProvider)
+		{
+			this.timeProvider = timeProvider;
+		}
+
+		public TriggerState() : this((ITimeProvider)MainForm.Instance)
+		{
+		}
 		
 		public bool Trigger(bool newLevel, Edge edge, int duration) {
 			if(prevLevel == null) {
@@ -35,7 +45,7 @@ namespace vJoySerialFeeder
 			prevLevel = newLevel;
 			
 			if(edgeEvent || releaseTriggerAt != 0) {
-				var now = MainForm.Now;
+				var now = timeProvider.Now;
 				
 				if(edgeEvent) {
 					// triggered
