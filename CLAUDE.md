@@ -1,3 +1,11 @@
+## StackMux — agent context
+
+This project is managed by StackMux. Read `STACKMUX.md` for your role and rules.
+
+**Do not modify files in this directory.** This is the base repo. All implementation
+must happen in workstream worktrees created by `stackmux start <branch>`.
+Use `stackmux status` to see current workstreams.
+
 # vJoySerialFeeder — Development Guide
 
 ## What is this project?
@@ -76,4 +84,3 @@ We're incrementally modernizing toward .NET 10 and cross-platform support. See t
 - Separate UI from logic before moving to a Core library
 - Tests before refactoring
 
-See AGENTS.workstream.md (generated per-worktree by stackmux) for workstream-specific context.
