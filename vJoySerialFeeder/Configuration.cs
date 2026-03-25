@@ -160,20 +160,28 @@ namespace vJoySerialFeeder
 		/// </summary>
 		/// <returns>true if upgrade was performed</returns>
 		public bool Upgrade() {
-			var currentVersion = RuntimeVersion;
+			return Upgrade(RuntimeVersion);
+		}
+
+		/// <summary>
+		/// Upgrade configuration to the specified version
+		/// </summary>
+		/// <param name="currentVersion">The version to upgrade to</param>
+		/// <returns>true if upgrade was performed</returns>
+		public bool Upgrade(Version currentVersion) {
 			var prevVersion = new Version(0,0,0,0);
-			
+
 			try {
 				prevVersion = new Version(this.Version);
 			}
 			catch(Exception){}
-			
-            if(prevVersion < currentVersion) {
-                DoUpgrade(prevVersion, currentVersion);
-                Version = currentVersion.ToString();
+
+			if(prevVersion < currentVersion) {
+				DoUpgrade(prevVersion, currentVersion);
+				Version = currentVersion.ToString();
 				return true;
 			}
-			
+
 			return false;
 		}
 		

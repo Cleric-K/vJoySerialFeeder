@@ -187,10 +187,17 @@ namespace vJoySerialFeeder
 		
 		public override List<string> GetJoysticks()
 		{
-			return isVBusExists() ?
-				new List<string>(new string[] {"1","2","3","4"})
-				:
-				new List<string>();
+			try
+			{
+				return isVBusExists() ?
+					new List<string>(new string[] {"1","2","3","4"})
+					:
+					new List<string>();
+			}
+			catch (DllNotFoundException)
+			{
+				return new List<string>();
+			}
 		}
 		
 		public override void Acquire(string id)

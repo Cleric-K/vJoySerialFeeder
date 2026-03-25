@@ -84,6 +84,33 @@
     <Reference Include="vJoyInterfaceWrap">
       <HintPath>Lib\vJoyInterfaceWrap.dll</HintPath>
     </Reference>
+    <Reference Include="System.Resources.Extensions">
+      <HintPath>Lib\System.Resources.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Formats.Nrbf">
+      <HintPath>Lib\System.Formats.Nrbf.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>Lib\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reflection.Metadata">
+      <HintPath>Lib\System.Reflection.Metadata.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Collections.Immutable">
+      <HintPath>Lib\System.Collections.Immutable.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode">
+      <HintPath>Lib\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>Lib\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>Lib\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>Lib\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutForm.cs">

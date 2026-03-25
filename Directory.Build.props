@@ -4,10 +4,9 @@
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
   </PropertyGroup>
 
-  <ItemGroup>
-    <!-- Provides .NET Framework reference assemblies for cross-platform builds -->
+  <!-- Only SDK-style projects (e.g. the test project) need PackageReference -->
+  <ItemGroup Condition="'$(UsingMicrosoftNETSdk)' == 'true'">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
-    <!-- Required at runtime for non-string resource serialization -->
     <PackageReference Include="System.Resources.Extensions" Version="9.0.0" />
   </ItemGroup>
 </Project>
