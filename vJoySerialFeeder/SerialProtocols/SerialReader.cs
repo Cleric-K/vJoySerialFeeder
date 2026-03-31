@@ -254,6 +254,7 @@ namespace vJoySerialFeeder
 			try {
 				serialPort.Close();
 				serialPort.BaudRate = BaudRate;
+				serialPort.DtrEnable = true;
 				serialPort.Open();
 				return true;
 			}
@@ -269,6 +270,7 @@ namespace vJoySerialFeeder
                 // first try to open with safe baudrate
                 serialPort.Close();
                 serialPort.BaudRate = 9600;
+				serialPort.DtrEnable = true;
                 serialPort.Open();
                 // it worked, no try to set the custom baud rate
                 if (!SetLinuxCustomBaudRate(PortName, BaudRate))
