@@ -48,36 +48,6 @@ Gets the [Mapping](#object-mapping) object for the requested `index`
 Gets the raw serial integer value for channel `index`
 
 
-#### function: SetDiscPov(pov, value)
-* `pov` \<integer> POV number - vJoy currently supports only one discrete POV so this should be `1`
-* `value` \<integer> - the direction of the POV.
-
-Sets the discrete POV direction. The possible values are:
-value | meaning
----|---
-0 |North (forward)
-1 |East (right)
-2 |South (backwards)
-3 |West (Left)
--1 |Neutral
-
-
-
-#### function: SetContPov(pov, value)
-* `pov` \<integer> POV number - vJoy currently supports 4 continuous POVs so this should be in the range 1-4
-* `value`\<float> the direction of the POV in degrees.
-
-Sets the direction of a continuous POV. The general directions have the following values:
-value | meaning
----|---
-0.0 |North (forward)
-90.0 |East (right)
-180.0 |South (backwards)
-270.0 |West (Left)
-negative value |Neutral
-
-Of course you can have any floating point value in between these. Check out the [example](#hat-pov-switch)
-
 #### object: VJoy \<[VJoy](#object-vjoy)>
 
 Interface for the Virtual Joystick
@@ -133,7 +103,33 @@ Name | Value
 * `button` \<integer> button number (starting from 1)
 * `pressed` \<boolean> button pressed state (true or false)
 
+#### method: SetDiscPov(pov, value)
+* `pov` \<integer> POV number - vJoy currently supports only one discrete POV so this should be `1`
+* `value` \<integer> - the direction of the POV.
 
+Sets the discrete POV direction. The possible values are:
+value | meaning
+---|---
+0 |North (forward)
+1 |East (right)
+2 |South (backwards)
+3 |West (Left)
+-1 |Neutral
+
+#### method: SetContPov(pov, value)
+* `pov` \<integer> POV number - vJoy currently supports 4 continuous POVs so this should be in the range 1-4
+* `value`\<float> the direction of the POV in degrees.
+
+Sets the direction of a continuous POV. The general directions have the following values:
+value | meaning
+---|---
+0.0 |North (forward)
+90.0 |East (right)
+180.0 |South (backwards)
+270.0 |West (Left)
+negative value |Neutral
+
+Of course you can have any floating point value in between these. Check out the [example](#hat-pov-switch)
 
 ## Order of execution
 
